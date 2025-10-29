@@ -66,7 +66,7 @@
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        border: 2px solid var(--color-on-bg-secondary);
+        border: 2px solid var(--color-text-primary);
         border-radius: 50%;
         width: 18px;
         height: 18px;
@@ -106,7 +106,7 @@
       }
 
       label {
-        color: var(--color-on-bg-secondary);
+        color: var(--color-text-primary);
         cursor: pointer;
       }
     }

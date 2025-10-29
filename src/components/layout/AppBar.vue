@@ -1,21 +1,3 @@
-<script setup lang="ts">
-  import { useUIStore } from '@/stores/uiStore'
-  import { useAnalysisStore } from '@/stores/analysisStore'
-  import { useI18n } from 'vue-i18n'
-  import { RouterLink } from 'vue-router'
-
-  const { t } = useI18n()
-
-  const showAnalysisTitle = useUIStore().showAnalysisTitle
-  const analysisStore = useAnalysisStore()
-  const repoName = analysisStore.link
-  const fromDate = analysisStore.fromDate
-  const toDate = analysisStore.toDate
-
-  function openProfile() {}
-  function openNotifications() {}
-</script>
-
 <template>
   <header class="app-bar">
     <RouterLink
@@ -77,13 +59,31 @@
   </header>
 </template>
 
+<script setup lang="ts">
+  import { useUIStore } from '@/stores/uiStore'
+  import { useAnalysisStore } from '@/stores/analysisStore'
+  import { useI18n } from 'vue-i18n'
+  import { RouterLink } from 'vue-router'
+
+  const { t } = useI18n()
+
+  const showAnalysisTitle = useUIStore().showAnalysisTitle
+  const analysisStore = useAnalysisStore()
+  const repoName = analysisStore.link
+  const fromDate = analysisStore.fromDate
+  const toDate = analysisStore.toDate
+
+  function openProfile() {}
+  function openNotifications() {}
+</script>
+
 <style lang="scss" scoped>
   .app-bar {
     width: 100%;
     min-width: 1100px;
     height: 80px;
-    background-color: var(--color-bg-primary);
-    color: var(--color-on-bg-primary);
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -103,7 +103,7 @@
       align-items: center;
       gap: 10px;
       text-decoration: none;
-      color: var(--color-on-bg-primary);
+      color: var(--color-text-primary);
     }
 
     &__center {
@@ -128,7 +128,7 @@
         color: var(--color-primary);
       }
       &__2 {
-        color: var(--color-on-bg-primary);
+        color: var(--color-text-primary);
       }
     }
 
@@ -138,7 +138,7 @@
       cursor: pointer;
       padding: 6px;
       border-radius: 8px;
-      color: var(--color-on-bg-primary);
+      color: var(--color-text-primary);
       object-fit: contain;
       transition:
         color 0.25s ease,

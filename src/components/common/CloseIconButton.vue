@@ -40,7 +40,7 @@
     right: 8px;
     background: none;
     border: none;
-    color: var(--color-on-bg-secondary);
+    color: var(--color-text-primary);
     cursor: pointer;
     padding: 8px;
     font-size: 1.2em;

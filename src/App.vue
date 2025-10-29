@@ -7,7 +7,7 @@
     />
     <AppBar />
     <NavBar v-if="isNavBarVisible" />
-    <div class="content" :style="{ minHeight: contentMinHeight }">
+    <div class="content">
       <RouterView />
     </div>
     <AppFooter />
@@ -28,40 +28,26 @@
   const uiStore = useUIStore()
   const userSettings = useUserSettingsStore()
   const isNavBarVisible = computed(() => uiStore.isNavBarVisible)
-
-  const contentMinHeight = computed(() => {
-    const appBarHeight = 80
-    const footerHeight = 30
-    const navBarHeight = isNavBarVisible.value ? 50 : 0
-    return `calc(100vh - ${appBarHeight + navBarHeight + footerHeight}px)`
-  })
 </script>
 
 <style lang="scss" scoped>
   .app {
+    @include flex-column;
     position: relative;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
   }
 
   .background-gradient {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    @include fixed-fill;
     z-index: -1;
     pointer-events: none;
   }
 
   .content {
     @include flex-center;
+    @include flex-column;
     flex: 1 0 auto;
     position: relative;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
   }
 </style>

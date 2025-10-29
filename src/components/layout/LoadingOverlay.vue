@@ -40,11 +40,13 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(10, 20, 40, 0.85);
+    background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    width: 100%;
     z-index: 1000;
   }
 

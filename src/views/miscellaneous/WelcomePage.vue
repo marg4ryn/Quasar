@@ -74,6 +74,7 @@
     text-align: center;
     max-width: 500px;
     width: 100%;
+    height: 100%;
     gap: 1.5rem;
   }
 
