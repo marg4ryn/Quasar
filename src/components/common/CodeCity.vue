@@ -13,7 +13,7 @@ import type { CityData } from '@/types/city'
 import { useCodeCityScene } from '@/composables/useCodeCityScene'
 import { useCodeCityState } from '@/composables/useCodeCityState'
 import { processNode } from '@/utils/city/layout'
-import { createGeometry } from '@/utils/city/geometry'
+import { createGeometry, clearEdgesCache, createMergedEdges } from '@/utils/city/geometry'
 import * as THREE from 'three'
 import { COLORS, CAMERA_DAMPING, AUTO_ROTATE_DELAY, AUTO_ROTATE_SPEED } from '@/utils/city/constants'
 import { toRaw } from 'vue'
@@ -225,6 +225,9 @@ function initThreeJS() {
   const rootData = processNode(props.data)
   const city = createGeometry(props.data, rootData, 0, 0, 0, objectMap)
   scene.add(city)
+
+  const mergedEdges = createMergedEdges()
+  scene.add(mergedEdges)
 
   setupEventListeners(renderer, camera, scene)
 

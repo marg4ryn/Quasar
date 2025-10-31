@@ -1,5 +1,6 @@
 import { ref, type Ref } from 'vue'
 import * as THREE from 'three'
+import { clearEdgesCache } from '@/utils/city/geometry'
 
 interface CodeCityScene {
   getScene: () => THREE.Scene | null
@@ -77,6 +78,8 @@ export function useCodeCityScene(
       })
       scene = null
     }
+
+    clearEdgesCache()
 
     camera = null
     raycaster = null
