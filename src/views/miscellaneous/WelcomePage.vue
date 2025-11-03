@@ -1,12 +1,7 @@
 <template>
   <section class="welcome-screen">
-    <LoadingOverlay
-      :show="isDownloading"
-      :label="t('welcomePage.loading') + ' ' + progress + '%'"
-    />
-
     <div class="welcome-content">
-      <img src="/logo.png" alt="HotSpotter Logo" class="logo" />
+      <img :src="logoSrc" alt="HotSpotter Logo" class="logo" />
 
       <h1 class="title">{{ t('welcomePage.header') }} <span class="appname1">Hot</span>Spotter!</h1>
       <h2 class="subtitle-heading">{{ t('welcomePage.motto') }}</h2>
@@ -19,17 +14,10 @@
           v-model="link"
           placeholder="e.g. https://github.com/johndoe/test.git"
           class="repo-input"
-          @keyup.enter="handleDownload"
-          :disabled="isDownloading"
         />
       </div>
 
-      <AppButton
-        :label="t('welcomePage.buttonAnalyze')"
-        variant="primary"
-        @click="handleDownload"
-        :disabled="isDownloading"
-      />
+      <AppButton :label="t('welcomePage.buttonStart')" variant="primary" @click="handleStart" />
     </div>
   </section>
 </template>
@@ -37,73 +25,36 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  //import { useAnalysisStore } from '@/stores/analysisStore'
+  import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
+  import { useUserSettingsStore } from '@/stores/userSettingsStore'
   import { useI18n } from 'vue-i18n'
+  import { computed } from 'vue'
   import AppButton from '@/components/common/AppButton.vue'
-  import LoadingOverlay from '@/components/layout/LoadingOverlay.vue'
-  import { downloadService } from '@/services/downloadService'
 
   const { t } = useI18n()
+  const userSettingsStore = useUserSettingsStore()
   const router = useRouter()
-  //const analysisStore = useAnalysisStore()
-  const link = ref('')
-  const progress = ref(0)
-  const status = ref('')
-  const isDownloading = ref(false)
-  const error = ref('')
+  const analysisStore = useNewAnalysisStore()
+  const link = ref(analysisStore.link || '')
 
-  const handleDownload = async () => {
+  const logoSrc = computed(() => {
+    switch (userSettingsStore.selectedColor) {
+      case '#bc1922':
+        return '/logo_red.png'
+      case '#28abf2':
+        return '/logo_blue.png'
+      default:
+        return '/logo_red.png'
+    }
+  })
+
+  const handleStart = async () => {
     if (!link.value.trim()) {
       alert(t('welcomePage.alertEnterRepo'))
       return
     }
-
-    progress.value = 0
-    status.value = ''
-    error.value = ''
-    isDownloading.value = true
-
-    downloadService.startDownloadMock(
-      link.value,
-      // onProgress callback
-      (data) => {
-        progress.value = data.progress
-        status.value = data.status
-      },
-      // onComplete callback
-      (data) => {
-        status.value = `Zakończono! Plik: ${data.filename}`
-        isDownloading.value = false
-        router.push('/time-range')
-      },
-      // onError callback
-      (errorMsg) => {
-        error.value = errorMsg
-        isDownloading.value = false
-      }
-    )
-
-    // downloadService.startDownload(
-    //   link.value,
-    //   (data) => {
-    //     progress.value = data.progress;
-    //     status.value = data.status;
-    //   },
-    //   (data) => {
-    //     status.value = `Zakończono! Plik: ${data.filename}`;
-    //     isDownloading.value = false;
-    //   },
-    //   (errorMsg) => {
-    //     error.value = errorMsg;
-    //     isDownloading.value = false;
-    //   }
-    // );
-
-    // const handleCancel = () => {
-    //   downloadService.abort()
-    //   isDownloading.value = false
-    //   status.value = 'Anulowano'
-    // }
+    analysisStore.setLink(link.value.trim())
+    router.push('/time-range')
   }
 </script>
 

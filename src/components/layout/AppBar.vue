@@ -6,7 +6,7 @@
       :title="t('appbar.new-analysis')"
       :aria-label="t('appbar.new-analysis')"
     >
-      <img src="/logo.png" alt="Logo" class="app_logo" /><span class="app-name">
+      <img :src="logoSrc" alt="Logo" class="app_logo" /><span class="app-name">
         <span class="app-name__1">Hot</span><span class="app-name__2">Spotter</span></span
       >
     </RouterLink>
@@ -61,17 +61,31 @@
 
 <script setup lang="ts">
   import { useUIStore } from '@/stores/uiStore'
-  import { useAnalysisStore } from '@/stores/analysisStore'
+  import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
+  import { useUserSettingsStore } from '@/stores/userSettingsStore'
   import { useI18n } from 'vue-i18n'
   import { RouterLink } from 'vue-router'
+  import { computed } from 'vue'
 
   const { t } = useI18n()
 
   const showAnalysisTitle = useUIStore().showAnalysisTitle
-  const analysisStore = useAnalysisStore()
+  const analysisStore = useNewAnalysisStore()
+  const userSettingsStore = useUserSettingsStore()
   const repoName = analysisStore.link
   const fromDate = analysisStore.fromDate
   const toDate = analysisStore.toDate
+
+  const logoSrc = computed(() => {
+    switch (userSettingsStore.selectedColor) {
+      case '#bc1922':
+        return '/logo_red.png'
+      case '#28abf2':
+        return '/logo_blue.png'
+      default:
+        return '/logo_red.png'
+    }
+  })
 
   function openProfile() {}
   function openNotifications() {}

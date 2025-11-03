@@ -26,6 +26,21 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
 
   async function applyMainColor(color: string) {
     document.documentElement.style.setProperty('--color-primary', color)
+
+    const favicon = document.querySelector("link[rel='icon']")
+    if (favicon) {
+      switch (color) {
+        case '#bc1922':
+          favicon.setAttribute('href', `/logo_red.png`)
+          break
+        case '#28abf2':
+          favicon.setAttribute('href', `/logo_blue.png`)
+          break
+        default:
+          favicon.setAttribute('href', `/logo_red.png`)
+      }
+    }
+
     await nextTick()
     colorPrimary.value = getComputedStyle(document.documentElement)
       .getPropertyValue('--color-primary')

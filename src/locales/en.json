@@ -66,8 +66,6 @@
     "system": "System",
     "language": "Language",
     "systemDefault": "System default",
-    "english": "English",
-    "polish": "Polski",
     "mappings": "Mappings",
     "performance": "Performance",
     "notifications": "Notifications"
@@ -77,10 +75,10 @@
     "header": "Welcome to",
     "motto": "Your repository, Your code city.",
     "prompt": "Enter link to analysis target:",
-    "buttonAnalyze": "Analyze",
+    "buttonStart": "Start",
     "alertEnterRepo": "Please enter a repository link before starting!",
     "alerServerError": "An error occurred during analysis. Please try again.",
-    "loading": "Loading repository..."
+    "loading": "Downloading repository..."
   },
 
   "others": {

@@ -8,7 +8,11 @@
     <AppBar />
     <NavBar v-if="isNavBarVisible" />
     <div class="content">
-      <RouterView />
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </div>
     <AppFooter />
   </div>
@@ -19,6 +23,8 @@
   import { RouterView } from 'vue-router'
   import { computed } from 'vue'
   import { useUserSettingsStore } from './stores/userSettingsStore'
+  import { onBeforeUnmount } from 'vue'
+  import { useAnalysisStore } from '@/stores/analysisStore'
 
   import AppBar from '@/components/layout/AppBar.vue'
   import NavBar from '@/components/layout/NavBar.vue'
@@ -28,6 +34,11 @@
   const uiStore = useUIStore()
   const userSettings = useUserSettingsStore()
   const isNavBarVisible = computed(() => uiStore.isNavBarVisible)
+  const analysisStore = useAnalysisStore()
+
+  onBeforeUnmount(() => {
+    analysisStore.closeAllConnections()
+  })
 </script>
 
 <style lang="scss" scoped>
