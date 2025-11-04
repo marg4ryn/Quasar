@@ -81,7 +81,9 @@ class MockSSEServerInstance {
     this.abortController = new AbortController()
 
     const urlObj = new URL(this.url, window.location.origin)
-    const params = Object.fromEntries(Array.from(urlObj.searchParams))
+    const params = Object.fromEntries(
+      Array.from(urlObj.searchParams.entries()) as [string, string][]
+    )
 
     console.log('[MockSSEServerInstance] Starting with params:', params)
 
