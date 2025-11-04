@@ -1,34 +1,172 @@
-$font-family-base: system-ui, Avenir, Helvetica, Arial, sans-serif;
-
-$border-radius: 8px;
+// ============================================
+// COLORS
+// ============================================
 
 $theme-dark: (
-  color-bg-primary: #08040c,
-  color-bg-primary-hover: #0b0e13,
-
-  color-bg-secondary: #0d1117,
-  color-bg-secondary-hover: #21262d,
-
-  color-on-bg-primary: #ffffff,
-  color-on-bg-primary-hover: #6e7681,
-
-  color-on-bg-secondary: #ffffff,
-  color-on-bg-secondary-hover: #6e7681,
-
+  // Primary colors
   color-primary: #28abf2,
-  color-primary-hover: #1c73a1,
+  color-primary-light: #38bdf8,
 
-  color-secondary: #bc1922,
-  color-secondary-hover: #7e0f14,
+  // Background colors
+  color-bg-primary: #0d1117,
+  color-bg-secondary: #08040c,
+  color-bg-tertiary: #1c2128,
 
-  color-button-primary: #2e9a40,
-  color-button-primary-hover: #1f692b,
-
-  color-button-secondary: #3d444d,
-  color-button-secondary-hover: #30353b,
-
-  color-button-danger: #ff5f57,
-  color-button-danger-hover: #aa302a,
+  // Text colors
+  color-text-primary: #ffffff,
+  color-text-secondary: rgba(255, 255, 255, 0.9),
+  color-text-tertiary: rgba(255, 255, 255, 0.8),
+  color-text-muted: rgba(255, 255, 255, 0.5),
+  // UI element colors
+  color-border: rgba(255, 255, 255, 0.2),
+  color-border-hover: rgba(255, 255, 255, 0.3),
+  color-border-focus: #28abf2,
+  color-overlay: rgba(255, 255, 255, 0.1),
+  color-overlay-hover: rgba(255, 255, 255, 0.15),
+  // Shadow colors
+  shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5),
+  shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6),
+  shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.7),
+  // Focus ring
+  focus-ring-color: rgba(40, 171, 242, 0.3),
+  // Button colors
+  color-button-primary: #22c55e,
+  color-button-secondary: rgba(255, 255, 255, 0.1),
+  color-button-danger: #ff5f57
 );
 
-$theme-light: ();
+$theme-light: (
+  // Primary colors
+  color-primary: #28abf2,
+  color-primary-light: #38bdf8,
+
+  // Background colors
+  color-bg-primary: #ffffff,
+  color-bg-secondary: #f5f7fa,
+  color-bg-tertiary: #e8ecf1,
+
+  // Text colors
+  color-text-primary: #1a1a1a,
+  color-text-secondary: rgba(26, 26, 26, 0.9),
+  color-text-tertiary: rgba(26, 26, 26, 0.7),
+  color-text-muted: rgba(26, 26, 26, 0.5),
+  // UI element colors
+  color-border: rgba(0, 0, 0, 0.12),
+  color-border-hover: rgba(0, 0, 0, 0.2),
+  color-border-focus: #1e88e5,
+  color-overlay: rgba(0, 0, 0, 0.05),
+  color-overlay-hover: rgba(0, 0, 0, 0.08),
+  // Shadow colors
+  shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08),
+  shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12),
+  shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16),
+  // Focus ring
+  focus-ring-color: rgba(30, 136, 229, 0.2),
+  // Button colors
+  color-button-primary: #22c55e,
+  color-button-secondary: rgba(255, 255, 255, 0.1),
+  color-button-danger: #ff5f57
+);
+
+// ============================================
+// TYPOGRAPHY
+// ============================================
+
+$font-family-base:
+  'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  Oxygen,
+  Ubuntu,
+  Cantarell,
+  'Helvetica Neue',
+  sans-serif;
+
+$font-size-xs: 0.75rem; // 12px
+$font-size-sm: 0.875rem; // 14px
+$font-size-base: 1rem; // 16px
+$font-size-lg: 1.125rem; // 18px
+$font-size-xl: 1.25rem; // 20px
+$font-size-2xl: 1.5rem; // 24px
+$font-size-3xl: 2rem; // 32px
+
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$line-height-tight: 1.2;
+$line-height-normal: 1.4;
+$line-height-relaxed: 1.6;
+
+// ============================================
+// SPACING
+// ============================================
+
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem; // 8px
+$spacing-md: 0.75rem; // 12px
+$spacing-lg: 1rem; // 16px
+$spacing-xl: 1.5rem; // 24px
+$spacing-2xl: 2rem; // 32px
+$spacing-3xl: 3rem; // 48px
+
+// ============================================
+// BORDER RADIUS
+// ============================================
+
+$radius-sm: 6px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-full: 50%;
+
+// ============================================
+// TRANSITIONS
+// ============================================
+
+$transition-fast: 0.1s ease;
+$transition-base: 0.2s ease;
+$transition-slow: 0.3s ease;
+
+// ============================================
+// BREAKPOINTS
+// ============================================
+
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// ============================================
+// Z-INDEX LAYERS
+// ============================================
+
+$z-index-background: -1;
+$z-index-base: 1;
+$z-index-dropdown: 100;
+$z-index-modal: 500;
+$z-index-overlay: 1000;
+$z-index-tooltip: 1500;
+
+// ============================================
+// COMPONENT SPECIFIC
+// ============================================
+
+// Inputs
+$input-padding-y: 1rem;
+$input-padding-x: 1.25rem;
+$input-border-width: 2px;
+
+// Buttons
+$button-padding-y: 0.75rem;
+$button-padding-x: 2rem;
+$button-min-width: 120px;
+
+// Containers
+$container-max-width-sm: 500px;
+$container-max-width-md: 600px;
+$container-max-width-lg: 800px;

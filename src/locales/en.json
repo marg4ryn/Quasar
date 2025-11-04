@@ -66,16 +66,34 @@
     "system": "System",
     "language": "Language",
     "systemDefault": "System default",
-    "english": "English",
-    "polish": "Polski",
     "mappings": "Mappings",
     "performance": "Performance",
     "notifications": "Notifications"
   },
 
-  "others": {
+  "welcomePage": {
+    "header": "Welcome to",
+    "motto": "Your repository, Your code city.",
+    "prompt": "Enter link to analysis target:",
+    "analysisInterval": "Set the analysis interval:",
+    "from": "From",
+    "to": "To",
+    "buttonStart": "Start",
+    "analysisCompleted": "Analysis completed successfully!",
+    "alertEnterRepo": "Please enter a repository link before starting!",
+    "loading": "Downloading repository...",
+    "modal": "Are you sure you want to abort the repository download?"
+  },
+
+  "common": {
     "inDevelopmentLabel": "In Development",
-    "closeIconButton": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "back": "Back",
+    "abort": "Abort",
+    "confirm": "Confirm",
+    "tryAgain": "Try Again",
+    "loading": "Loading..."
   },
 
   "footer": {

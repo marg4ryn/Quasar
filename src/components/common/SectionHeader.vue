@@ -26,7 +26,7 @@
   .section-label {
     font-size: 1em;
     font-weight: 400;
-    color: var(--color-on-bg-secondary);
+    color: var(--color-text-primary);
     margin: 0;
     white-space: nowrap;
   }
@@ -34,6 +34,6 @@
   .horizontal-line {
     width: 100%;
     height: 1px;
-    background-color: var(--color-on-bg-secondary);
+    background-color: var(--color-text-primary);
   }
 </style>

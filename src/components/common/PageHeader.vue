@@ -13,7 +13,7 @@
     align-items: center;
     font-size: 1.8em;
     font-weight: 400;
-    color: var(--color-on-bg-secondary);
+    color: var(--color-text-primary);
     margin: 8px;
     text-align: center;
   }

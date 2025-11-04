@@ -56,7 +56,9 @@
 <style lang="scss" scoped>
   .nav-item-wrapper {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
 
     .nav-item {
       @include flex-center;
@@ -65,14 +67,12 @@
       border-radius: 10px;
       cursor: pointer;
       position: relative;
-      color: var(--color-on-bg-primary);
+      color: var(--color-text-primary);
       text-decoration: none;
       font-size: 16px;
       min-width: 210px;
       max-width: 250px;
-      transition:
-        background 0.3s ease,
-        font-weight 0.3s ease;
+      transition: font-weight 0.3s ease;
 
       &[is='div'],
       &[is='span'] {
@@ -119,7 +119,7 @@
       margin: 0;
       padding: 5px 0;
       list-style: none;
-      background-color: var(--color-bg-primary);
+      background-color: var(--color-bg-secondary);
       border-radius: 8px;
       min-width: 210px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -130,14 +130,13 @@
         padding: 4px 10px;
 
         a {
-          color: var(--color-on-bg-primary);
+          color: var(--color-text-primary);
           text-decoration: none;
           display: block;
           padding: 4px 6px;
           border-radius: 6px;
           position: relative;
           transition:
-            background 0.3s ease,
             color 0.3s ease,
             font-weight 0.3s ease;
 

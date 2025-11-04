@@ -26,34 +26,35 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 30px;
     min-width: 1100px;
-    padding: 10px 20px;
+    padding: $spacing-md $spacing-xl;
     background-color: var(--color-bg-secondary);
-    color: var(--color-on-bg-secondary);
-    font-size: 14px;
-    font-weight: 300;
+    color: var(--color-text-secondary);
+    font-size: $font-size-sm;
+    font-weight: $font-weight-light;
+    border-top: 1px solid var(--color-border);
+  }
 
-    .footer-right {
-      display: flex;
-      gap: 15px;
+  .footer-right {
+    @include flex-row(10px);
+  }
+
+  .footer-btn {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition:
+      color $transition-base,
+      transform $transition-base;
+
+    &:hover {
+      color: var(--color-primary);
+      transform: scale(1.1);
     }
 
-    .footer-btn {
-      color: var(--color-on-bg-secondary);
-      text-decoration: none;
-      transition:
-        color 0.25s ease,
-        transform 0.2s ease;
-
-      &:hover {
-        color: var(--color-primary);
-        transform: scale(1.1);
-      }
-
-      &.router-link-active {
-        color: var(--color-primary);
-        font-weight: 400;
-      }
+    &.router-link-active {
+      color: var(--color-primary);
+      font-weight: $font-weight-normal;
     }
   }
 </style>

@@ -61,8 +61,8 @@
 
   const languages = [
     { label: t('settingsPage.systemDefault'), value: 'system' },
-    { label: t('settingsPage.english'), value: 'en' },
-    { label: t('settingsPage.polish'), value: 'pl' },
+    { label: 'English', value: 'en' },
+    { label: 'Polski', value: 'pl' },
   ]
 
   const colors = [

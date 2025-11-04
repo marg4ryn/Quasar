@@ -1,6 +1,6 @@
 <template>
   <div class="info-label">
-    <p>{{ t('others.inDevelopmentLabel') }}</p>
+    <p>{{ t('common.inDevelopmentLabel') }}</p>
   </div>
 </template>
 

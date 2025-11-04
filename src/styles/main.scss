@@ -1,37 +1,250 @@
-:root {
-  font-family: $font-family-base;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: var(--color-on-bg-secondary);
-  background-color: var(--color-bg-secondary);
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+// ============================================
+// GLOBAL RESET
+// ============================================
 
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html,
-body,
-#app {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+// ============================================
+// BODY
+// ============================================
+
+body {
+  font-family: $font-family-base;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  @include text-smooth;
+  overflow-x: hidden;
 }
 
-input[type='radio'] {
-  accent-color: var(--color-primary);
+// ============================================
+// TYPOGRAPHY
+// ============================================
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-tight;
 }
+
+h1 {
+  font-size: $font-size-3xl;
+}
+
+h2 {
+  font-size: $font-size-2xl;
+}
+
+h3 {
+  font-size: $font-size-xl;
+}
+
+p {
+  margin: 0;
+  line-height: $line-height-relaxed;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color $transition-base;
+
+  &:hover {
+    color: var(--color-primary-light);
+  }
+}
+
+// ============================================
+// APP CONTAINER
+// ============================================
+
+#app {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+// ============================================
+// COMMON LAYOUT CLASSES
+// ============================================
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+
+  &--sm {
+    max-width: $container-max-width-sm;
+  }
+
+  &--md {
+    max-width: $container-max-width-md;
+  }
+
+  &--lg {
+    max-width: $container-max-width-lg;
+  }
+}
+
+.section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  @include flex-center;
+}
+
+// ============================================
+// UTILITY CLASSES
+// ============================================
+
+// Spacing utilities
+.mt-sm {
+  margin-top: $spacing-sm;
+}
+.mt-md {
+  margin-top: $spacing-md;
+}
+.mt-lg {
+  margin-top: $spacing-lg;
+}
+.mt-xl {
+  margin-top: $spacing-xl;
+}
+
+.mb-sm {
+  margin-bottom: $spacing-sm;
+}
+.mb-md {
+  margin-bottom: $spacing-md;
+}
+.mb-lg {
+  margin-bottom: $spacing-lg;
+}
+.mb-xl {
+  margin-bottom: $spacing-xl;
+}
+
+// Text utilities
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+// Display utilities
+.d-flex {
+  display: flex;
+}
+
+.d-none {
+  display: none;
+}
+
+.d-block {
+  display: block;
+}
+
+// ============================================
+// FORM ELEMENTS RESET
+// ============================================
+
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='url'],
+input[type='date'],
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+button {
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+// ============================================
+// SCROLLBAR
+// ============================================
+
+* {
+  @include custom-scrollbar(8px, transparent, rgba(255, 255, 255, 0.2));
+}
+
+// ============================================
+// ACCESSIBILITY
+// ============================================
+
+// Focus visible (keyboard navigation)
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// ============================================
+// SELECTION
+// ============================================
+
+::selection {
+  background: var(--color-primary);
+  color: white;
+}
+
+::-moz-selection {
+  background: var(--color-primary);
+  color: white;
+}
+
+// ============================================
+// THEME EXPORT
+// ============================================
 
 :root {
   @include export-theme($theme-dark);

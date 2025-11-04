@@ -2,8 +2,8 @@
   <button
     class="icon-button"
     @click="handleBack"
-    :title="t('others.closeIconButton')"
-    :aria-label="t('others.closeIconButton')"
+    :title="t('common.close')"
+    :aria-label="t('common.close')"
   >
     <svg
       width="24"
@@ -40,7 +40,7 @@
     right: 8px;
     background: none;
     border: none;
-    color: var(--color-on-bg-secondary);
+    color: var(--color-text-primary);
     cursor: pointer;
     padding: 8px;
     font-size: 1.2em;

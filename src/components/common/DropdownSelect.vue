@@ -69,10 +69,10 @@
       width: 100%;
       padding: 10px 12px;
       padding-right: 40px;
-      border: 1px solid var(--color-button-secondary);
+      border: 1px solid var(--color-border);
       border-radius: 4px;
-      background-color: var(--color-bg-secondary);
-      color: var(--color-on-bg-secondary);
+      background-color: var(--color-bg-primary);
+      color: var(--color-text-primary);
       font-size: 1em;
       cursor: pointer;
       -webkit-appearance: none;
@@ -92,7 +92,7 @@
       right: 12px;
       transform: translateY(-50%);
       pointer-events: none;
-      color: var(--color-on-bg-secondary);
+      color: var(--color-text-primary);
 
       svg {
         width: 20px;

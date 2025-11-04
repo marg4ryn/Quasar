@@ -75,8 +75,8 @@
     margin-bottom: 16px;
     overflow: hidden;
     width: 40%;
-    border: 1px solid var(--color-button-secondary);
-    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg-primary);
   }
 
   .collapsible-header {
@@ -85,7 +85,7 @@
     align-items: center;
     padding: 12px 16px;
     cursor: pointer;
-    border: 1px solid var(--color-button-secondary);
+    border: 1px solid var(--color-border);
     transition: background-color 0.2s ease;
 
     &:hover {
@@ -96,7 +96,7 @@
   .collapsible-label {
     font-weight: 400;
     font-size: 1.1em;
-    color: var(--color-on-bg-secondary);
+    color: var(--color-text-primary);
   }
 
   .collapsible-header svg {
@@ -104,7 +104,7 @@
     height: 20px;
     transform: rotate(0deg);
     transition: transform 0.3s ease;
-    color: var(--color-on-bg-secondary);
+    color: var(--color-text-primary);
   }
 
   .collapsible-header svg.rotated {

@@ -6,15 +6,15 @@
   import { computed } from 'vue'
 
   interface Props {
-    color1: string
-    color2: string
+    primaryColor: string
+    secondaryColor: string
   }
 
   const props = defineProps<Props>()
 
   const gradientStyle = computed(() => ({
-    '--color1': props.color1,
-    '--color2': props.color2,
+    '--color1': props.primaryColor,
+    '--color2': props.secondaryColor,
   }))
 </script>
 

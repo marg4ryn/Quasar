@@ -2,30 +2,30 @@ import { createRouter, createWebHistory, Router } from 'vue-router'
 import { i18n } from '@/i18n'
 import { useUIStore } from '@/stores/uiStore'
 
-const Welcome = () => import('@/views/WelcomePage.vue')
-const TimeRange = () => import('@/views/TimeRangePage.vue')
-const Settings = () => import('@/views/SettingsPage.vue')
-const About = () => import('@/views/AboutPage.vue')
-const Attributions = () => import('@/views/AttributionsPage.vue')
+const Welcome = () => import('@/views/miscellaneous/WelcomePage.vue')
+const Settings = () => import('@/views/miscellaneous/SettingsPage.vue')
+const About = () => import('@/views/miscellaneous/AboutPage.vue')
+const Attributions = () => import('@/views/miscellaneous/AttributionsPage.vue')
+const SystemOverview = () => import('@/views/miscellaneous/SystemOverviewPage.vue')
 
-const SystemOverview = () => import('@/views/SystemOverviewPage.vue')
-const TechnicalSprawl = () => import('@/views/TechnicalSprawlPage.vue')
-const Hotspots = () => import('@/views/HotspotsPage.vue')
-const ComplexityTrends = () => import('@/views/ComplexityTrendsPage.vue')
-const CodeAge = () => import('@/views/CodeAgePage.vue')
-const ChangeCoupling = () => import('@/views/ChangeCouplingPage.vue')
-const DeveloperView = () => import('@/views/DeveloperViewPage.vue')
-const TeamView = () => import('@/views/TeamViewPage.vue')
-const AbandonedCode = () => import('@/views/AbandonedCodePage.vue')
-const ResponsibilityDiffusion = () => import('@/views/ResponsibilityDiffusionPage.vue')
-const DeveloperRelationships = () => import('@/views/DeveloperRelationshipsPage.vue')
+const DeveloperRelationships = () => import('@/views/relationships/DeveloperRelationshipsPage.vue')
 
-const DeveloperMapping = () => import('@/views/DeveloperMappingPage.vue')
-const TeamMapping = () => import('@/views/TeamMappingPage.vue')
-const FolderMapping = () => import('@/views/FolderMappingPage.vue')
-const FormerDevsMapping = () => import('@/views/FormerDevsMappingPage.vue')
-const IgnoredFilesMapping = () => import('@/views/IgnoredFilesMappingPage.vue')
-const IgnoredFoldersMapping = () => import('@/views/IgnoredFoldersMappingPage.vue')
+const TechnicalSprawl = () => import('@/views/cities/TechnicalSprawlPage.vue')
+const Hotspots = () => import('@/views/cities/HotspotsPage.vue')
+const ComplexityTrends = () => import('@/views/cities/ComplexityTrendsPage.vue')
+const CodeAge = () => import('@/views/cities/CodeAgePage.vue')
+const ChangeCoupling = () => import('@/views/cities/ChangeCouplingPage.vue')
+const DeveloperView = () => import('@/views/cities/DeveloperViewPage.vue')
+const TeamView = () => import('@/views/cities/TeamViewPage.vue')
+const AbandonedCode = () => import('@/views/cities/AbandonedCodePage.vue')
+const ResponsibilityDiffusion = () => import('@/views/cities/ResponsibilityDiffusionPage.vue')
+
+const DeveloperMapping = () => import('@/views/mappings/DeveloperMappingPage.vue')
+const TeamMapping = () => import('@/views/mappings/TeamMappingPage.vue')
+const FolderMapping = () => import('@/views/mappings/FolderMappingPage.vue')
+const FormerDevsMapping = () => import('@/views/mappings/FormerDevsMappingPage.vue')
+const IgnoredFilesMapping = () => import('@/views/mappings/IgnoredFilesMappingPage.vue')
+const IgnoredFoldersMapping = () => import('@/views/mappings/IgnoredFoldersMappingPage.vue')
 
 export default function (): Router {
   const { t } = i18n.global
@@ -38,15 +38,6 @@ export default function (): Router {
         showNavBar: true,
       },
       component: Welcome,
-    },
-    {
-      path: '/time-range',
-      name: 'time-range',
-      meta: {
-        title: t('title.time-range'),
-        showNavBar: false,
-      },
-      component: TimeRange,
     },
     {
       path: '/settings',
@@ -62,7 +53,7 @@ export default function (): Router {
       name: 'about',
       meta: {
         title: t('title.about'),
-        showNavBar: false,
+        showNavBar: true,
       },
       component: About,
     },
@@ -71,11 +62,10 @@ export default function (): Router {
       name: 'attributions',
       meta: {
         title: t('title.attributions'),
-        showNavBar: false,
+        showNavBar: true,
       },
       component: Attributions,
     },
-
     {
       path: '/system-overview',
       name: 'system-overview',
@@ -167,6 +157,7 @@ export default function (): Router {
       },
       component: ResponsibilityDiffusion,
     },
+
     {
       path: '/developer-relationships',
       name: 'developer-relationships',

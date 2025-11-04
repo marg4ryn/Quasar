@@ -71,11 +71,13 @@
     width: 100%;
     min-width: 1100px;
     height: 50px;
-    background-color: var(--color-bg-primary);
-    color: var(--color-on-bg-primary);
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
     display: flex;
     align-items: center;
-    padding: 0 20px;
+    padding: 0 $spacing-xl;
     flex-shrink: 0;
+    border-bottom: 1px solid var(--color-border);
+    gap: $spacing-sm;
   }
 </style>

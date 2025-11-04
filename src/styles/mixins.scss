@@ -1,15 +1,356 @@
+@use 'variables' as *;
+
+// ============================================
+// LAYOUT MIXINS
+// ============================================
+
+// Flexbox center (both axes)
+@mixin flex-center($gap: null) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @if $gap != null {
+    gap: $gap;
+  }
+}
+
+// Flexbox column layout
+@mixin flex-column($gap: null) {
+  display: flex;
+  flex-direction: column;
+  @if $gap != null {
+    gap: $gap;
+  }
+}
+
+// Flexbox row layout
+@mixin flex-row($gap: null) {
+  display: flex;
+  flex-direction: row;
+  @if $gap != null {
+    gap: $gap;
+  }
+}
+
+// Full viewport dimensions
+@mixin full-viewport {
+  width: 100vw;
+  height: 100vh;
+}
+
+// Absolute fill (cover entire parent)
+@mixin absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+// Fixed fill (cover entire viewport)
+@mixin fixed-fill {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+// ============================================
+// TEXT MIXINS
+// ============================================
+
+// Text truncate (single line)
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Text clamp (multiple lines)
+@mixin text-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Text smooth rendering
+@mixin text-smooth {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ============================================
+// INPUT MIXINS
+// ============================================
+
+// Base input styles
+@mixin input-base {
+  width: 100%;
+  padding: $input-padding-y $input-padding-x;
+  background: var(--color-overlay);
+  border: $input-border-width solid var(--color-border);
+  border-radius: $radius-lg;
+  color: var(--color-text-primary);
+  font-size: $font-size-base;
+  transition: all $transition-base;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--color-overlay-hover);
+    border-color: var(--color-border-hover);
+  }
+
+  &:focus {
+    outline: none;
+    background: var(--color-overlay-hover);
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 3px var(--focus-ring-color);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Date input specific styles
+@mixin date-input {
+  padding: $spacing-md;
+  text-align: center;
+  cursor: pointer;
+  font-size: $font-size-sm;
+
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
+}
+
+// ============================================
+// BUTTON MIXINS
+// ============================================
+
+// Base button styles
+@mixin button-base {
+  padding: $button-padding-y $button-padding-x;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: all $transition-base;
+  min-width: $button-min-width;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+}
+
+// Primary button variant
+@mixin button-primary {
+  @include button-base;
+  background: var(--color-accent);
+  color: var(--color-text-primary);
+
+  &:hover:not(:disabled) {
+    background: rgba(var(--color-button-primary), 0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(var(--color-button-primary), 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+// Secondary button variant
+@mixin button-secondary {
+  @include button-base;
+  background: var(--color-overlay);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+
+  &:hover:not(:disabled) {
+    background: var(--color-overlay-hover);
+    border-color: var(--color-border-hover);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+// ============================================
+// ANIMATION MIXINS
+// ============================================
+
+// Floating animation
+@mixin floating-animation($duration: 3s, $distance: 10px) {
+  animation: float $duration ease-in-out infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-$distance);
+    }
+  }
+}
+
+// Fade in animation
+@mixin fade-in($duration: $transition-slow) {
+  animation: fadeIn $duration ease-in;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+// Slide up animation
+@mixin slide-up($duration: $transition-slow, $distance: 20px) {
+  animation: slideUp $duration ease-out;
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY($distance);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// ============================================
+// COMPONENT SPECIFIC MIXINS
+// ============================================
+
+// Logo with floating animation
+@mixin floating-logo($size: 80px) {
+  width: $size;
+  height: $size;
+  @include floating-animation(3s, 10px);
+}
+
+// Card container
+@mixin card-container($padding: $spacing-2xl) {
+  position: relative;
+  background: var(--color-overlay);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-lg;
+  padding: $padding;
+}
+
+// Content wrapper (centered, max-width)
+@mixin content-wrapper($max-width: $container-max-width-sm) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: $max-width;
+  width: 100%;
+  gap: $spacing-xl;
+}
+
+// ============================================
+// RESPONSIVE MIXINS
+// ============================================
+
+// Media query shortcuts
+@mixin respond-to-sm {
+  @media (max-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+@mixin respond-to-md {
+  @media (max-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+@mixin respond-to-lg {
+  @media (max-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin respond-to-xl {
+  @media (max-width: $breakpoint-xl) {
+    @content;
+  }
+}
+
+// ============================================
+// UTILITY MIXINS
+// ============================================
+
+// Remove default button styles
+@mixin reset-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+// Remove default list styles
+@mixin reset-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+// Scrollbar styling
+@mixin custom-scrollbar(
+  $width: 8px,
+  $track-color: transparent,
+  $thumb-color: rgba(255, 255, 255, 0.3)
+) {
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
 @mixin export-theme($theme) {
   @each $name, $value in $theme {
     --#{$name}: #{$value};
   }
 }
 
-@mixin flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@mixin transition($time: 0.25s) {
-  transition: all $time ease-in-out;
+// Hardware acceleration
+@mixin hardware-accelerate {
+  transform: translateZ(0);
+  will-change: transform;
 }

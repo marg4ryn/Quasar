@@ -1,15 +1,3 @@
-<script setup lang="ts">
-  import { storeToRefs } from 'pinia'
-  import { useUIStore } from '@/stores/uiStore'
-  import { useI18n } from 'vue-i18n'
-  import { RouterLink } from 'vue-router'
-
-  const { t } = useI18n()
-  const { showLabel, analysisTitle } = storeToRefs(useUIStore())
-  function openProfile() {}
-  function openNotifications() {}
-</script>
-
 <template>
   <header class="app-bar">
     <RouterLink
@@ -18,13 +6,13 @@
       :title="t('appbar.new-analysis')"
       :aria-label="t('appbar.new-analysis')"
     >
-      <img src="/vite.svg" alt="Logo" class="logo" /><span class="app-name">
+      <img :src="logoSrc" alt="Logo" class="app_logo" /><span class="app-name">
         <span class="app-name__1">Hot</span><span class="app-name__2">Spotter</span></span
       >
     </RouterLink>
 
-    <div v-if="showLabel" class="app-bar__center">
-      <span class="app-label">{{ analysisTitle }}</span>
+    <div v-if="showAnalysisTitle" class="app-bar__center">
+      <span class="app-label"> {{ repoName }} — {{ fromDate }} – {{ toDate }} </span>
     </div>
 
     <div class="app-bar__right">
@@ -71,13 +59,45 @@
   </header>
 </template>
 
+<script setup lang="ts">
+  import { useUIStore } from '@/stores/uiStore'
+  import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
+  import { useUserSettingsStore } from '@/stores/userSettingsStore'
+  import { useI18n } from 'vue-i18n'
+  import { RouterLink } from 'vue-router'
+  import { computed } from 'vue'
+
+  const { t } = useI18n()
+
+  const showAnalysisTitle = useUIStore().showAnalysisTitle
+  const analysisStore = useNewAnalysisStore()
+  const userSettingsStore = useUserSettingsStore()
+  const repoName = analysisStore.link
+  const fromDate = analysisStore.fromDate
+  const toDate = analysisStore.toDate
+
+  const logoSrc = computed(() => {
+    switch (userSettingsStore.selectedColor) {
+      case '#bc1922':
+        return '/logo_red.png'
+      case '#28abf2':
+        return '/logo_blue.png'
+      default:
+        return '/logo_red.png'
+    }
+  })
+
+  function openProfile() {}
+  function openNotifications() {}
+</script>
+
 <style lang="scss" scoped>
   .app-bar {
     width: 100%;
     min-width: 1100px;
     height: 80px;
-    background-color: var(--color-bg-primary);
-    color: var(--color-on-bg-primary);
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -97,7 +117,7 @@
       align-items: center;
       gap: 10px;
       text-decoration: none;
-      color: var(--color-on-bg-primary);
+      color: var(--color-text-primary);
     }
 
     &__center {
@@ -108,9 +128,9 @@
       font-size: 1.1rem;
     }
 
-    .logo {
-      height: 40px;
-      width: 40px;
+    .app_logo {
+      height: 60px;
+      width: 60px;
     }
 
     .app-name {
@@ -122,7 +142,7 @@
         color: var(--color-primary);
       }
       &__2 {
-        color: var(--color-on-bg-primary);
+        color: var(--color-text-primary);
       }
     }
 
@@ -132,7 +152,7 @@
       cursor: pointer;
       padding: 6px;
       border-radius: 8px;
-      color: var(--color-on-bg-primary);
+      color: var(--color-text-primary);
       object-fit: contain;
       transition:
         color 0.25s ease,
