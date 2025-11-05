@@ -12,7 +12,6 @@
 </template>
 
 <script setup lang="ts">
-  import { defineProps, defineEmits } from 'vue'
   import { useI18n } from 'vue-i18n'
   import AppButton from '@/components/common/AppButton.vue'
 

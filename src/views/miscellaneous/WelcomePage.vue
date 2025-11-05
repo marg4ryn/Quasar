@@ -1,6 +1,6 @@
 <template>
   <section class="welcome-screen">
-    <LoadingOverlay
+    <LoadingBar
       :show="isBusy"
       :label="statusLabel || t('welcomePage.loading')"
       :show-cancel-button="true"
@@ -81,8 +81,8 @@
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
   import { useAnalysis } from '@/composables/useAnalysis'
   import AppButton from '@/components/common/AppButton.vue'
-  import LoadingOverlay from '@/components/layout/LoadingOverlay.vue'
-  import ToastBox from '@/components/common/ToastBox.vue'
+  import LoadingBar from '@/components/sections/LoadingBar.vue'
+  import ToastBox from '@/components/modals/ToastBox.vue'
 
   const { t } = useI18n()
   const router = useRouter()
@@ -95,8 +95,11 @@
   const fromDate = ref(newAnalysisStore.fromDate || '2005-01-01')
   const toDate = ref(newAnalysisStore.toDate || today)
 
-  const screenId = 'download-repository'
-  const { isBusy, isCompleted, statusLabel, start, stop } = useAnalysis(screenId)
+  const { isBusy, isCompleted, statusLabel, start, stop } = useAnalysis(
+    'download-repository',
+    'Repository Download',
+    '/system-overview'
+  )
 
   const logoSrc = computed(() => {
     switch (userSettingsStore.selectedColor) {

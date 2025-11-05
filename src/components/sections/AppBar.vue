@@ -6,9 +6,10 @@
       :title="t('appbar.new-analysis')"
       :aria-label="t('appbar.new-analysis')"
     >
-      <img :src="logoSrc" alt="Logo" class="app_logo" /><span class="app-name">
-        <span class="app-name__1">Hot</span><span class="app-name__2">Spotter</span></span
-      >
+      <img :src="logoSrc" alt="Logo" class="app_logo" />
+      <span class="app-name">
+        <span class="app-name__1">Hot</span><span class="app-name__2">Spotter</span>
+      </span>
     </RouterLink>
 
     <div v-if="showAnalysisTitle" class="app-bar__center">
@@ -16,22 +17,29 @@
     </div>
 
     <div class="app-bar__right">
-      <button
-        class="icon-btn"
-        :title="t('appbar.notifications')"
-        :aria-label="t('appbar.notifications')"
-        @click="openNotifications"
-      >
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-          <path
-            d="M320 64C306.7 64 296 74.7 296 88L296 97.7C214.6 109.3 152 179.4 152 264L152 278.5C152 316.2 142 353.2 123 385.8L101.1 423.2C97.8 429 96 435.5 96 442.2C96 463.1 112.9 480 133.8 480L506.2 480C527.1 480 544 463.1 544 442.2C544 435.5 542.2 428.9 538.9 423.2L517 385.7C498 353.1 488 316.1 488 278.4L488 263.9C488 179.3 425.4 109.2 344 97.6L344 87.9C344 74.6 333.3 63.9 320 63.9zM488.4 432L151.5 432L164.4 409.9C187.7 370 200 324.6 200 278.5L200 264C200 197.7 253.7 144 320 144C386.3 144 440 197.7 440 264L440 278.5C440 324.7 452.3 370 475.5 409.9L488.4 432zM252.1 528C262 556 288.7 576 320 576C351.3 576 378 556 387.9 528L252.1 528z"
-            fill="currentColor"
-          />
-        </svg>
-      </button>
+      <div ref="notificationBtnRef" class="notification-wrapper">
+        <button
+          class="icon-btn"
+          :class="{ active: notificationsStore.showPanel }"
+          :title="t('appbar.notifications')"
+          :aria-label="t('appbar.notifications')"
+          @click="openNotifications"
+        >
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+            <path
+              d="M320 64C306.7 64 296 74.7 296 88L296 97.7C214.6 109.3 152 179.4 152 264L152 278.5C152 316.2 142 353.2 123 385.8L101.1 423.2C97.8 429 96 435.5 96 442.2C96 463.1 112.9 480 133.8 480L506.2 480C527.1 480 544 463.1 544 442.2C544 435.5 542.2 428.9 538.9 423.2L517 385.7C498 353.1 488 316.1 488 278.4L488 263.9C488 179.3 425.4 109.2 344 97.6L344 87.9C344 74.6 333.3 63.9 320 63.9zM488.4 432L151.5 432L164.4 409.9C187.7 370 200 324.6 200 278.5L200 264C200 197.7 253.7 144 320 144C386.3 144 440 197.7 440 264L440 278.5C440 324.7 452.3 370 475.5 409.9L488.4 432zM252.1 528C262 556 288.7 576 320 576C351.3 576 378 556 387.9 528L252.1 528z"
+              fill="currentColor"
+            />
+          </svg>
+          <span v-if="notificationsStore.unreadCount > 0" class="notification-badge">
+            {{ notificationsStore.unreadCount > 99 ? '99+' : notificationsStore.unreadCount }}
+          </span>
+        </button>
+      </div>
+
       <RouterLink
         to="/settings"
-        class="icon-btn"
+        class="settings-btn"
         :title="t('appbar.settings')"
         :aria-label="t('appbar.settings')"
       >
@@ -42,6 +50,7 @@
           />
         </svg>
       </RouterLink>
+
       <button
         class="icon-btn"
         :title="t('appbar.user-profile')"
@@ -57,24 +66,32 @@
       </button>
     </div>
   </header>
+
+  <NotificationsPanel ref="notificationsPanelRef" />
 </template>
 
 <script setup lang="ts">
   import { useUIStore } from '@/stores/uiStore'
   import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
+  import { useNotificationsStore } from '@/stores/notificationsStore'
   import { useI18n } from 'vue-i18n'
   import { RouterLink } from 'vue-router'
-  import { computed } from 'vue'
+  import { computed, ref, onMounted, onUnmounted } from 'vue'
+  import NotificationsPanel from '@/components/sections/NotificationsPanel.vue'
 
   const { t } = useI18n()
 
   const showAnalysisTitle = useUIStore().showAnalysisTitle
   const analysisStore = useNewAnalysisStore()
   const userSettingsStore = useUserSettingsStore()
+  const notificationsStore = useNotificationsStore()
   const repoName = analysisStore.link
   const fromDate = analysisStore.fromDate
   const toDate = analysisStore.toDate
+
+  const notificationBtnRef = ref<HTMLElement | null>(null)
+  const notificationsPanelRef = ref<InstanceType<typeof NotificationsPanel> | null>(null)
 
   const logoSrc = computed(() => {
     switch (userSettingsStore.selectedColor) {
@@ -87,8 +104,31 @@
     }
   })
 
+  function openNotifications() {
+    notificationsStore.togglePanel()
+  }
+
   function openProfile() {}
-  function openNotifications() {}
+
+  function handleClickOutside(event: MouseEvent) {
+    if (!notificationsStore.showPanel) return
+
+    const target = event.target as Node
+    const btn = notificationBtnRef.value
+    const panel = notificationsPanelRef.value?.panelElement
+
+    if (btn && !btn.contains(target) && panel && !panel.contains(target)) {
+      notificationsStore.closePanel()
+    }
+  }
+
+  onMounted(() => {
+    document.addEventListener('click', handleClickOutside, true)
+  })
+
+  onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside, true)
+  })
 </script>
 
 <style lang="scss" scoped>
@@ -146,7 +186,11 @@
       }
     }
 
-    .icon-btn {
+    .notification-wrapper {
+      position: relative;
+    }
+
+    .settings-btn {
       background: none;
       border: none;
       cursor: pointer;
@@ -158,8 +202,7 @@
         color 0.25s ease,
         transform 0.2s ease;
 
-      &:hover,
-      &:focus {
+      &:hover {
         color: var(--color-primary);
         transform: scale(1.2);
       }
@@ -170,10 +213,64 @@
       }
     }
 
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+      color: var(--color-text-primary);
+      object-fit: contain;
+      transition:
+        color 0.25s ease,
+        transform 0.2s ease;
+      position: relative;
+
+      &:hover {
+        color: var(--color-primary);
+        transform: scale(1.2);
+      }
+
+      &.active {
+        color: var(--color-primary);
+        transform: scale(1);
+      }
+    }
+
     .icon {
       width: 34px;
       height: 34px;
       display: block;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.4);
+      border: 2px solid var(--color-bg-secondary);
+      animation: badge-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes badge-pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
     }
   }
 </style>

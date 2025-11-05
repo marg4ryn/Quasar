@@ -1,17 +1,16 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import {
-  createAnalysisConnection,
-  AnalysisStatus,
-  AnalysisResult,
-} from '@/services/analysisConnection'
+import { createAnalysisConnection } from '@/services/analysisConnection'
+import { useNotificationsStore } from '@/stores/notificationsStore'
 
 export interface AnalysisState {
   id: string
   screenId: string
+  screenName?: string
+  screenRoute?: string
   state: 'idle' | 'running' | 'completed' | 'error'
-  status?: AnalysisStatus
-  result?: AnalysisResult
+  status?: any
+  result?: any
   error?: string
   startedAt?: Date
   completedAt?: Date
@@ -38,11 +37,13 @@ export const useAnalysisStore = defineStore('analysis', () => {
     return Array.from(analyses.value.values()).filter((a) => a.state === 'running')
   })
 
-  const initializeAnalysis = (screenId: string) => {
+  const initializeAnalysis = (screenId: string, screenName?: string, screenRoute?: string) => {
     if (!analyses.value.has(screenId)) {
       analyses.value.set(screenId, {
         id: `${screenId}-${Date.now()}`,
         screenId,
+        screenName,
+        screenRoute,
         state: 'idle',
       })
     }
@@ -55,9 +56,13 @@ export const useAnalysisStore = defineStore('analysis', () => {
     }
 
     closeConnection(screenId)
-    initializeAnalysis(screenId)
 
-    const analysis = analyses.value.get(screenId)!
+    const analysis = analyses.value.get(screenId)
+    if (!analysis) {
+      console.error(`Analysis ${screenId} not initialized`)
+      return
+    }
+
     analysis.state = 'running'
     analysis.status = undefined
     analysis.error = undefined
@@ -65,20 +70,34 @@ export const useAnalysisStore = defineStore('analysis', () => {
     analysis.startedAt = new Date()
     analysis.completedAt = undefined
 
+    const notificationsStore = useNotificationsStore()
+
     try {
       const connection = createAnalysisConnection(screenId, params, {
-        onProgress: (status: AnalysisStatus) => {
+        onProgress: (status: any) => {
           const current = analyses.value.get(screenId)
           if (current) {
             current.status = status
           }
         },
-        onComplete: (result: AnalysisResult) => {
+        onComplete: (result: any) => {
           const current = analyses.value.get(screenId)
           if (current) {
             current.state = 'completed'
             current.result = result
             current.completedAt = new Date()
+
+            const screenName = current.screenName || screenId
+            const duration = current.startedAt
+              ? Math.round((current.completedAt.getTime() - current.startedAt.getTime()) / 1000)
+              : 0
+
+            notificationsStore.addNotification({
+              message: `Analysis "${screenName}" completed successfully in ${duration}s`,
+              type: 'success',
+              screenId: current.screenId,
+              screenRoute: current.screenRoute,
+            })
           }
           closeConnection(screenId)
         },
@@ -88,6 +107,14 @@ export const useAnalysisStore = defineStore('analysis', () => {
             current.state = 'error'
             current.error = error
             current.completedAt = new Date()
+
+            const screenName = current.screenName || screenId
+            notificationsStore.addNotification({
+              message: `Analysis "${screenName}" failed: ${error}`,
+              type: 'error',
+              screenId: current.screenId,
+              screenRoute: current.screenRoute,
+            })
           }
           closeConnection(screenId)
         },
@@ -98,6 +125,14 @@ export const useAnalysisStore = defineStore('analysis', () => {
       analysis.state = 'error'
       analysis.error = error instanceof Error ? error.message : 'Unknown error'
       analysis.completedAt = new Date()
+
+      const screenName = analysis.screenName || screenId
+      notificationsStore.addNotification({
+        message: `Analysis "${screenName}" failed to start: ${analysis.error}`,
+        type: 'error',
+        screenId: analysis.screenId,
+        screenRoute: analysis.screenRoute,
+      })
     }
   }
 
@@ -107,6 +142,15 @@ export const useAnalysisStore = defineStore('analysis', () => {
       analysis.state = 'idle'
       analysis.status = undefined
       closeConnection(screenId)
+
+      const notificationsStore = useNotificationsStore()
+      const screenName = analysis.screenName || screenId
+      notificationsStore.addNotification({
+        message: `Analysis "${screenName}" was cancelled`,
+        type: 'info',
+        screenId: analysis.screenId,
+        screenRoute: analysis.screenRoute,
+      })
     }
   }
 

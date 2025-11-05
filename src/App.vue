@@ -23,10 +23,10 @@
   import { useAnalysisStore } from '@/stores/analysisStore'
   import { MockSSEServer } from '@/services/mockSSEServer'
 
-  import AppBar from '@/components/layout/AppBar.vue'
-  import NavBar from '@/components/layout/NavBar.vue'
-  import AppFooter from '@/components/layout/AppFooter.vue'
-  import MeshGradient from '@/components/layout/MeshGradient.vue'
+  import AppBar from '@/components/sections/AppBar.vue'
+  import NavBar from '@/components/sections/navbar/NavBar.vue'
+  import AppFooter from '@/components/sections/AppFooter.vue'
+  import MeshGradient from '@/components/visuals/MeshGradient.vue'
 
   const uiStore = useUIStore()
   const userSettings = useUserSettingsStore()

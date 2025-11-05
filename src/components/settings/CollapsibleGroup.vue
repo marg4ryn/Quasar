@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
   import { ref } from 'vue'
-  import CollapsibleBox from './CollapsibleBox.vue'
+  import CollapsibleBox from '@/components/settings/CollapsibleBox.vue'
 
   defineOptions({ name: 'CollapsibleGroup' })
 

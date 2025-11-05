@@ -20,7 +20,7 @@
 
   const props = defineProps<{
     message: string
-    variant?: 'success' | 'error' | 'info'
+    variant?: 'success' | 'error' | 'info' | 'warning'
     duration?: number
     onClose?: () => void
   }>()
@@ -84,15 +84,19 @@
       opacity 0.3s ease;
 
     &.toast--success {
-      background: linear-gradient(135deg, #22c55e, #15803d);
+      background: linear-gradient(135deg, var(--color-success), var(--color-success-dark));
     }
 
     &.toast--error {
-      background: linear-gradient(135deg, #ef4444, #991b1b);
+      background: linear-gradient(135deg, var(--color-error), var(--color-error-dark));
     }
 
     &.toast--info {
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      background: linear-gradient(135deg, var(--color-info), var(--color-info-dark));
+    }
+
+    &.toast--warning {
+      background: linear-gradient(135deg, var(--color-warning), var(--color-warning-dark));
     }
 
     .toast-message {

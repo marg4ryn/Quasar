@@ -1,6 +1,6 @@
 <template>
-  <CloseIconButton />
-  <PageHeader :label="t('settingsPage.header')" />
+  <AppButtonClose />
+  <AppPageHeader :label="t('settingsPage.header')" />
   <div class="content">
     <CollapsibleGroup
       :items="[
@@ -24,7 +24,7 @@
           :options="themes"
         />
         <SectionHeader :label="t('settingsPage.language')" />
-        <DropdownSelect
+        <AppDropdownSelect
           id="language-select"
           :options="languages"
           v-model="useUserSettingsStore().selectedLanguage"
@@ -32,15 +32,15 @@
       </template>
 
       <template #second>
-        <p>{{ t('others.inDevelopmentLabel') }}</p>
+        <p>{{ t('common.inDevelopmentLabel') }}</p>
       </template>
 
       <template #third>
-        <p>{{ t('others.inDevelopmentLabel') }}</p>
+        <p>{{ t('common.inDevelopmentLabel') }}</p>
       </template>
 
       <template #fourth>
-        <p>{{ t('others.inDevelopmentLabel') }}</p>
+        <p>{{ t('common.inDevelopmentLabel') }}</p>
       </template>
     </CollapsibleGroup>
   </div>
@@ -50,12 +50,12 @@
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
   import { useI18n } from 'vue-i18n'
 
-  import CloseIconButton from '@/components/common/CloseIconButton.vue'
-  import PageHeader from '@/components/common/PageHeader.vue'
-  import CollapsibleGroup from '@/components/common/CollapsibleGroup.vue'
-  import RadioButtonGroup from '@/components/common/RadioButtonGroup.vue'
-  import SectionHeader from '@/components/common/SectionHeader.vue'
-  import DropdownSelect from '@/components/common/DropdownSelect.vue'
+  import AppButtonClose from '@/components/common/AppButtonClose.vue'
+  import AppPageHeader from '@/components/common/AppPageHeader.vue'
+  import CollapsibleGroup from '@/components/settings/CollapsibleGroup.vue'
+  import RadioButtonGroup from '@/components/settings/RadioButtonGroup.vue'
+  import SectionHeader from '@/components/settings/SectionHeader.vue'
+  import AppDropdownSelect from '@/components/common/AppDropdownSelect.vue'
 
   const { t } = useI18n()
 

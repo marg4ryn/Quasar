@@ -6,10 +6,10 @@ import {
   getAnalysisStatusLabel,
 } from '@/services/analysisConnection'
 
-export function useAnalysis(screenId: string) {
+export function useAnalysis(screenId: string, screenName?: string, screenRoute?: string) {
   const store = useAnalysisStore()
 
-  store.initializeAnalysis(screenId)
+  store.initializeAnalysis(screenId, screenName, screenRoute)
 
   const analysis = store.getAnalysis(screenId)
   const isRunning = store.isRunning(screenId)

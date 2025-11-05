@@ -85,6 +85,14 @@
     "modal": "Are you sure you want to abort the repository download?"
   },
 
+  "notifications": {
+    "header": "Notifications",
+    "noNotifications": "No notifications yet",
+    "clearAll": "Clear All",
+    "remove": "Remove notification",
+    "viewDetails": "View Details"
+  },
+
   "common": {
     "inDevelopmentLabel": "In Development",
     "close": "Close",

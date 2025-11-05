@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import InDevelopmentLabel from '@/components/layout/InDevelopmentLabel.vue'
+  import InDevelopmentLabel from '@/components/common/InDevelopmentLabel.vue'
 </script>
 
 <style scoped></style>

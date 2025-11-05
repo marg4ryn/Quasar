@@ -1,3 +1,9 @@
+<template>
+  <button :class="['app-button', `app-button--${variant || 'primary'}`]" @click="handleClick">
+    {{ label }}
+  </button>
+</template>
+
 <script setup lang="ts">
   defineProps<{
     label: string
@@ -12,12 +18,6 @@
     emit('click')
   }
 </script>
-
-<template>
-  <button :class="['app-button', `app-button--${variant || 'primary'}`]" @click="handleClick">
-    {{ label }}
-  </button>
-</template>
 
 <style scoped lang="scss">
   .app-button {

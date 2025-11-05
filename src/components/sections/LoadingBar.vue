@@ -29,7 +29,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import ModalBox from '@/components/common/ModalBox.vue'
+  import ModalBox from '@/components/modals/ModalBox.vue'
   import AppButton from '@/components/common/AppButton.vue'
 
   const { t } = useI18n()
