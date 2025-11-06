@@ -10,6 +10,8 @@ const edgesToMerge: Array<{
   matrix: THREE.Matrix4
 }> = []
 
+const colorDataMap = new Map<string, { color: number; intensity: number }>()
+
 // ========== TWORZENIE GEOMETRII ==========
 export function createBuilding(
   node: CityNode, 
@@ -218,7 +220,7 @@ export function applyColorData(
   objectMap: Map<THREE.Mesh, any>
 ): void {
   // mapa path -> colorData
-  const colorDataMap = new Map<string, { color: number; intensity: number }>()
+  colorDataMap.clear()
   colorData.forEach(h => {
     colorDataMap.set(h.path, { color: h.color, intensity: h.intensity })
   })
@@ -244,6 +246,7 @@ export function applyColorData(
 }
 
 export function clearColorData(objectMap: Map<THREE.Mesh, any>): void {
+  colorDataMap.clear()
   objectMap.forEach((nodeData, mesh) => {
     if (mesh.userData.type === 'building') {
       const material = mesh.material as THREE.MeshPhongMaterial
@@ -251,4 +254,8 @@ export function clearColorData(objectMap: Map<THREE.Mesh, any>): void {
       material.emissive.setHex(COLORS.buildingEmissive)
     }
   })
+}
+
+export function getColorDataForPath(path: string): { color: number; intensity: number } | undefined {
+  return colorDataMap.get(path)
 }
