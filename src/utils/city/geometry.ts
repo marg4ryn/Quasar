@@ -212,3 +212,42 @@ export function createGeometry(
 
     return group;
 }
+
+export function applyColorData(
+  colorData: Array<{ path: string; color: number; intensity: number }>,
+  objectMap: Map<THREE.Mesh, any>
+): void {
+  // mapa path -> colorData
+  const colorDataMap = new Map<string, { color: number; intensity: number }>()
+  colorData.forEach(h => {
+    colorDataMap.set(h.path, { color: h.color, intensity: h.intensity })
+  })
+  
+  objectMap.forEach((nodeData, mesh) => {
+    const currentColorData = colorDataMap.get(nodeData.path)
+    
+    if (currentColorData && mesh.userData.type === 'building') {
+      const material = mesh.material as THREE.MeshPhongMaterial
+      
+      // Interpoluj między oryginalnym kolorem a kolorem hotspotu
+      const originalColor = new THREE.Color(COLORS.building)
+      const targetColor = new THREE.Color(currentColorData.color)
+      
+      material.color.lerpColors(originalColor, targetColor, currentColorData.intensity * 1.5)
+      
+      // emissive things
+      const emissiveColor = new THREE.Color(currentColorData.color)
+      material.emissive.copy(emissiveColor)
+    }
+  })
+}
+
+export function clearColorData(objectMap: Map<THREE.Mesh, any>): void {
+  objectMap.forEach((nodeData, mesh) => {
+    if (mesh.userData.type === 'building') {
+      const material = mesh.material as THREE.MeshPhongMaterial
+      material.color.setHex(COLORS.building)
+      material.emissive.setHex(COLORS.buildingEmissive)
+    }
+  })
+}

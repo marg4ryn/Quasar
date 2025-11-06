@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
-import type { CityData } from '@/types/city'
+import type { CityNode } from '@/types/city'
 import { useCodeCityScene } from '@/composables/useCodeCityScene'
 import { useCodeCityState } from '@/composables/useCodeCityState'
 import { processNode } from '@/utils/city/layout'
@@ -17,20 +17,23 @@ import { createGeometry, createMergedEdges } from '@/utils/city/geometry'
 import * as THREE from 'three'
 import { COLORS, CAMERA_DAMPING, AUTO_ROTATE_DELAY, AUTO_ROTATE_SPEED, CENTER_TRANSITION_SPEED } from '@/utils/city/constants'
 import { toRaw } from 'vue'
+import { applyColorData, clearColorData } from '@/utils/city/geometry'
 
 interface Props {
-  data: CityData | null
+  data: CityNode | null
   autoRotate?: boolean
   initialZoom?: number
+  colorData?: Array<{ path: string; color: number; intensity: number }>
 }
 
 const props = withDefaults(defineProps<Props>(), {
   autoRotate: true,
-  initialZoom: 150
+  initialZoom: 150,
+  colorData: () => []
 })
 
 const emit = defineEmits<{
-  buildingClick: [name: string, nodeData: any]
+  buildingClick: [name: string, path: string]
 }>()
 
 const containerRef = ref<HTMLDivElement | null>(null)
@@ -42,6 +45,14 @@ const { getScene, getCamera, getRenderer, getRaycaster, getMouse, initScene, cle
 
 const { hoveredObject, selectedObject, objectMap, rotationCenter, setRotationCenter, clearSelection } = 
   useCodeCityState()
+
+watch(() => props.colorData, (newColorData) => {
+  if (newColorData && newColorData.length > 0) {
+    applyColorData(newColorData, objectMap)
+  } else {
+    clearColorData(objectMap)
+  }
+}, { deep: true })
 
 // Kontrolki
 const controls = {
@@ -131,7 +142,7 @@ function handleClick(cam: THREE.Camera, scn: THREE.Scene, e: MouseEvent) {
       setRotationCenter(new THREE.Vector3(0, 0, 0))
     } else if (clickedObject !== toRaw(selectedObject.value)) {
       const nodeData = objectMap.get(clickedObject)
-      emit('buildingClick', nodeData.name, nodeData)
+      emit('buildingClick', nodeData.name, nodeData.path)
 
       setEmissiveColor(selectedObject.value, COLORS.buildingEmissive)
 
@@ -139,25 +150,8 @@ function handleClick(cam: THREE.Camera, scn: THREE.Scene, e: MouseEvent) {
       setEmissiveColor(selectedObject.value, COLORS.selected)
       
       // Ustaw nowy target centrum rotacji
-      if (clickedObject.userData.type === 'building') {
-        let parent = clickedObject.parent
-        while (parent) {
-          if (parent.children.length > 0) {
-            const platformMesh = parent.children.find((child: any) => 
-              child.userData && child.userData.type === 'platform'
-            )
-            if (platformMesh) {
-              controls.targetCenter.copy(platformMesh.position)
-              setRotationCenter(platformMesh.position)
-              break
-            }
-          }
-          parent = parent.parent
-        }
-      } else if (clickedObject.userData.type === 'platform') {
-        controls.targetCenter.copy(clickedObject.position)
-        setRotationCenter(clickedObject.position)
-      }
+      controls.targetCenter.copy(clickedObject.position)
+      setRotationCenter(clickedObject.position)
     }
   }
 }
@@ -260,6 +254,10 @@ function initThreeJS() {
 
   const mergedEdges = createMergedEdges()
   scene.add(mergedEdges)
+
+  if (props.colorData && props.colorData.length > 0) {
+    applyColorData(props.colorData, objectMap)
+  }
 
   setupEventListeners(renderer, camera, scene)
 

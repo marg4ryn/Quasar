@@ -4,27 +4,33 @@ import CodeCity from '@/components/common/CodeCity.vue'
 
 // Tymczasowe dane testowe
 const cityData = ref({
-  name: "root",
+  name: "root", type: "directory", path: "/",
   children: [
     {
-      name: "internal",
+      name: "internal", type: "directory", path: "/internal",
       children: [
-        { name: "SessionImpl.java", height: 0.8, width: 0.49 },
-        { name: "SessionFactoryImpl.java", height: 0.2, width: 0.43 },
-        { name: "Transaction.java", height: 0.4, width: 0.35 },
-        { name: "Cache.java", height: 0.55, width: 0.55 }
+        { name: "SessionImpl.java", type: "file", path: "/internal/SessionImpl.java", height: 0.8, width: 0.49 },
+        { name: "SessionFactoryImpl.java", type: "file", path: "/internal/SessionFactoryImpl.java", height: 0.2, width: 0.43 },
+        { name: "Transaction.java", type: "file", path: "/internal/Transaction.java", height: 0.4, width: 0.35 },
+        { name: "Cache.java", type: "file", path: "/internal/Cache.java", height: 0.55, width: 0.55 }
       ]
     },
     {
-      name: "api",
+      name: "api", type: "directory", path: "/api",
       children: [
-        { name: "UserService.java", height: 0.94, width: 0.60 },
-        { name: "AuthService.java", height: 0.12, width: 0.70 }
+        { name: "UserService.java", type: "file", path: "/api/UserService.java", height: 0.94, width: 0.60 },
+        { name: "AuthService.java", type: "file", path: "/api/AuthService.java", height: 0.12, width: 0.70 }
       ]
     },
-    { name: "Main.java", height: 0.33, width: 0.85 }
+    { name: "Main.java", type: "file", path: "/Main.java", height: 0.33, width: 0.85 }
   ]
 })
+
+const colorData = ref([
+  { path: "/api/UserService.java", color: 0xa30000, intensity: 0.9 },
+  { path: "/internal/Cache.java", color: 0xa30000, intensity: 0.5 }, 
+  { path: "/Main.java", color: 0xa30000, intensity: 0.2 }            
+])
 
 const cityDataBig = ref({
   name: "root",
@@ -1639,15 +1645,16 @@ const cityDataBig = ref({
   ]
 })
 
-function handleBuildingClick(name: string, data: any) {
-  console.log('Clicked on:', name, data)
+function handleBuildingClick(name: string, path: string) {
+  console.log('Clicked on:', name, ' Path:', path)
 }
 </script>
 
 <template>
   <div class="project-view">
     <CodeCity 
-      :data="cityDataBig"
+      :data="cityData"
+      :colorData="colorData"
       @buildingClick="handleBuildingClick"
     />
   </div>

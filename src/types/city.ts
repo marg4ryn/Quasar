@@ -1,13 +1,10 @@
 export interface CityNode {
   name: string
+  type: string
+  path: string
   height?: number
   width?: number
   children?: CityNode[]
-}
-
-export interface CityData {
-  name: string
-  children: CityNode[]
 }
 
 export interface ProcessedNodeData {
@@ -22,4 +19,10 @@ export interface LayoutResult {
   positions: Array<{ x: number; z: number; rowDepth: number }>
   totalWidth: number
   totalDepth: number
+}
+
+export interface BuildingColorData {
+  path: string
+  color: number
+  intensity: number
 }
