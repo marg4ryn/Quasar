@@ -1,6 +1,9 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, onMounted, onUnmounted } from 'vue'
   import CodeCity from '@/components/visuals/CodeCity.vue'
+  import { useCodeCityController } from '@/composables/useCodeCityController'
+
+  const { selectBuilding } = useCodeCityController()
 
   // Tymczasowe dane testowe
   const cityData = ref({
@@ -319,6 +322,23 @@
   function handleBuildingClick(name: string, path: string, intensity?: number) {
     console.log('Clicked on:', name, ' Path:', path, ' Intensity: ', intensity)
   }
+
+  function handleKeyPress(e: KeyboardEvent) {
+    if (e.key === 'c' || e.key === 'C') {
+      const success = selectBuilding(
+        '/src/main/java/com/company/service/UserService.java'
+      )
+    }
+  }
+
+  onMounted(() => {
+    window.addEventListener('keydown', handleKeyPress)
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeyPress)
+  })
+
 </script>
 
 <template>

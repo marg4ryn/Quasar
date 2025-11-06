@@ -18,6 +18,9 @@
   import { COLORS, CAMERA_DAMPING, AUTO_ROTATE_DELAY, AUTO_ROTATE_SPEED, CENTER_TRANSITION_SPEED } from '@/utils/city/constants'
   import { toRaw } from 'vue'
   import { applyColorData, clearColorData } from '@/utils/city/geometry'
+  import { useCodeCityController } from '@/composables/useCodeCityController'
+
+  const { registerSelectBuilding, unregisterSelectBuilding } = useCodeCityController()
 
   interface Props {
     data: CityNode | null
@@ -53,6 +56,43 @@
       clearColorData(objectMap)
     }
   }, { deep: true })
+
+  function selectBuildingByPath(path: string): boolean {
+    let targetMesh: THREE.Mesh | null = null
+    
+    objectMap.forEach((nodeData, mesh) => {
+      if (nodeData.path === path) {
+        targetMesh = mesh
+      }
+    })
+    
+    if (!targetMesh) {
+      return false
+    }
+    
+    selectBuilding(targetMesh, false)
+    return true
+  }
+
+  function selectBuilding(mesh: THREE.Mesh, returnEmit: boolean) {
+    const nodeData = objectMap.get(mesh)
+    if (!nodeData) return
+    
+    // Odznacz poprzedni budynek/platformę
+    if (selectedObject.value) {
+      setEmissiveColor(selectedObject.value, COLORS.buildingEmissive)
+    }
+    
+    selectedObject.value = mesh
+
+    controls.targetCenter.copy(mesh.position)
+    setRotationCenter(mesh.position)
+    
+    if (returnEmit) {
+      const colorInfo = getColorDataForPath(nodeData.path)
+      emit('buildingClick', nodeData.name, nodeData.path, colorInfo?.intensity)
+    }
+  }
 
   // Kontrolki
   const controls = {
@@ -141,18 +181,7 @@
         controls.targetCenter = new THREE.Vector3(0, 0, 0)
         setRotationCenter(new THREE.Vector3(0, 0, 0))
       } else if (clickedObject !== toRaw(selectedObject.value)) {
-        const nodeData = objectMap.get(clickedObject)
-        const colorInfo = getColorDataForPath(nodeData.path)
-        emit('buildingClick', nodeData.name, nodeData.path, colorInfo?.intensity)
-
-        setEmissiveColor(selectedObject.value, COLORS.buildingEmissive)
-
-        selectedObject.value = clickedObject
-        //setEmissiveColor(selectedObject.value, COLORS.selected)
-        
-        // Ustaw nowy target centrum rotacji
-        controls.targetCenter.copy(clickedObject.position)
-        setRotationCenter(clickedObject.position)
+        selectBuilding(clickedObject, true)
       }
     }
   }
@@ -298,10 +327,12 @@
 
   onMounted(() => {
     initThreeJS()
+    registerSelectBuilding(selectBuildingByPath)
   })
 
   onUnmounted(() => {
     cleanup()
+    unregisterSelectBuilding()
   })
 </script>
 
