@@ -10,6 +10,8 @@ const edgesToMerge: Array<{
   matrix: THREE.Matrix4
 }> = []
 
+const colorDataMap = new Map<string, { color: number; intensity: number }>()
+
 // ========== TWORZENIE GEOMETRII ==========
 export function createBuilding(
   node: CityNode, 
@@ -211,4 +213,49 @@ export function createGeometry(
     }
 
     return group;
+}
+
+export function applyColorData(
+  colorData: Array<{ path: string; color: number; intensity: number }>,
+  objectMap: Map<THREE.Mesh, any>
+): void {
+  // mapa path -> colorData
+  colorDataMap.clear()
+  colorData.forEach(h => {
+    colorDataMap.set(h.path, { color: h.color, intensity: h.intensity })
+  })
+  
+  objectMap.forEach((nodeData, mesh) => {
+    const currentColorData = colorDataMap.get(nodeData.path)
+    
+    if (currentColorData && mesh.userData.type === 'building') {
+      const material = mesh.material as THREE.MeshPhongMaterial
+      
+      // Interpoluj między oryginalnym kolorem a kolorem hotspotu
+      const originalColor = new THREE.Color(COLORS.building)
+      const targetColor = new THREE.Color(currentColorData.color)
+      
+      material.color.lerpColors(originalColor, targetColor, currentColorData.intensity * 3)
+      
+      // emissive things
+      //const emissiveColor = new THREE.Color(currentColorData.color)
+      //material.emissive.copy(emissiveColor)
+      //material.emissiveIntensity = 0.8
+    }
+  })
+}
+
+export function clearColorData(objectMap: Map<THREE.Mesh, any>): void {
+  colorDataMap.clear()
+  objectMap.forEach((nodeData, mesh) => {
+    if (mesh.userData.type === 'building') {
+      const material = mesh.material as THREE.MeshPhongMaterial
+      material.color.setHex(COLORS.building)
+      material.emissive.setHex(COLORS.buildingEmissive)
+    }
+  })
+}
+
+export function getColorDataForPath(path: string): { color: number; intensity: number } | undefined {
+  return colorDataMap.get(path)
 }

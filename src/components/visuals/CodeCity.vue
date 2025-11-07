@@ -8,53 +8,91 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, onUnmounted } from 'vue'
-  import type { CityData } from '@/types/city'
+  import { ref, onMounted, onUnmounted, watch } from 'vue'
+  import type { CityNode } from '@/types/city'
   import { useCodeCityScene } from '@/composables/useCodeCityScene'
   import { useCodeCityState } from '@/composables/useCodeCityState'
   import { processNode } from '@/utils/city/layout'
-  import { createGeometry, createMergedEdges } from '@/utils/city/geometry'
+  import { createGeometry, createMergedEdges, getColorDataForPath } from '@/utils/city/geometry'
   import * as THREE from 'three'
-  import {
-    COLORS,
-    CAMERA_DAMPING,
-    AUTO_ROTATE_DELAY,
-    AUTO_ROTATE_SPEED,
-    CENTER_TRANSITION_SPEED,
-  } from '@/utils/city/constants'
+  import { COLORS, CAMERA_DAMPING, AUTO_ROTATE_DELAY, AUTO_ROTATE_SPEED, CENTER_TRANSITION_SPEED } from '@/utils/city/constants'
   import { toRaw } from 'vue'
+  import { applyColorData, clearColorData } from '@/utils/city/geometry'
+  import { useCodeCityController } from '@/composables/useCodeCityController'
+
+  const { registerSelectBuilding, unregisterSelectBuilding } = useCodeCityController()
 
   interface Props {
-    data: CityData | null
+    data: CityNode | null
     autoRotate?: boolean
     initialZoom?: number
+    colorData?: Array<{ path: string; color: number; intensity: number }>
   }
 
   const props = withDefaults(defineProps<Props>(), {
     autoRotate: true,
     initialZoom: 150,
+    colorData: () => []
   })
 
   const emit = defineEmits<{
-    buildingClick: [name: string, nodeData: any]
+    buildingClick: [name: string, path: string, intensity?: number]
   }>()
 
   const containerRef = ref<HTMLDivElement | null>(null)
   let animationId: number | null = null
 
   // Composables
-  const {
-    getScene,
-    getCamera,
-    getRenderer,
-    getRaycaster,
-    getMouse,
-    initScene,
-    cleanup: cleanupScene,
-  } = useCodeCityScene(containerRef, props.initialZoom)
+  const { getScene, getCamera, getRenderer, getRaycaster, getMouse, initScene, cleanup: cleanupScene } = 
+    useCodeCityScene(containerRef, props.initialZoom)
 
-  const { hoveredObject, selectedObject, objectMap, setRotationCenter, clearSelection } =
+  const { hoveredObject, selectedObject, objectMap, rotationCenter, setRotationCenter, clearSelection } = 
     useCodeCityState()
+
+  watch(() => props.colorData, (newColorData) => {
+    if (newColorData && newColorData.length > 0) {
+      applyColorData(newColorData, objectMap)
+    } else {
+      clearColorData(objectMap)
+    }
+  }, { deep: true })
+
+  function selectBuildingByPath(path: string): boolean {
+    let targetMesh: THREE.Mesh | null = null
+    
+    objectMap.forEach((nodeData, mesh) => {
+      if (nodeData.path === path) {
+        targetMesh = mesh
+      }
+    })
+    
+    if (!targetMesh) {
+      return false
+    }
+    
+    selectBuilding(targetMesh, false)
+    return true
+  }
+
+  function selectBuilding(mesh: THREE.Mesh, returnEmit: boolean) {
+    const nodeData = objectMap.get(mesh)
+    if (!nodeData) return
+    
+    // Odznacz poprzedni budynek/platformę
+    if (selectedObject.value) {
+      setEmissiveColor(selectedObject.value, COLORS.buildingEmissive)
+    }
+    
+    selectedObject.value = mesh
+
+    controls.targetCenter.copy(mesh.position)
+    setRotationCenter(mesh.position)
+    
+    if (returnEmit) {
+      const colorInfo = getColorDataForPath(nodeData.path)
+      emit('buildingClick', nodeData.name, nodeData.path, colorInfo?.intensity)
+    }
+  }
 
   // Kontrolki
   const controls = {
@@ -91,9 +129,9 @@
 
   function handleHover(cam: THREE.Camera, scn: THREE.Scene) {
     const raycaster = getRaycaster()
-    const mouse = getMouse()
+    const mouse = getMouse() 
     if (!raycaster || !mouse) return
-
+    
     raycaster.setFromCamera(mouse, cam)
     const intersects = raycaster.intersectObjects(scn.children, true)
 
@@ -105,8 +143,7 @@
 
     for (let intersect of intersects) {
       if (intersect.object.userData.isSelectable) {
-        if (toRaw(intersect.object) !== toRaw(selectedObject.value)) {
-          // toRaw bo były problemy z opakowaniem proxy przy porównaniu
+        if (toRaw(intersect.object) !== toRaw(selectedObject.value)) { // toRaw bo były problemy z opakowaniem proxy przy porównaniu
           hoveredObject.value = intersect.object as THREE.Mesh
           setEmissiveColor(hoveredObject.value, COLORS.hover)
         }
@@ -117,12 +154,13 @@
 
   function handleClick(cam: THREE.Camera, scn: THREE.Scene, e: MouseEvent) {
     const raycaster = getRaycaster()
-    const mouse = getMouse()
+    const mouse = getMouse() 
     if (!raycaster || !mouse) return
-
+    
     const timeDiff = Date.now() - mouseDownTime
     const distance = Math.sqrt(
-      Math.pow(e.clientX - mouseDownPosition.x, 2) + Math.pow(e.clientY - mouseDownPosition.y, 2)
+      Math.pow(e.clientX - mouseDownPosition.x, 2) +
+      Math.pow(e.clientY - mouseDownPosition.y, 2)
     )
 
     if (distance < 15 && timeDiff < 200) {
@@ -143,34 +181,7 @@
         controls.targetCenter = new THREE.Vector3(0, 0, 0)
         setRotationCenter(new THREE.Vector3(0, 0, 0))
       } else if (clickedObject !== toRaw(selectedObject.value)) {
-        const nodeData = objectMap.get(clickedObject)
-        emit('buildingClick', nodeData.name, nodeData)
-
-        setEmissiveColor(selectedObject.value, COLORS.buildingEmissive)
-
-        selectedObject.value = clickedObject
-        setEmissiveColor(selectedObject.value, COLORS.selected)
-
-        // Ustaw nowy target centrum rotacji
-        if (clickedObject.userData.type === 'building') {
-          let parent = clickedObject.parent
-          while (parent) {
-            if (parent.children.length > 0) {
-              const platformMesh = parent.children.find(
-                (child: any) => child.userData && child.userData.type === 'platform'
-              )
-              if (platformMesh) {
-                controls.targetCenter.copy(platformMesh.position)
-                setRotationCenter(platformMesh.position)
-                break
-              }
-            }
-            parent = parent.parent
-          }
-        } else if (clickedObject.userData.type === 'platform') {
-          controls.targetCenter.copy(clickedObject.position)
-          setRotationCenter(clickedObject.position)
-        }
+        selectBuilding(clickedObject, true)
       }
     }
   }
@@ -205,10 +216,7 @@
 
         controls.targetRotation.y += controls.rotationVelocity.y
         controls.targetRotation.x += controls.rotationVelocity.x
-        controls.targetRotation.x = Math.max(
-          -Math.PI / 2,
-          Math.min(Math.PI / 2, controls.targetRotation.x)
-        )
+        controls.targetRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, controls.targetRotation.x))
 
         controls.previousMousePosition = { x: e.clientX, y: e.clientY }
         controls.lastInteractionTime = Date.now()
@@ -241,10 +249,7 @@
 
       controls.targetRotation.x += controls.rotationVelocity.x
       controls.targetRotation.y += controls.rotationVelocity.y
-      controls.targetRotation.x = Math.max(
-        -Math.PI / 2,
-        Math.min(Math.PI / 2, controls.targetRotation.x)
-      )
+      controls.targetRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, controls.targetRotation.x))
     }
 
     controls.rotation.x += (controls.targetRotation.x - controls.rotation.x) * CAMERA_DAMPING
@@ -255,12 +260,10 @@
 
     const distance = controls.zoom
     const center = controls.currentCenter
-
-    cam.position.x =
-      center.x + distance * Math.sin(controls.rotation.y) * Math.cos(controls.rotation.x)
+    
+    cam.position.x = center.x + distance * Math.sin(controls.rotation.y) * Math.cos(controls.rotation.x)
     cam.position.y = center.y + distance * Math.sin(controls.rotation.x)
-    cam.position.z =
-      center.z + distance * Math.cos(controls.rotation.y) * Math.cos(controls.rotation.x)
+    cam.position.z = center.z + distance * Math.cos(controls.rotation.y) * Math.cos(controls.rotation.x)
     cam.lookAt(center.x, center.y, center.z)
   }
 
@@ -281,6 +284,10 @@
 
     const mergedEdges = createMergedEdges()
     scene.add(mergedEdges)
+
+    if (props.colorData && props.colorData.length > 0) {
+      applyColorData(props.colorData, objectMap)
+    }
 
     setupEventListeners(renderer, camera, scene)
 
@@ -320,10 +327,12 @@
 
   onMounted(() => {
     initThreeJS()
+    registerSelectBuilding(selectBuildingByPath)
   })
 
   onUnmounted(() => {
     cleanup()
+    unregisterSelectBuilding()
   })
 </script>
 
