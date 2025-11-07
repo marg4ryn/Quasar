@@ -3,7 +3,7 @@
   import CodeCity from '@/components/visuals/CodeCity.vue'
   import { useCodeCityController } from '@/composables/useCodeCityController'
 
-  const { selectBuilding } = useCodeCityController()
+  const { selectCityNode } = useCodeCityController()
 
   // Tymczasowe dane testowe
   const cityData = ref({
@@ -319,26 +319,9 @@
     { path: "/pom.xml", color: 0xbf1b1b, intensity: 0.15 }
   ])
 
-  function handleBuildingClick(name: string, path: string, intensity?: number) {
+  function handleBuildingClick(name: string | null, path: string | null, intensity?: number) {
     console.log('Clicked on:', name, ' Path:', path, ' Intensity: ', intensity)
   }
-
-  function handleKeyPress(e: KeyboardEvent) {
-    if (e.key === 'c' || e.key === 'C') {
-      const success = selectBuilding(
-        '/src/main/java/com/company/service/UserService.java'
-      )
-    }
-  }
-
-  onMounted(() => {
-    window.addEventListener('keydown', handleKeyPress)
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener('keydown', handleKeyPress)
-  })
-
 </script>
 
 <template>

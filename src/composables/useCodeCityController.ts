@@ -1,30 +1,30 @@
 import { ref } from 'vue'
 
-type SelectBuildingCallback = (path: string) => boolean
+type SelectCityNodeCallback = (path: string | null) => boolean
 
-const selectBuildingCallback = ref<SelectBuildingCallback | null>(null)
+const selectCityNodeCallback = ref<SelectCityNodeCallback | null>(null)
 
 export function useCodeCityController() {
-  function registerSelectBuilding(callback: SelectBuildingCallback) {
-    selectBuildingCallback.value = callback
+  function registerSelectCityNode(callback: SelectCityNodeCallback) {
+    selectCityNodeCallback.value = callback
   }
 
-  function unregisterSelectBuilding() {
-    selectBuildingCallback.value = null
+  function unregisterSelectCityNode() {
+    selectCityNodeCallback.value = null
   }
 
   // Dla komponentów zewnętrznych - wywołuje zaznaczenie
-  function selectBuilding(path: string): boolean {
-    if (!selectBuildingCallback.value) {
+  function selectCityNode(path: string | null): boolean {
+    if (!selectCityNodeCallback.value) {
       console.warn('City component not mounted')
       return false
     }
-    return selectBuildingCallback.value(path)
+    return selectCityNodeCallback.value(path)
   }
 
   return {
-    registerSelectBuilding,
-    unregisterSelectBuilding,
-    selectBuilding
+    registerSelectCityNode,
+    unregisterSelectCityNode,
+    selectCityNode
   }
 }
