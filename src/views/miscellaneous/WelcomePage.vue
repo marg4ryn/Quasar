@@ -289,45 +289,6 @@
     }
   }
 
-  // .error-message {
-  //   padding: $spacing-lg;
-  //   background: rgba(239, 68, 68, 0.1);
-  //   border: 1px solid rgba(239, 68, 68, 0.3);
-  //   border-radius: $radius-md;
-  //   color: #fca5a5;
-  //   display: flex;
-  //   flex-direction: column;
-  //   gap: $spacing-md;
-  //   width: 100%;
-  //   max-width: 400px;
-
-  //   p {
-  //     margin: 0;
-  //     font-size: $font-size-sm;
-  //     line-height: $line-height-normal;
-  //   }
-  // }
-
-  // .success-message {
-  //   padding: $spacing-lg;
-  //   background: rgba(34, 197, 94, 0.1);
-  //   border: 1px solid rgba(34, 197, 94, 0.3);
-  //   border-radius: $radius-md;
-  //   color: #86efac;
-  //   width: 100%;
-  //   max-width: 400px;
-
-  //   p {
-  //     margin: 0;
-  //     font-size: $font-size-sm;
-  //     line-height: $line-height-normal;
-
-  //     &:not(:last-child) {
-  //       margin-bottom: $spacing-xs;
-  //     }
-  //   }
-  // }
-
   @include respond-to-sm {
     .welcome-screen {
       padding: $spacing-lg $spacing-md;

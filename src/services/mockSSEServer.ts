@@ -1,4 +1,7 @@
 import { AnalysisStatus, AnalysisResult } from '@/services/analysisConnection'
+import { useLogger } from '@/composables/useLogger'
+
+const log = useLogger('mockSSEServer')
 
 export class MockSSEServer {
   private static instances = new Map<string, MockSSEServerInstance>()
@@ -25,10 +28,10 @@ export class MockSSEServer {
         this.url = url
 
         if (url.includes('/api/analysis/')) {
-          console.log('[MockSSEServer] Intercepting:', url)
+          log.info('Intercepting:', url)
           this.instance = MockSSEServer.createInstance(url, this)
         } else {
-          console.log('[MockSSEServer] Using real EventSource for:', url)
+          log.info('Using real EventSource for:', url)
           return new OriginalEventSource(url, config) as any
         }
       }
@@ -50,7 +53,7 @@ export class MockSSEServer {
     } as any
 
     this.isInitialized = true
-    console.log('[MockSSEServer] Initialized')
+    log.info('Initialized')
   }
 
   static createInstance(url: string, eventSource: EventTarget): MockSSEServerInstance {
@@ -85,7 +88,7 @@ class MockSSEServerInstance {
       Array.from(urlObj.searchParams.entries()) as [string, string][]
     )
 
-    console.log('[MockSSEServerInstance] Starting with params:', params)
+    log.info('Starting with params:', params)
 
     setTimeout(() => {
       const openEvent = new Event('open')

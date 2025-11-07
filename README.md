@@ -76,8 +76,12 @@ npm run lint
 Here's an overview of the project's directory structure:
 
 -   **`components/`**: Reusable Vue components.
-    -   `common/`: Very general components like buttons, input fields, modals.
-    -   `layout/`: Components responsible for the overall page layout (e.g., header, footer, sidebar navigation).
+    -   `common/`: Small, versatile UI components
+    -   `layout/`: Page wireframes
+    -   `modals`: Dialog boxes and popups
+    -   `sections`: Larger parts of the interface
+    -   `settings`: Settings page components
+    -   `visuals`: Graphic elements
 -   **`locales/`**: Stores translation files for different languages.
 -   **`router/`**: Vue Router configuration.
 -   **`services/`**: Files containing business logic and communication with external APIs.

@@ -1,9 +1,7 @@
 {
   "title": {
-    "time-range": "Time Range",
     "settings": "Settings",
     "about": "About",
-    "attributions": "Attributions",
     "change-coupling": "Change Coupling",
     "system-overview": "System Overview",
     "technical-sprawl": "Technical Sprawl",
@@ -106,10 +104,35 @@
 
   "footer": {
     "about": "About",
-    "attributions": "Attributions",
     "aria": {
-      "about": "About page",
-      "attributions": "Attributions page"
+      "about": "About page"
+    }
+  },
+
+  "about": {
+    "team": {
+      "title": "Project team",
+      "supervisorLabel": "Team supervisor",
+      "supervisorDegree": "Dr."
+    },
+    "description": {
+      "title": "Introduction",
+      "p1": "In the software development industry, especially within organizations working on large, long-term projects, managing technical debt and maintaining code quality play a crucial role. As code repositories grow — often spanning thousands of files and hundreds of thousands of lines of code — and as team composition changes over time, identifying areas that require refactoring becomes increasingly difficult. Current code quality management processes often rely on code reviews and reactive problem-solving, addressing issues only after defects appear. In recent years, however, behavioral code analysis methods have gained popularity, enhancing traditional static analysis with data from version control systems, such as change history and team collaboration patterns. Combining structural and behavioral perspectives enables faster detection of risky code areas before they evolve into more serious issues.",
+      "p2": "Manual identification of code that requires attention can be time-consuming and inefficient, often leading to the omission of critical areas. Refactoring decisions are frequently made intuitively, without access to data that integrates both technical and organizational aspects of the project. Additional challenges include limited visibility into how knowledge is distributed within the team and how different modules depend on each other. Inefficient planning of maintenance activities and poor issue prediction lead to higher project maintenance costs. Therefore, there is a strong need for effective visualization of both technical and organizational data, enabling quick understanding of system structure and supporting decision-making regarding refactoring priorities.",
+      "p3": "Existing tools, such as CodeScene, offer advanced capabilities for detecting areas that require attention by combining static and behavioral code analysis. However, their complex interfaces are not always intuitive, particularly for less experienced users who may feel overwhelmed by the volume of data and visualizations. Furthermore, the transparency of the metrics used and the methods for calculating them are not always clearly presented, which can make it even more difficult to interpret the results accurately."
+    },
+    "technologies": {
+      "title": "Technologies",
+      "backendLabel": "Backend",
+      "backend": "Java, Spring Boot, MongoDB",
+      "frontendLabel": "Frontend",
+      "frontend": "TypeScript, Vue.js, Vite, SCSS",
+      "visualizationsLabel": "Visualizations",
+      "visualizations": "D3.js, Three.js",
+      "analysisLabel": "Analysis",
+      "analysis": "Git",
+      "hostingLabel": "Hosting",
+      "hosting": "Google Cloud, Terraform, Docker, Kubernetes"
     }
   }
 }

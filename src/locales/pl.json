@@ -1,1 +1,138 @@
-{}
+{
+  "title": {
+    "settings": "Ustawienia",
+    "about": "O projekcie",
+    "change-coupling": "Powiązania plików",
+    "system-overview": "Przegląd systemu",
+    "technical-sprawl": "Technologie",
+    "hotspots": "Hotspoty",
+    "complexity-trends": "Trendy złożoności",
+    "code-age": "Wiek kodu",
+    "developer-view": "Widok dewelopera",
+    "team-view": "Widok zespołu",
+    "abandoned-code": "Martwy kod",
+    "responsibility-diffusion": "Rozproszenie odpowiedzialności",
+    "developer-relationships": "Relacje deweloperów",
+    "developer-mapping": "Deweloperzy",
+    "team-mapping": "Zespoły",
+    "folder-mapping": "Foldery",
+    "former-developers-mapping": "Byli deweloperzy",
+    "ignored-files-mapping": "Ignorowane pliki",
+    "ignored-folders-mapping": "Ignorowane foldery"
+  },
+
+  "appbar": {
+    "settings": "Ustawienia",
+    "notifications": "Powiadomienia",
+    "user-profile": "Twoje konto",
+    "new-analysis": "Nowa analiza"
+  },
+
+  "navbar": {
+    "summary": "Podsumowanie",
+    "code-health": "Jakość kodu",
+    "change-coupling": "Powiązania plików",
+    "developers": "Deweloperzy",
+    "mappings": "Mapowania",
+    "system-overview": "Przegląd systemu",
+    "technical-sprawl": "Technologie",
+    "hotspots": "Hotspoty",
+    "complexity-trends": "Trendy złożoności",
+    "code-age": "Wiek kodu",
+    "developer-view": "Widok dewelopera",
+    "team-view": "Widok zespołu",
+    "abandoned-code": "Martwy kod",
+    "responsibility-diffusion": "Rozproszenie odpowiedzialności",
+    "developer-relationships": "Powiązania deweloperów",
+    "developer-mapping": "Deweloperzy",
+    "team-mapping": "Zespoły",
+    "folder-mapping": "Foldery",
+    "former-developers-mapping": "Byli deweloperzy",
+    "ignored-files-mapping": "Ignorowane pliki",
+    "ignored-folders-mapping": "Ignorowane foldery"
+  },
+
+  "settingsPage": {
+    "header": "USTAWIENIA",
+    "appearance": "Wygląd",
+    "mainColor": "Główny kolor",
+    "red": "Czerwony",
+    "blue": "Niebieski",
+    "theme": "Motyw",
+    "light": "Jasny",
+    "dark": "Ciemny",
+    "system": "Systemowy",
+    "language": "Język",
+    "systemDefault": "Domyślny systemowy",
+    "mappings": "Mapowania",
+    "performance": "Wydajność",
+    "notifications": "Powiadomienia"
+  },
+
+  "welcomePage": {
+    "header": "Witamy w",
+    "motto": "Twoje repozytorium, Twoje miasto kodu.",
+    "prompt": "Wprowadź link do repozytorium:",
+    "analysisInterval": "Ustaw zakres analizy:",
+    "from": "Od",
+    "to": "Do",
+    "buttonStart": "Start",
+    "analysisCompleted": "Analiza zakończona pomyślnie!",
+    "alertEnterRepo": "Podaj link do repozytorium przed rozpoczęciem!",
+    "loading": "Pobieranie repozytorium...",
+    "modal": "Czy na pewno chcesz przerwać pobieranie repozytorium?"
+  },
+
+  "notifications": {
+    "header": "Powiadomienia",
+    "noNotifications": "Brak powiadomień",
+    "clearAll": "Wyczyść wszystko",
+    "remove": "Usuń powiadomienie",
+    "viewDetails": "Zobacz szczegóły"
+  },
+
+  "common": {
+    "inDevelopmentLabel": "W trakcie rozwoju",
+    "close": "Zamknij",
+    "cancel": "Anuluj",
+    "back": "Wstecz",
+    "abort": "Przerwij",
+    "confirm": "Potwierdź",
+    "tryAgain": "Spróbuj ponownie",
+    "loading": "Wczytywanie..."
+  },
+
+  "footer": {
+    "about": "O projekcie",
+    "aria": {
+      "about": "Strona o projekcie"
+    }
+  },
+
+  "about": {
+    "team": {
+      "title": "Zespół projektowy",
+      "supervisorLabel": "Opiekun zespołu",
+      "supervisorDegree": "dr inż."
+    },
+    "description": {
+      "title": "Wprowadzenie",
+      "p1": "W branży rozwoju oprogramowania, szczególnie w organizacjach pracujących nad dużymi, długotrwałymi projektami, zarządzanie długiem technicznym i jakością kodu odgrywa istotną rolę. Wraz ze wzrostem rozmiaru repozytoriów kodu, które w wielu przypadkach obejmują tysiące plików i setki tysięcy linii kodu, oraz rotacją w zespołach programistycznych identyfikacja obszarów wymagających refaktoryzacji staje się coraz trudniejsza. Obecne procesy zarządzania jakością kodu często opierają się na przeglądach kodu i reaktywnym rozwiązywaniu problemów dopiero po wystąpieniu defektów. W ostatnich latach rośnie jednak popularność metod analizy behawioralnej kodu, które wzbogacają tradycyjną statyczną analizę o dane z systemów kontroli wersji, takie jak historia zmian czy wzorce współpracy zespołu. Połączenie perspektywy strukturalnej i behawioralnej pozwala na szybsze wykrywanie ryzykownych obszarów kodu, zanim przekształcą się one w poważniejsze problemy.",
+      "p2": "Manualna identyfikacja kodu wymagającego uwagi może być czasochłonna oraz nieskuteczna i prowadzić do przeoczenia krytycznych obszarów. Decyzje o refaktoryzacji często podejmowane są intuicyjnie bez danych, które integrowałyby aspekty techniczne i organizacyjne projektu. Problemy może powodować także niedostateczna widoczność rozkładu wiedzy w projekcie oraz zależności między modułami. Nieefektywne planowanie prac utrzymania kodu i przewidywanie problemów skutkuje wyższymi kosztami utrzymania projektów. Kluczowa jest potrzeba dobrej wizualizacji danych technicznych i organizacyjnych umożliwiająca szybkie zrozumienie struktury systemu i wsparcie w podejmowaniu decyzji dotyczących priorytetyzacji prac refaktoryzacyjnych.",
+      "p3": "Dostępne narzędzia, takie jak CodeScene, oferują zaawansowane możliwości wykrywania obszarów wymagających uwagi poprzez połączenie statycznej analizy kodu z analizą behawioralną. Ich złożony interfejs może nie być jednak w pełni intuicyjny, szczególnie dla mniej zaawansowanych użytkowników, którzy mogą czuć się przytłoczeni nadmiarem danych i wizualizacji. Również przejrzystość wykorzystanych metryk oraz sposób ich obliczania nie zawsze są jasno przedstawione, co może dodatkowo utrudniać właściwą interpretację wyników."
+    },
+    "technologies": {
+      "title": "Technologie",
+      "backendLabel": "Backend",
+      "backend": "Java, Spring Boot, MongoDB",
+      "frontendLabel": "Frontend",
+      "frontend": "TypeScript, Vue.js, Vite, SCSS",
+      "visualizationsLabel": "Wizualizacje",
+      "visualizations": "D3.js, Three.js",
+      "analysisLabel": "Analiza",
+      "analysis": "Git",
+      "hostingLabel": "Hosting",
+      "hosting": "Google Cloud, Terraform, Docker, Kubernetes"
+    }
+  }
+}

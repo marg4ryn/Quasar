@@ -6,10 +6,6 @@
       <RouterLink to="/about" class="footer-btn" :aria-label="t('footer.aria.about')">
         {{ t('footer.about') }}
       </RouterLink>
-
-      <RouterLink to="/attributions" class="footer-btn" :aria-label="t('footer.aria.attributions')">
-        {{ t('footer.attributions') }}
-      </RouterLink>
     </div>
   </footer>
 </template>

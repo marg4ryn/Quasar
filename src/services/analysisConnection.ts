@@ -1,3 +1,7 @@
+import { useLogger } from '@/composables/useLogger'
+
+const log = useLogger('analysisConnection')
+
 interface AnalysisCallbacks {
   onProgress: (status: AnalysisStatus) => void
   onComplete: (result: AnalysisResult) => void
@@ -71,10 +75,10 @@ export function createAnalysisConnection(
         if (status in AnalysisStatus) {
           callbacks?.onProgress(status)
         } else {
-          console.warn('Unknown status received:', status)
+          log.warn('Unknown status received:', status)
         }
       } catch (error) {
-        console.error('Failed to parse progress event:', error)
+        log.error('Failed to parse progress event:', error)
       }
     })
 
@@ -84,7 +88,7 @@ export function createAnalysisConnection(
         callbacks?.onComplete(result)
         cleanup()
       } catch (error) {
-        console.error('Failed to parse complete event:', error)
+        log.error('Failed to parse complete event:', error)
         callbacks?.onError('Failed to parse completion data')
         cleanup()
       }
@@ -96,21 +100,21 @@ export function createAnalysisConnection(
         callbacks?.onError(errorData.message || 'Server error')
         cleanup()
       } catch (error) {
-        console.error('Failed to parse error event:', error)
+        log.error('Failed to parse error event:', error)
         callbacks?.onError('Unknown server error')
         cleanup()
       }
     })
 
     eventSource.onerror = (event) => {
-      console.error('SSE connection error:', event)
+      log.error('SSE connection error:', event)
 
       if (eventSource?.readyState === EventSource.CLOSED) {
         eventSource?.close()
 
         if (!isManualClose && retryCount < MAX_RETRIES) {
           retryCount++
-          console.log(`Retrying connection (${retryCount}/${MAX_RETRIES})...`)
+          log.info(`Retrying connection (${retryCount}/${MAX_RETRIES})...`)
           setTimeout(() => {
             connect()
           }, RETRY_DELAY * retryCount)
@@ -122,7 +126,7 @@ export function createAnalysisConnection(
     }
 
     eventSource.onopen = () => {
-      console.log(`SSE connection opened for ${screenId}`)
+      log.info(`SSE connection opened for ${screenId}`)
       retryCount = 0
     }
   }

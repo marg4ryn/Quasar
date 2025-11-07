@@ -5,7 +5,6 @@ import { useUIStore } from '@/stores/uiStore'
 const Welcome = () => import('@/views/miscellaneous/WelcomePage.vue')
 const Settings = () => import('@/views/miscellaneous/SettingsPage.vue')
 const About = () => import('@/views/miscellaneous/AboutPage.vue')
-const Attributions = () => import('@/views/miscellaneous/AttributionsPage.vue')
 const SystemOverview = () => import('@/views/miscellaneous/SystemOverviewPage.vue')
 
 const DeveloperRelationships = () => import('@/views/relationships/DeveloperRelationshipsPage.vue')
@@ -43,7 +42,7 @@ export default function (): Router {
       path: '/settings',
       name: 'settings',
       meta: {
-        title: t('title.settings'),
+        titleKey: 'title.settings',
         showNavBar: false,
       },
       component: Settings,
@@ -52,25 +51,16 @@ export default function (): Router {
       path: '/about',
       name: 'about',
       meta: {
-        title: t('title.about'),
-        showNavBar: true,
+        titleKey: 'title.about',
+        showNavBar: false,
       },
       component: About,
-    },
-    {
-      path: '/attributions',
-      name: 'attributions',
-      meta: {
-        title: t('title.attributions'),
-        showNavBar: true,
-      },
-      component: Attributions,
     },
     {
       path: '/system-overview',
       name: 'system-overview',
       meta: {
-        title: t('title.system-overview'),
+        titleKey: 'title.system-overview',
         showNavBar: true,
       },
       component: SystemOverview,
@@ -80,7 +70,7 @@ export default function (): Router {
       path: '/technical-sprawl',
       name: 'technical-sprawl',
       meta: {
-        title: t('title.technical-sprawl'),
+        titleKey: 'title.technical-sprawl',
         showNavBar: true,
       },
       component: TechnicalSprawl,
@@ -89,7 +79,7 @@ export default function (): Router {
       path: '/hotspots',
       name: 'hotspots',
       meta: {
-        title: t('title.hotspots'),
+        titleKey: 'title.hotspots',
         showNavBar: true,
       },
       component: Hotspots,
@@ -98,7 +88,7 @@ export default function (): Router {
       path: '/complexity-trends',
       name: 'complexity-trends',
       meta: {
-        title: t('title.complexity-trends'),
+        titleKey: 'title.complexity-trends',
         showNavBar: true,
       },
       component: ComplexityTrends,
@@ -107,7 +97,7 @@ export default function (): Router {
       path: '/code-age',
       name: 'code-age',
       meta: {
-        title: t('title.code-age'),
+        titleKey: 'title.code-age',
         showNavBar: true,
       },
       component: CodeAge,
@@ -116,7 +106,7 @@ export default function (): Router {
       path: '/change-coupling',
       name: 'change-coupling',
       meta: {
-        title: t('title.change-coupling'),
+        titleKey: 'title.change-coupling',
         showNavBar: true,
       },
       component: ChangeCoupling,
@@ -125,7 +115,7 @@ export default function (): Router {
       path: '/developer-view',
       name: 'developer-view',
       meta: {
-        title: t('title.developer-view'),
+        titleKey: 'title.developer-view',
         showNavBar: true,
       },
       component: DeveloperView,
@@ -134,7 +124,7 @@ export default function (): Router {
       path: '/team-view',
       name: 'team-view',
       meta: {
-        title: t('title.team-view'),
+        titleKey: 'title.team-view',
         showNavBar: true,
       },
       component: TeamView,
@@ -143,7 +133,7 @@ export default function (): Router {
       path: '/abandoned-code',
       name: 'abandoned-code',
       meta: {
-        title: t('title.abandoned-code'),
+        titleKey: 'title.abandoned-code',
         showNavBar: true,
       },
       component: AbandonedCode,
@@ -152,7 +142,7 @@ export default function (): Router {
       path: '/responsibility-diffusion',
       name: 'responsibility-diffusion',
       meta: {
-        title: t('title.responsibility-diffusion'),
+        titleKey: 'title.responsibility-diffusion',
         showNavBar: true,
       },
       component: ResponsibilityDiffusion,
@@ -162,7 +152,7 @@ export default function (): Router {
       path: '/developer-relationships',
       name: 'developer-relationships',
       meta: {
-        title: t('title.developer-relationships'),
+        titleKey: 'title.developer-relationships',
         showNavBar: true,
       },
       component: DeveloperRelationships,
@@ -172,7 +162,7 @@ export default function (): Router {
       path: '/developer-mapping',
       name: 'developer-mapping',
       meta: {
-        title: t('title.developer-mapping'),
+        titleKey: 'title.developer-mapping',
         showNavBar: true,
       },
       component: DeveloperMapping,
@@ -181,7 +171,7 @@ export default function (): Router {
       path: '/team-mapping',
       name: 'team-mapping',
       meta: {
-        title: t('title.team-mapping'),
+        titleKey: 'title.team-mapping',
         showNavBar: true,
       },
       component: TeamMapping,
@@ -190,7 +180,7 @@ export default function (): Router {
       path: '/folder-mapping',
       name: 'folder-mapping',
       meta: {
-        title: t('title.folder-mapping'),
+        titleKey: 'title.folder-mapping',
         showNavBar: true,
       },
       component: FolderMapping,
@@ -199,7 +189,7 @@ export default function (): Router {
       path: '/former-developers-mapping',
       name: 'former-developers-mapping',
       meta: {
-        title: t('title.former-developers-mapping'),
+        titleKey: 'title.former-developers-mapping',
         showNavBar: true,
       },
       component: FormerDevsMapping,
@@ -208,7 +198,7 @@ export default function (): Router {
       path: '/ignored-files-mapping',
       name: 'ignored-files-mapping',
       meta: {
-        title: t('title.ignored-files-mapping'),
+        titleKey: 'title.ignored-files-mapping',
         showNavBar: true,
       },
       component: IgnoredFilesMapping,
@@ -217,7 +207,7 @@ export default function (): Router {
       path: '/ignored-folders-mapping',
       name: 'ignored-folders-mapping',
       meta: {
-        title: t('title.ignored-folders-mapping'),
+        titleKey: 'title.ignored-folders-mapping',
         showNavBar: true,
       },
       component: IgnoredFoldersMapping,
@@ -240,10 +230,6 @@ export default function (): Router {
   router.beforeEach((to, from, next) => {
     const uiStore = useUIStore()
 
-    const baseTitle = 'HotSpotter'
-    const newTitle = to.meta.title ? `${to.meta.title} - ${baseTitle}` : baseTitle
-    document.title = newTitle
-
     if (typeof to.meta.showNavBar === 'boolean') {
       uiStore.isNavBarVisible = to.meta.showNavBar
     } else {
@@ -251,6 +237,20 @@ export default function (): Router {
     }
 
     next()
+  })
+
+  router.afterEach((to) => {
+    const { t } = i18n.global
+
+    const baseTitle = 'HotSpotter'
+    const titleKey = to.meta.titleKey as string | undefined
+
+    if (titleKey) {
+      const newTitle = `${t(titleKey)} - ${baseTitle}`
+      document.title = newTitle
+    } else {
+      document.title = baseTitle
+    }
   })
 
   return router
