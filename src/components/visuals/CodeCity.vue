@@ -291,8 +291,6 @@
 
         controls.previousMousePosition = { x: e.clientX, y: e.clientY }
         controls.lastInteractionTime = Date.now()
-      } else {
-        handleHover(cam, scn)
       }
     })
 
@@ -372,6 +370,7 @@
       animationId = requestAnimationFrame(animate)
       if (camera && scene && renderer) {
         updateCamera(camera)
+        handleHover(camera, scene)
         renderer.render(scene, camera)
       }
     }
