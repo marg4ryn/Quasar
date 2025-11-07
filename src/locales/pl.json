@@ -99,7 +99,8 @@
     "abort": "Przerwij",
     "confirm": "Potwierdź",
     "tryAgain": "Spróbuj ponownie",
-    "loading": "Wczytywanie..."
+    "loading": "Wczytywanie...",
+    "searchBarPlaceholder": "Wyszukaj pliki..."
   },
 
   "footer": {

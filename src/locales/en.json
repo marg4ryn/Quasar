@@ -99,7 +99,8 @@
     "abort": "Abort",
     "confirm": "Confirm",
     "tryAgain": "Try Again",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "searchBarPlaceholder": "Search files..."
   },
 
   "footer": {

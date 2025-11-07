@@ -274,6 +274,7 @@
         border-radius: $radius-md;
         border: 1px solid var(--color-border);
         transition: all $transition-fast;
+        align-items: center;
 
         &:hover {
           border-color: #8b5cf6;
