@@ -31,7 +31,7 @@ export function createBuilding(
     
     const material = new THREE.MeshPhongMaterial({ 
         color: COLORS.building,
-        emissive: COLORS.buildingEmissive
+        emissive: COLORS.emissiveColor
     });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(x, y + nodeData.height / 2, z);
@@ -64,7 +64,7 @@ export function createPlatform(
 
     const material = new THREE.MeshPhongMaterial({ 
         color: COLORS.platform,
-        emissive: COLORS.platformEmissive
+        emissive: COLORS.emissiveColor
     });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(x, y + nodeData.height / 2, z);
@@ -251,7 +251,7 @@ export function clearColorData(objectMap: Map<THREE.Mesh, any>): void {
     if (mesh.userData.type === 'building') {
       const material = mesh.material as THREE.MeshPhongMaterial
       material.color.setHex(COLORS.building)
-      material.emissive.setHex(COLORS.buildingEmissive)
+      material.emissive.setHex(COLORS.emissiveColor)
     }
   })
 }

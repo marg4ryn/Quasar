@@ -78,12 +78,15 @@
     const nodeData = objectMap.get(mesh)
     if (!nodeData) return
     
-    // Odznacz poprzedni budynek/platformę
     if (selectedObject.value) {
-      setEmissiveColor(selectedObject.value, COLORS.buildingEmissive)
+      restoreOriginalColor(toRaw(selectedObject.value))
     }
     
     selectedObject.value = mesh
+    
+    // Ustaw kolor selected
+    const material = mesh.material as THREE.MeshPhongMaterial
+    material.color.setHex(COLORS.selected)
 
     controls.targetCenter.copy(mesh.position)
     setRotationCenter(mesh.position)
@@ -92,6 +95,21 @@
       const colorInfo = getColorDataForPath(nodeData.path)
       emit('buildingClick', nodeData.name, nodeData.path, colorInfo?.intensity)
     }
+  }
+
+  function restoreOriginalColor(mesh: THREE.Mesh) {
+    const nodeData = objectMap.get(mesh)
+    const colorInfo = getColorDataForPath(nodeData.path)
+    const material = mesh.material as THREE.MeshPhongMaterial
+
+    if (colorInfo) {
+      const originalColor = new THREE.Color(COLORS.building)
+      const targetColor = new THREE.Color(colorInfo.color)
+      material.color.lerpColors(originalColor, targetColor, colorInfo.intensity * 3)
+    } else {
+      material.color.setHex(COLORS.building)
+    }
+    material.emissive.setHex(COLORS.emissiveColor)
   }
 
   // Kontrolki
@@ -136,7 +154,7 @@
     const intersects = raycaster.intersectObjects(scn.children, true)
 
     if (hoveredObject.value && hoveredObject.value !== selectedObject.value) {
-      setEmissiveColor(hoveredObject.value, COLORS.buildingEmissive)
+      setEmissiveColor(hoveredObject.value, COLORS.emissiveColor)
     }
 
     hoveredObject.value = null
@@ -176,7 +194,9 @@
       }
 
       if (!clickedObject) {
-        setEmissiveColor(selectedObject.value, COLORS.buildingEmissive)
+        if (selectedObject.value) {
+          restoreOriginalColor(toRaw(selectedObject.value))
+        }
         selectedObject.value = null
         controls.targetCenter = new THREE.Vector3(0, 0, 0)
         setRotationCenter(new THREE.Vector3(0, 0, 0))
@@ -198,7 +218,7 @@
       controls.rotationVelocity.y = 0
 
       if (hoveredObject.value && hoveredObject.value !== selectedObject.value) {
-        setEmissiveColor(hoveredObject.value, COLORS.buildingEmissive)
+        setEmissiveColor(hoveredObject.value, COLORS.emissiveColor)
         hoveredObject.value = null
       }
     })
