@@ -110,6 +110,7 @@
   .about {
     flex: 1;
     width: 100%;
+    min-width: 0;
     padding: $spacing-2xl $spacing-xl;
     overflow-y: auto;
 
@@ -134,7 +135,7 @@
         transform: translateX(-50%);
         width: 100px;
         height: 2px;
-        background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+        background: linear-gradient(90deg, transparent, $color-primary, transparent);
       }
     }
 
@@ -143,7 +144,7 @@
       font-weight: $font-weight-bold;
       color: var(--color-text-primary);
       margin: 0 0 $spacing-md;
-      background: var(--color-primary);
+      background: $color-primary;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -157,7 +158,7 @@
       letter-spacing: 0.5px;
 
       &.appname {
-        color: var(--color-primary);
+        color: $color-primary;
       }
     }
 
@@ -175,7 +176,7 @@
       transition: all $transition-base;
 
       &:hover {
-        border-color: rgba(var(--color-primary-rgb), 0.3);
+        border-color: $color-primary;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         transform: translateY(-2px);
       }
@@ -198,14 +199,14 @@
     &__icon {
       width: 28px;
       height: 28px;
-      color: var(--color-primary);
+      color: $color-primary;
       flex-shrink: 0;
     }
 
     &__icon2 {
       width: 28px;
       height: 28px;
-      color: var(--color-success);
+      color: $color-success;
       flex-shrink: 0;
     }
 
@@ -259,7 +260,7 @@
         padding: $spacing-md;
         background: var(--color-bg-primary);
         border-radius: $radius-md;
-        border-left: 3px solid var(--color-success);
+        border-left: 3px solid $color-success;
         transition: all $transition-fast;
 
         &:hover {
@@ -288,14 +289,14 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--color-primary);
+      background: $color-primary;
       flex-shrink: 0;
       margin-top: 6px;
     }
 
     &__tech-label {
       font-weight: $font-weight-semibold;
-      color: var(--color-success);
+      color: $color-success;
       min-width: 120px;
     }
 

@@ -23,7 +23,6 @@
     justify-content: space-between;
     align-items: center;
     height: 30px;
-    min-width: 1100px;
     padding: $spacing-md $spacing-xl;
     background-color: var(--color-bg-secondary);
     color: var(--color-text-secondary);

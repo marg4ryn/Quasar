@@ -15,10 +15,14 @@
         </svg>
       </button>
     </div>
-
+    <AppSearchBar
+      class="search-bar"
+      type="mini"
+      :placeholder="$t('rightPanel.searchPlaceholder')"
+      :items="items || []"
+      @filtered="filteredItems = $event"
+    />
     <div class="item-list">
-      <AppSearchBar v-model="searchQuery" class="search-bar" />
-
       <div
         v-for="item in filteredItems"
         :key="item.path"
@@ -48,32 +52,25 @@
 
   const maxHeight = computed(() => props.maxHeight || '100%')
 
-  const searchQuery = ref('')
-
-  const filteredItems = computed(() => {
-    if (!searchQuery.value) return props.items
-    const query = searchQuery.value.toLowerCase()
-    return props.items.filter(
-      (file) => file.name?.toLowerCase().includes(query) || file.path.toLowerCase().includes(query)
-    )
-  })
+  const filteredItems = ref([])
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .left-panel {
     background: var(--color-bg-secondary);
     backdrop-filter: blur(10px);
     border: 1px solid var(--color-border);
-    border-radius: 16px;
-    padding: 1.5rem;
+    border-radius: $radius-xl;
+    padding: $spacing-xl;
     width: 320px;
+    min-height: 600px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: $shadow-lg;
   }
 
   .search-bar {
-    margin-bottom: 1rem;
+    margin-bottom: $spacing-lg;
   }
 
   .panel-header {
@@ -96,14 +93,14 @@
     .info-button {
       background: none;
       border: none;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--color-icon);
       cursor: pointer;
       padding: 0.25rem;
       display: flex;
       transition: color 0.3s ease;
 
       &:hover {
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--color-icon-hover);
       }
     }
   }
@@ -120,17 +117,41 @@
     }
 
     &::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--color-scrollbar-track);
       border-radius: 3px;
     }
 
     &::-webkit-scrollbar-thumb {
-      background: var(--color-primary);
+      background: var(--color-scrollbar-thumb);
       border-radius: 3px;
 
       &:hover {
         cursor: pointer;
+        background: var(--color-scrollbar-track-hover);
       }
+    }
+  }
+
+  .file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--color-item-bg);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid $color-none;
+
+    &:hover {
+      background: var(--color-item-bg-hover);
+      border-color: var(--color-border);
+    }
+
+    &.active {
+      background: var(--color-item-bg-hover);
+      border-color: var(--color-border);
     }
   }
 </style>

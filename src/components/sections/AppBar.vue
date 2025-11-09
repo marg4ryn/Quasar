@@ -134,7 +134,6 @@
 <style lang="scss" scoped>
   .app-bar {
     width: 100%;
-    min-width: 1100px;
     height: 80px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text-primary);

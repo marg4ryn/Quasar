@@ -61,8 +61,14 @@
     cleanup: cleanupScene,
   } = useCodeCityScene(containerRef, props.initialZoom)
 
-  const { hoveredObject, selectedObject, objectMap, setRotationCenter, clearSelection } =
-    useCodeCityState()
+  const {
+    hoveredObject,
+    selectedObject,
+    objectMap,
+    rotationCenter,
+    setRotationCenter,
+    clearSelection,
+  } = useCodeCityState()
 
   watch(
     () => props.colorData,

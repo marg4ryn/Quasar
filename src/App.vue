@@ -21,7 +21,8 @@
   import { useUserSettingsStore } from './stores/userSettingsStore'
   import { onBeforeUnmount } from 'vue'
   import { useAnalysisStore } from '@/stores/analysisStore'
-  import { MockSSEServer } from '@/services/mockSSEServer'
+  import { MockSSEServer } from '@/mocks/SSEServerMock'
+  import { initializeCityDataMock } from '@/mocks/cityDataMock'
 
   import AppBar from '@/components/sections/AppBar.vue'
   import NavBar from '@/components/sections/navbar/NavBar.vue'
@@ -37,6 +38,10 @@
     MockSSEServer.initialize()
   }
 
+  if (import.meta.env.VITE_USE_MOCK_CITY_DATA === 'true') {
+    initializeCityDataMock()
+  }
+
   onBeforeUnmount(() => {
     analysisStore.closeAllConnections()
   })
@@ -47,6 +52,7 @@
     @include flex-column;
     position: relative;
     min-height: 100vh;
+    width: 100%;
   }
 
   .background-gradient {
@@ -61,5 +67,6 @@
     flex: 1 0 auto;
     position: relative;
     z-index: 1;
+    min-width: 0;
   }
 </style>

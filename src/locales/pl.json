@@ -91,6 +91,18 @@
     "viewDetails": "Zobacz wyniki"
   },
 
+  "rightPanel": {
+    "selectFile": "Wybierz plik",
+    "fileMetrics": "METRYKI PLIKU",
+    "findCoupling": "Znajdź powiązania",
+    "xray": "X-Ray",
+    "sourceCode": "Kod źródłowy",
+    "directoryContents": "ZAWARTOŚĆ KATALOGU",
+    "searchPlaceholder": "Szukaj w katalogu...",
+    "items": "elementów",
+    "noSelection": "Wybierz plik lub katalog, aby zobaczyć szczegóły"
+  },
+
   "common": {
     "inDevelopmentLabel": "W trakcie rozwoju",
     "close": "Zamknij",
