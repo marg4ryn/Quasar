@@ -1,21 +1,44 @@
 <template>
   <nav class="nav-bar">
-    <NavBarItem
-      v-for="item in items"
-      :key="item.label"
-      :label="item.label"
-      :icon="item.icon"
-      :to="item.to"
-      :active="false"
-      :submenu="item.submenu"
-    />
+    <!-- Mobile Sidebar - pokazuje się tylko na małych ekranach -->
+    <MobileSidebar v-if="isMobile" :items="items" class="mobile-only" />
+
+    <!-- Desktop Navigation - pokazuje się tylko na dużych ekranach -->
+    <div v-else class="nav-items">
+      <NavBarItem
+        v-for="item in items"
+        :key="item.label"
+        :label="item.label"
+        :icon="item.icon"
+        :to="item.to"
+        :submenu="item.submenu"
+      />
+    </div>
   </nav>
 </template>
 
 <script setup lang="ts">
+  import { ref, onMounted, onUnmounted } from 'vue'
   import NavBarItem from '@/components/sections/navbar/NavBarItem.vue'
+  import MobileSidebar from '@/components/sections/navbar/MobileSidebar.vue'
   import { useI18n } from 'vue-i18n'
+
   const { t } = useI18n()
+
+  const isMobile = ref(false)
+
+  const checkMobile = () => {
+    isMobile.value = window.innerWidth <= 1200
+  }
+
+  onMounted(() => {
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', checkMobile)
+  })
 
   const items = [
     {
@@ -69,7 +92,6 @@
 <style scoped lang="scss">
   .nav-bar {
     width: 100%;
-    min-width: 1100px;
     height: 50px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text-primary);
@@ -79,5 +101,31 @@
     flex-shrink: 0;
     border-bottom: 1px solid var(--color-border);
     gap: $spacing-sm;
+    position: relative;
+  }
+
+  .nav-items {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    height: 100%;
+  }
+
+  .mobile-only {
+    @media (min-width: 1201px) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .nav-items {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nav-bar {
+      padding: 0 $spacing-md;
+    }
   }
 </style>

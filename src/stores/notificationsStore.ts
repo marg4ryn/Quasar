@@ -1,65 +1,65 @@
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+import type { Notification } from '@/types'
 
-export type NotificationType = 'success' | 'error' | 'info' | 'warning'
+export const useNotificationsStore = defineStore('notifications', () => {
+  const showPanel = ref(false)
+  const notifications = ref<Notification[]>([])
 
-export interface Notification {
-  id: number
-  time: string
-  message: string
-  type: NotificationType
-  screenId?: string
-  screenRoute?: string
-  read?: boolean
-}
+  const unreadCount = computed(() => notifications.value.filter((n) => !n.read).length)
+  const hasUnread = computed(() => notifications.value.some((n) => !n.read))
 
-export const useNotificationsStore = defineStore('notifications', {
-  state: () => ({
-    showPanel: false,
-    notifications: [] as Notification[],
-  }),
-  getters: {
-    unreadCount: (state) => state.notifications.filter((n) => !n.read).length,
-    hasUnread: (state) => state.notifications.some((n) => !n.read),
-  },
-  actions: {
-    togglePanel() {
-      this.showPanel = !this.showPanel
-      if (this.showPanel) {
-        this.markAllAsRead()
-      }
-    },
-    closePanel() {
-      this.showPanel = false
-    },
-    removeNotification(id: number) {
-      this.notifications = this.notifications.filter((n) => n.id !== id)
-    },
-    addNotification(notification: Omit<Notification, 'id' | 'time' | 'read'>) {
-      const now = new Date()
-      const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const togglePanel = () => {
+    showPanel.value = !showPanel.value
+    if (showPanel.value) {
+      markAllAsRead()
+    }
+  }
 
-      this.notifications.unshift({
-        id: Date.now(),
-        time,
-        read: false,
-        ...notification,
-      })
+  const closePanel = () => {
+    showPanel.value = false
+  }
 
-      if (this.notifications.length > 50) {
-        this.notifications = this.notifications.slice(0, 50)
-      }
-    },
-    markAsRead(id: number) {
-      const notification = this.notifications.find((n) => n.id === id)
-      if (notification) {
-        notification.read = true
-      }
-    },
-    markAllAsRead() {
-      this.notifications.forEach((n) => (n.read = true))
-    },
-    clearAll() {
-      this.notifications = []
-    },
-  },
+  const removeNotification = (id: number) => {
+    notifications.value = notifications.value.filter((n) => n.id !== id)
+  }
+
+  const addNotification = (notification: Omit<Notification, 'id' | 'time' | 'read'>) => {
+    const now = new Date()
+    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+
+    notifications.value.unshift({
+      id: Date.now(),
+      time,
+      read: false,
+      ...notification,
+    })
+  }
+
+  const markAsRead = (id: number) => {
+    const n = notifications.value.find((n) => n.id === id)
+    if (n) n.read = true
+  }
+
+  const markAllAsRead = () => {
+    notifications.value.forEach((n) => (n.read = true))
+  }
+
+  const clearAll = () => {
+    notifications.value = []
+  }
+
+  return {
+    showPanel,
+    notifications,
+    unreadCount,
+    hasUnread,
+    togglePanel,
+    closePanel,
+    removeNotification,
+    addNotification,
+    markAsRead,
+    markAllAsRead,
+    clearAll,
+  }
 })

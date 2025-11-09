@@ -1,4 +1,4 @@
-import { AnalysisStatus, AnalysisResult } from '@/services/analysisConnection'
+import { AnalysisStatus, AnalysisResult } from '@/types'
 import { useLogger } from '@/composables/useLogger'
 
 const log = useLogger('mockSSEServer')

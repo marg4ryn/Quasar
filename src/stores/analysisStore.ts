@@ -2,24 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { createAnalysisConnection } from '@/services/analysisConnection'
 import { useNotificationsStore } from '@/stores/notificationsStore'
-
-export interface AnalysisState {
-  id: string
-  screenId: string
-  screenName?: string
-  screenRoute?: string
-  state: 'idle' | 'running' | 'completed' | 'error'
-  status?: any
-  result?: any
-  error?: string
-  startedAt?: Date
-  completedAt?: Date
-}
-
-interface AnalysisConnection {
-  eventSource: EventSource
-  cleanup: () => void
-}
+import { AnalysisState, AnalysisConnection } from '@/types'
 
 export const useAnalysisStore = defineStore('analysis', () => {
   const analyses = ref<Map<string, AnalysisState>>(new Map())

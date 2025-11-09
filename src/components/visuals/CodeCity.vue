@@ -15,7 +15,15 @@
   import { processNode } from '@/utils/city/layout'
   import { createGeometry, createMergedEdges, getColorDataForPath } from '@/utils/city/geometry'
   import * as THREE from 'three'
-  import { COLORS, CAMERA_DAMPING, AUTO_ROTATE_DELAY, AUTO_ROTATE_SPEED, CENTER_TRANSITION_SPEED, BUILDING_ZOOM, PLATFORM_ZOOM_MULT } from '@/utils/city/constants'
+  import {
+    COLORS,
+    CAMERA_DAMPING,
+    AUTO_ROTATE_DELAY,
+    AUTO_ROTATE_SPEED,
+    CENTER_TRANSITION_SPEED,
+    BUILDING_ZOOM,
+    PLATFORM_ZOOM_MULT,
+  } from '@/utils/city/constants'
   import { toRaw } from 'vue'
   import { applyColorData, clearColorData } from '@/utils/city/geometry'
   import { useCodeCityController } from '@/composables/useCodeCityController'
@@ -32,7 +40,7 @@
   const props = withDefaults(defineProps<Props>(), {
     autoRotate: true,
     initialZoom: 150,
-    colorData: () => []
+    colorData: () => [],
   })
 
   const emit = defineEmits<{
@@ -45,19 +53,36 @@
   let animationId: number | null = null
 
   // Composables
-  const { getScene, getCamera, getRenderer, getRaycaster, getMouse, initScene, cleanup: cleanupScene } = 
-    useCodeCityScene(containerRef, props.initialZoom)
+  const {
+    getScene,
+    getCamera,
+    getRenderer,
+    getRaycaster,
+    getMouse,
+    initScene,
+    cleanup: cleanupScene,
+  } = useCodeCityScene(containerRef, props.initialZoom)
 
-  const { hoveredObject, selectedObject, objectMap, rotationCenter, setRotationCenter, clearSelection } = 
-    useCodeCityState()
+  const {
+    hoveredObject,
+    selectedObject,
+    objectMap,
+    rotationCenter,
+    setRotationCenter,
+    clearSelection,
+  } = useCodeCityState()
 
-  watch(() => props.colorData, (newColorData) => {
-    if (newColorData && newColorData.length > 0) {
-      applyColorData(newColorData, objectMap)
-    } else {
-      clearColorData(objectMap)
-    }
-  }, { deep: true })
+  watch(
+    () => props.colorData,
+    (newColorData) => {
+      if (newColorData && newColorData.length > 0) {
+        applyColorData(newColorData, objectMap)
+      } else {
+        clearColorData(objectMap)
+      }
+    },
+    { deep: true }
+  )
 
   // Kontrolki
   const controls = {
@@ -88,7 +113,7 @@
       controls.targetZoom = initialZoom
 
       if (returnEmit) {
-        emit('buildingClick', null, null)
+        emit('cityNodeClick', null, null)
       }
     }
   }
@@ -100,17 +125,17 @@
     }
 
     let targetMesh: THREE.Mesh | null = null
-    
+
     objectMap.forEach((nodeData, mesh) => {
       if (nodeData.path === path) {
         targetMesh = mesh
       }
     })
-    
+
     if (!targetMesh) {
       return false
     }
-    
+
     selectCityNode(targetMesh, false)
     return true
   }
@@ -118,13 +143,13 @@
   function selectCityNode(mesh: THREE.Mesh, returnEmit: boolean) {
     const nodeData = objectMap.get(mesh)
     if (!nodeData) return
-    
+
     if (selectedObject.value) {
       restoreOriginalColor(toRaw(selectedObject.value))
     }
-    
+
     selectedObject.value = mesh
-    
+
     // Ustaw kolor selected
     const material = mesh.material as THREE.MeshPhongMaterial
     material.color.setHex(COLORS.selected)
@@ -136,10 +161,10 @@
     if (camera) {
       controls.targetZoom = calculateOptimalZoom(mesh, camera)
     }
-    
+
     if (returnEmit) {
       const colorInfo = getColorDataForPath(nodeData.path)
-      emit('buildingClick', nodeData.name, nodeData.path, colorInfo?.intensity)
+      emit('cityNodeClick', nodeData.name, nodeData.path, colorInfo?.intensity)
     }
   }
 
@@ -160,7 +185,7 @@
   function calculateInitialZoom(rootData: any, camera: THREE.PerspectiveCamera): number {
     const maxDimension = Math.max(rootData.width, rootData.depth)
     const fov = camera.fov * (Math.PI / 180)
-    const distance = maxDimension * 0.5 / (Math.tan(fov))
+    const distance = (maxDimension * 0.5) / Math.tan(fov)
     const result = distance * PLATFORM_ZOOM_MULT
     return result >= BUILDING_ZOOM ? result : BUILDING_ZOOM
   }
@@ -168,20 +193,20 @@
   function calculateOptimalZoom(mesh: THREE.Mesh, camera: THREE.PerspectiveCamera): number {
     const nodeData = objectMap.get(mesh)
     if (!nodeData) return controls.targetZoom
-    
+
     // Dla platformy
     if (mesh.userData.type === 'platform') {
       const geometry = mesh.geometry as THREE.BoxGeometry
       const params = geometry.parameters
       const maxDimension = Math.max(params.width, params.depth)
-      
+
       const fov = camera.fov * (Math.PI / 180)
-      const distance = maxDimension * 0.5 / (Math.tan(fov))
+      const distance = (maxDimension * 0.5) / Math.tan(fov)
       const result = distance * PLATFORM_ZOOM_MULT
-      
+
       return result >= BUILDING_ZOOM ? result : BUILDING_ZOOM
     }
-    
+
     // Dla budynku
     return BUILDING_ZOOM
   }
@@ -197,9 +222,9 @@
     if (controls.isDragging) return
     
     const raycaster = getRaycaster()
-    const mouse = getMouse() 
+    const mouse = getMouse()
     if (!raycaster || !mouse) return
-    
+
     raycaster.setFromCamera(mouse, cam)
     const intersects = raycaster.intersectObjects(scn.children, true)
 
@@ -236,13 +261,12 @@
 
   function handleClick(cam: THREE.Camera, scn: THREE.Scene, e: MouseEvent) {
     const raycaster = getRaycaster()
-    const mouse = getMouse() 
+    const mouse = getMouse()
     if (!raycaster || !mouse) return
-    
+
     const timeDiff = Date.now() - mouseDownTime
     const distance = Math.sqrt(
-      Math.pow(e.clientX - mouseDownPosition.x, 2) +
-      Math.pow(e.clientY - mouseDownPosition.y, 2)
+      Math.pow(e.clientX - mouseDownPosition.x, 2) + Math.pow(e.clientY - mouseDownPosition.y, 2)
     )
 
     if (distance < 15 && timeDiff < 200) {
@@ -299,7 +323,10 @@
 
         controls.targetRotation.y += controls.rotationVelocity.y
         controls.targetRotation.x += controls.rotationVelocity.x
-        controls.targetRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, controls.targetRotation.x))
+        controls.targetRotation.x = Math.max(
+          -Math.PI / 2,
+          Math.min(Math.PI / 2, controls.targetRotation.x)
+        )
 
         controls.previousMousePosition = { x: e.clientX, y: e.clientY }
         controls.lastInteractionTime = Date.now()
@@ -330,7 +357,10 @@
 
       controls.targetRotation.x += controls.rotationVelocity.x
       controls.targetRotation.y += controls.rotationVelocity.y
-      controls.targetRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, controls.targetRotation.x))
+      controls.targetRotation.x = Math.max(
+        -Math.PI / 2,
+        Math.min(Math.PI / 2, controls.targetRotation.x)
+      )
     }
 
     controls.rotation.x += (controls.targetRotation.x - controls.rotation.x) * CAMERA_DAMPING
@@ -341,10 +371,12 @@
 
     const distance = controls.zoom
     const center = controls.currentCenter
-    
-    cam.position.x = center.x + distance * Math.sin(controls.rotation.y) * Math.cos(controls.rotation.x)
+
+    cam.position.x =
+      center.x + distance * Math.sin(controls.rotation.y) * Math.cos(controls.rotation.x)
     cam.position.y = center.y + distance * Math.sin(controls.rotation.x)
-    cam.position.z = center.z + distance * Math.cos(controls.rotation.y) * Math.cos(controls.rotation.x)
+    cam.position.z =
+      center.z + distance * Math.cos(controls.rotation.y) * Math.cos(controls.rotation.x)
     cam.lookAt(center.x, center.y, center.z)
   }
 

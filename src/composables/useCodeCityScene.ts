@@ -1,4 +1,4 @@
-import { ref, type Ref } from 'vue'
+import { type Ref } from 'vue'
 import * as THREE from 'three'
 import { clearEdgesCache } from '@/utils/city/geometry'
 
@@ -25,14 +25,14 @@ export function useCodeCityScene(
   function initScene() {
     if (!container.value) return false
 
-    // Inicjalizuj raycaster i mouse
+    // Initialize raycaster and mouse
     raycaster = new THREE.Raycaster()
     mouse = new THREE.Vector2()
 
-    // Stwórz scenę
+    // Create a scene
     scene = new THREE.Scene()
 
-    // Stwórz kamerę
+    // Create a camera
     camera = new THREE.PerspectiveCamera(
       60,
       container.value.clientWidth / container.value.clientHeight,
@@ -41,13 +41,13 @@ export function useCodeCityScene(
     )
     camera.position.set(initialZoom, initialZoom, initialZoom)
 
-    // Stwórz renderer
+    // Create a renderer
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(container.value.clientWidth, container.value.clientHeight)
     renderer.shadowMap.enabled = true
     container.value.appendChild(renderer.domElement)
 
-    // Dodaj światła
+    // Add lights
     const ambientLight = new THREE.AmbientLight(0xd9d9d9, 0.5)
     scene.add(ambientLight)
 
@@ -93,6 +93,6 @@ export function useCodeCityScene(
     getRaycaster: () => raycaster,
     getMouse: () => mouse,
     initScene,
-    cleanup
+    cleanup,
   }
 }

@@ -91,6 +91,18 @@
     "viewDetails": "View Results"
   },
 
+  "rightPanel": {
+    "selectFile": "Select a file",
+    "fileMetrics": "FILE METRICS",
+    "findCoupling": "Find Coupling",
+    "xray": "X-Ray",
+    "sourceCode": "Source Code",
+    "directoryContents": "DIRECTORY CONTENTS",
+    "searchPlaceholder": "Search in directory...",
+    "items": "items",
+    "noSelection": "Select a file or directory to view details"
+  },
+
   "common": {
     "inDevelopmentLabel": "In Development",
     "close": "Close",
@@ -99,7 +111,8 @@
     "abort": "Abort",
     "confirm": "Confirm",
     "tryAgain": "Try Again",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "searchBarPlaceholder": "Search files..."
   },
 
   "footer": {
