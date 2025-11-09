@@ -8,8 +8,8 @@ export const CAMERA_DAMPING = 0.05
 export const CENTER_TRANSITION_SPEED = 0.05
 export const AUTO_ROTATE_DELAY = 3000
 export const AUTO_ROTATE_SPEED = 0.0015
-export const BUILDING_ZOOM = 70
-export const PLATFORM_ZOOM_MULT = 4
+export const BUILDING_ZOOM = 90
+export const PLATFORM_ZOOM_MULT = 6
 
 export const COLORS = {
   building: 0xf0f0f0,

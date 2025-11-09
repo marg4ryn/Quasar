@@ -62,6 +62,14 @@
     if (intensity >= 0.2) return '#ffcc44'
     return '#ffee44'
   }
+
+  function handleBuildingHover(path: string) {
+    console.log('Hovered over: ', path)
+  }
+
+  function handleBuildingCancelHover(path: string) {
+    console.log('No longer hovering over: ', path)
+  }
 </script>
 
 <style scoped lang="scss">

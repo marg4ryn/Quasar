@@ -44,7 +44,9 @@
   })
 
   const emit = defineEmits<{
-    cityNodeClick: [name: string | null, path: string | null, intensity?: number]
+    buildingClick: [name: string | null, path: string | null, intensity?: number],
+    buildingHover: [path: string],
+    buildingCancelHover: [path: string]
   }>()
 
   const containerRef = ref<HTMLDivElement | null>(null)
@@ -151,7 +153,6 @@
     // Ustaw kolor selected
     const material = mesh.material as THREE.MeshPhongMaterial
     material.color.setHex(COLORS.selected)
-    material.emissive.setHex(COLORS.emissiveColor)
 
     controls.targetCenter.copy(mesh.position)
     setRotationCenter(mesh.position)
@@ -179,7 +180,6 @@
     } else {
       material.color.setHex(COLORS.building)
     }
-    material.emissive.setHex(COLORS.emissiveColor)
   }
 
   function calculateInitialZoom(rootData: any, camera: THREE.PerspectiveCamera): number {
@@ -211,14 +211,6 @@
     return BUILDING_ZOOM
   }
 
-  function setEmissiveColor(mesh: THREE.Mesh | null, color: number) {
-    if (!mesh) return
-    const material = mesh.material as THREE.MeshPhongMaterial
-    if (material && 'emissive' in material) {
-      material.emissive.setHex(color)
-    }
-  }
-
   function updateMousePosition(e: MouseEvent, rect: DOMRect) {
     const mouse = getMouse()
     if (!mouse) return
@@ -227,6 +219,8 @@
   }
 
   function handleHover(cam: THREE.Camera, scn: THREE.Scene) {
+    if (controls.isDragging) return
+    
     const raycaster = getRaycaster()
     const mouse = getMouse()
     if (!raycaster || !mouse) return
@@ -234,21 +228,34 @@
     raycaster.setFromCamera(mouse, cam)
     const intersects = raycaster.intersectObjects(scn.children, true)
 
-    if (hoveredObject.value && hoveredObject.value !== selectedObject.value) {
-      setEmissiveColor(hoveredObject.value, COLORS.emissiveColor)
-    }
-
-    hoveredObject.value = null
-
+    let newHoveredObject: THREE.Mesh | null = null
     for (let intersect of intersects) {
       if (intersect.object.userData.isSelectable) {
-        if (toRaw(intersect.object) !== toRaw(selectedObject.value)) {
-          // toRaw bo były problemy z opakowaniem proxy przy porównaniu
-          hoveredObject.value = intersect.object as THREE.Mesh
-          setEmissiveColor(hoveredObject.value, COLORS.hover)
-        }
+        newHoveredObject = intersect.object as THREE.Mesh
         break
       }
+    }
+
+    if (toRaw(newHoveredObject) === toRaw(hoveredObject.value)) return
+
+    // Przywróć kolor poprzedniego obiektu (jeśli nie jest selected)
+    if (hoveredObject.value && hoveredObject.value !== selectedObject.value) {
+      restoreOriginalColor(toRaw(hoveredObject.value))
+
+      const nodeData = objectMap.get(toRaw(hoveredObject.value))
+      emit('buildingCancelHover', nodeData.path)
+    }
+
+    // Ustaw nowy hovered object
+    hoveredObject.value = newHoveredObject
+
+    // Podświetl nowy obiekt (jeśli nie jest selected)
+    if (hoveredObject.value && toRaw(hoveredObject.value) !== toRaw(selectedObject.value)) {
+      const material = hoveredObject.value.material as THREE.MeshPhongMaterial
+      material.color.setHex(COLORS.hover)
+
+      const nodeData = objectMap.get(toRaw(hoveredObject.value))
+      emit('buildingHover', nodeData.path)
     }
   }
 
@@ -294,7 +301,11 @@
       controls.rotationVelocity.y = 0
 
       if (hoveredObject.value && hoveredObject.value !== selectedObject.value) {
-        setEmissiveColor(hoveredObject.value, COLORS.emissiveColor)
+        restoreOriginalColor(toRaw(hoveredObject.value))
+
+        const nodeData = objectMap.get(toRaw(hoveredObject.value))
+        emit('buildingCancelHover', nodeData.path)
+
         hoveredObject.value = null
       }
     })
