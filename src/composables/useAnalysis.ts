@@ -1,10 +1,6 @@
 import { computed } from 'vue'
 import { useAnalysisStore } from '@/stores/analysisStore'
-import {
-  AnalysisStatus,
-  AnalysisResult,
-  getAnalysisStatusLabel,
-} from '@/services/analysisConnection'
+import { getAnalysisStatusLabel } from '@/services/analysisConnection'
 
 export function useAnalysis(screenId: string, screenName?: string, screenRoute?: string) {
   const store = useAnalysisStore()
@@ -75,5 +71,4 @@ export function useAnalysis(screenId: string, screenName?: string, screenRoute?:
   }
 }
 
-export type { AnalysisStatus, AnalysisResult }
 export { getAnalysisStatusLabel }

@@ -125,7 +125,7 @@
   import AppSearchBar from '@/components/common/AppSearchBar.vue'
 
   const props = defineProps<{
-    selectedItem?: CityNode
+    selectedItem?: CityNode | null
     navigateUp: () => void
     handleCityNodeSelect: (path: string) => void
     metricTypes?: MetricType[]
