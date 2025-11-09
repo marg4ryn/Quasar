@@ -27,8 +27,6 @@ const IgnoredFilesMapping = () => import('@/views/mappings/IgnoredFilesMappingPa
 const IgnoredFoldersMapping = () => import('@/views/mappings/IgnoredFoldersMappingPage.vue')
 
 export default function (): Router {
-  const { t } = i18n.global
-
   const routes = [
     {
       path: '/',

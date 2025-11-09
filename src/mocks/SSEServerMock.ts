@@ -27,7 +27,7 @@ export class MockSSEServer {
         super()
         this.url = url
 
-        if (url.includes('/api/analysis/')) {
+        if (url.includes('/api/analysis')) {
           log.info('Intercepting:', url)
           this.instance = MockSSEServer.createInstance(url, this)
         } else {

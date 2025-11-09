@@ -278,9 +278,9 @@
     }
 
     await start({
-      repoLink: link.value.trim(),
-      fromDate: showDateInputs.value ? fromDate.value : null,
-      toDate: showDateInputs.value ? toDate.value : null,
+      repositoryUrl: link.value.trim(),
+      startDate: showDateInputs.value ? fromDate.value : null,
+      endDate: showDateInputs.value ? toDate.value : null,
     })
   }
 

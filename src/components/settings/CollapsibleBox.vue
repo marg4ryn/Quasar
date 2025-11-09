@@ -77,6 +77,7 @@
     width: 40%;
     border: 1px solid var(--color-border);
     background-color: var(--color-bg-primary);
+    min-width: 500px;
   }
 
   .collapsible-header {

@@ -1,7 +1,12 @@
 <template>
   <div class="radio-button-group">
     <div class="options-container">
-      <div v-for="option in options" :key="option.value" class="radio-option">
+      <label
+        v-for="option in options"
+        :key="option.value"
+        :for="`${name}-${option.value}`"
+        class="radio-option"
+      >
         <input
           type="radio"
           :id="`${name}-${option.value}`"
@@ -9,8 +14,8 @@
           :value="option.value"
           v-model="internalValue"
         />
-        <label :for="`${name}-${option.value}`">{{ option.label }}</label>
-      </div>
+        <span class="label-text">{{ option.label }}</span>
+      </label>
     </div>
   </div>
 </template>
@@ -53,7 +58,6 @@
 
     .options-container {
       display: flex;
-      justify-content: space-around;
       gap: 20px;
     }
 
@@ -61,6 +65,14 @@
       display: flex;
       align-items: center;
       cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background-color 0.2s ease;
+      width: 130px;
+
+      &:hover {
+        background-color: var(--color-button-secondary-hover, rgba(0, 0, 0, 0.05));
+      }
 
       input[type='radio'] {
         -webkit-appearance: none;
@@ -77,6 +89,7 @@
           background-color 0.2s ease;
         position: relative;
         cursor: pointer;
+        flex-shrink: 0;
 
         &:checked {
           border-color: var(--color-primary);
@@ -105,9 +118,10 @@
         }
       }
 
-      label {
+      .label-text {
         color: var(--color-text-primary);
         cursor: pointer;
+        user-select: none;
       }
     }
   }
