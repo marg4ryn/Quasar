@@ -101,7 +101,7 @@
     filterItems: undefined,
   })
 
-  const { selectCityNode } = useCodeCityController()
+  const { selectCityNode, setCityNodeHoverByPath } = useCodeCityController()
   const log = useLogger('CodeCityPageTemplate')
   const cityStore = useCityStore()
   const cityData = cityStore.cityData
@@ -130,7 +130,7 @@
     log.info('Clicked on:', name, ' Path:', path, ' Intensity: ', intensity)
     const newPath = path ?? ''
     selectedPath.value = newPath
-    selectCityNode(newPath)
+    // selectCityNode(newPath) - niepotrzebne wywołanie selecta 
   }
 
   function handleCityNodeSelect(path: string) {
@@ -139,11 +139,11 @@
   }
 
   function handleCityNodeHover(path: string) {
-    //console.log('Hovered over: ', path)
+    log.info('Hovered over: ', path)
   }
 
   function handleCityNodeCancelHover(path: string) {
-    //console.log('No longer hovering over: ', path)
+    log.info('No longer hovering over: ', path)
   }
 
   function navigateUp() {
