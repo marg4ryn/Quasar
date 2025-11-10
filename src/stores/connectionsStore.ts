@@ -1,48 +1,52 @@
 import { defineStore } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import { ref, computed } from 'vue'
 import { createAnalysisConnection } from '@/services/analysisConnection'
 import { useNotificationsStore } from '@/stores/notificationsStore'
 import { AnalysisState, AnalysisConnection } from '@/types'
 
-export const useAnalysisStore = defineStore('analysis', () => {
+export const useConnectionStore = defineStore('connections', () => {
+  const { t } = useI18n()
   const analyses = ref<Map<string, AnalysisState>>(new Map())
   const connections = ref<Map<string, AnalysisConnection>>(new Map())
 
-  const getAnalysis = (screenId: string) => {
-    return computed(() => analyses.value.get(screenId))
+  const getConnection = (screenRoute: string) => {
+    return computed(() => analyses.value.get(screenRoute))
   }
 
-  const isRunning = (screenId: string) => {
-    return computed(() => analyses.value.get(screenId)?.state === 'running')
+  const isRunning = (screenRoute: string) => {
+    return computed(() => analyses.value.get(screenRoute)?.state === 'running')
   }
 
   const getAllRunning = computed(() => {
     return Array.from(analyses.value.values()).filter((a) => a.state === 'running')
   })
 
-  const initializeAnalysis = (screenId: string, screenName?: string, screenRoute?: string) => {
-    if (!analyses.value.has(screenId)) {
-      analyses.value.set(screenId, {
-        id: `${screenId}-${Date.now()}`,
-        screenId,
-        screenName,
+  const initializeConnection = (screenRoute: string, screenName?: string) => {
+    if (!analyses.value.has(screenRoute)) {
+      analyses.value.set(screenRoute, {
+        id: `${screenRoute}-${Date.now()}`,
         screenRoute,
+        screenName: screenName || screenRoute,
         state: 'idle',
       })
     }
   }
 
-  const startAnalysis = async (screenId: string, params?: Record<string, any>) => {
-    if (isRunning(screenId).value) {
-      console.warn(`Analysis for ${screenId} is already running`)
+  const startConnection = async (
+    screenRoute: string,
+    params?: Record<string, string | number | boolean | null | undefined>
+  ) => {
+    if (isRunning(screenRoute).value) {
+      console.warn(`Analysis for route "${screenRoute}" is already running`)
       return
     }
 
-    closeConnection(screenId)
+    closeConnection(screenRoute)
 
-    const analysis = analyses.value.get(screenId)
+    const analysis = analyses.value.get(screenRoute)
     if (!analysis) {
-      console.error(`Analysis ${screenId} not initialized`)
+      console.error(`Analysis for route "${screenRoute}" not initialized`)
       return
     }
 
@@ -56,89 +60,94 @@ export const useAnalysisStore = defineStore('analysis', () => {
     const notificationsStore = useNotificationsStore()
 
     try {
-      const connection = createAnalysisConnection(screenId, params, {
-        onProgress: (status: any) => {
-          const current = analyses.value.get(screenId)
+      const connection = createAnalysisConnection(screenRoute, params, {
+        onProgress: (status) => {
+          const current = analyses.value.get(screenRoute)
           if (current) {
             current.status = status
           }
         },
-        onComplete: (result: any) => {
-          const current = analyses.value.get(screenId)
+        onComplete: (result) => {
+          const current = analyses.value.get(screenRoute)
           if (current) {
             current.state = 'completed'
             current.result = result
             current.completedAt = new Date()
 
-            const screenName = current.screenName || screenId
+            const screenNameKey = current.screenName || screenRoute
             const duration = current.startedAt
               ? Math.round((current.completedAt.getTime() - current.startedAt.getTime()) / 1000)
               : 0
 
             notificationsStore.addNotification({
-              message: `Analysis "${screenName}" completed successfully in ${duration}s`,
+              message: t('analysis.completed', {
+                screen: t(screenNameKey),
+                duration,
+              }),
               type: 'success',
-              screenId: current.screenId,
               screenRoute: current.screenRoute,
             })
           }
-          closeConnection(screenId)
+          closeConnection(screenRoute)
         },
-        onError: (error: string) => {
-          const current = analyses.value.get(screenId)
+        onError: (error) => {
+          const current = analyses.value.get(screenRoute)
           if (current) {
             current.state = 'error'
             current.error = error
             current.completedAt = new Date()
 
-            const screenName = current.screenName || screenId
+            const screenNameKey = current.screenName || screenRoute
             notificationsStore.addNotification({
-              message: `Analysis "${screenName}" failed: ${error}`,
+              message: t('analysis.failed', {
+                screen: t(screenNameKey),
+                error,
+              }),
               type: 'error',
-              screenId: current.screenId,
-              screenRoute: current.screenRoute,
             })
           }
-          closeConnection(screenId)
+          closeConnection(screenRoute)
         },
       })
 
-      connections.value.set(screenId, connection)
+      connections.value.set(screenRoute, connection)
     } catch (error) {
       analysis.state = 'error'
       analysis.error = error instanceof Error ? error.message : 'Unknown error'
       analysis.completedAt = new Date()
 
-      const screenName = analysis.screenName || screenId
+      const screenNameKey = analysis.screenName || screenRoute
       notificationsStore.addNotification({
-        message: `Analysis "${screenName}" failed to start: ${analysis.error}`,
+        message: t('analysis.start_failed', {
+          screen: t(screenNameKey),
+          error: analysis.error,
+        }),
         type: 'error',
-        screenId: analysis.screenId,
-        screenRoute: analysis.screenRoute,
       })
     }
   }
 
-  const stopAnalysis = (screenId: string) => {
-    const analysis = analyses.value.get(screenId)
+  const stopConnection = (screenRoute: string) => {
+    const analysis = analyses.value.get(screenRoute)
     if (analysis && analysis.state === 'running') {
       analysis.state = 'idle'
       analysis.status = undefined
-      closeConnection(screenId)
+      closeConnection(screenRoute)
 
       const notificationsStore = useNotificationsStore()
-      const screenName = analysis.screenName || screenId
+      const screenNameKey = analysis.screenName || screenRoute
       notificationsStore.addNotification({
-        message: `Analysis "${screenName}" was cancelled`,
+        message: t('analysis.cancelled', {
+          screen: t(screenNameKey),
+          error: analysis.error,
+        }),
         type: 'info',
-        screenId: analysis.screenId,
-        screenRoute: analysis.screenRoute,
       })
     }
   }
 
-  const resetAnalysis = (screenId: string) => {
-    const analysis = analyses.value.get(screenId)
+  const resetConnection = (screenRoute: string) => {
+    const analysis = analyses.value.get(screenRoute)
     if (analysis) {
       analysis.state = 'idle'
       analysis.status = undefined
@@ -147,14 +156,14 @@ export const useAnalysisStore = defineStore('analysis', () => {
       analysis.startedAt = undefined
       analysis.completedAt = undefined
     }
-    closeConnection(screenId)
+    closeConnection(screenRoute)
   }
 
-  const closeConnection = (screenId: string) => {
-    const connection = connections.value.get(screenId)
+  const closeConnection = (screenRoute: string) => {
+    const connection = connections.value.get(screenRoute)
     if (connection) {
       connection.cleanup()
-      connections.value.delete(screenId)
+      connections.value.delete(screenRoute)
     }
   }
 
@@ -167,13 +176,13 @@ export const useAnalysisStore = defineStore('analysis', () => {
 
   return {
     analyses,
-    getAnalysis,
+    getConnection,
     isRunning,
     getAllRunning,
-    initializeAnalysis,
-    startAnalysis,
-    stopAnalysis,
-    resetAnalysis,
+    initializeConnection,
+    startConnection,
+    stopConnection,
+    resetConnection,
     closeConnection,
     closeAllConnections,
   }

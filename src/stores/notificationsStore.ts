@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Notification } from '@/types'
+import { useToast } from '@/composables/useToast'
 
 export const useNotificationsStore = defineStore('notifications', () => {
   const showPanel = ref(false)
   const notifications = ref<Notification[]>([])
+  const { showToast } = useToast()
 
   const unreadCount = computed(() => notifications.value.filter((n) => !n.read).length)
   const hasUnread = computed(() => notifications.value.some((n) => !n.read))
@@ -34,6 +36,15 @@ export const useNotificationsStore = defineStore('notifications', () => {
       read: false,
       ...notification,
     })
+
+    const variantMap: Record<string, 'success' | 'error' | 'info' | 'warning'> = {
+      success: 'success',
+      error: 'error',
+      info: 'info',
+      warning: 'warning',
+    }
+
+    showToast(notification.message, variantMap[notification.type] || 'info', 5000)
   }
 
   const markAsRead = (id: number) => {

@@ -71,7 +71,7 @@
       padding-right: 40px;
       border: 1px solid var(--color-border);
       border-radius: 4px;
-      background-color: var(--color-bg-primary);
+      background-color: var(--color-bg-secondary);
       color: var(--color-text-primary);
       font-size: 1em;
       cursor: pointer;
@@ -82,7 +82,7 @@
       &:focus {
         outline: none;
         border-color: var(--color-primary);
-        box-shadow: 0 0 0 2px rgba(var(--color-primary), 0.5);
+        box-shadow: 0 0 0 2px var(--color-primary);
       }
     }
 

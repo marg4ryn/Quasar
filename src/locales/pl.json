@@ -73,14 +73,20 @@
     "header": "Witamy w",
     "motto": "Twoje repozytorium, Twoje miasto kodu.",
     "prompt": "Wprowadź link do repozytorium:",
-    "analysisInterval": "Ustaw zakres analizy:",
     "from": "Od",
     "to": "Do",
     "buttonStart": "Start",
-    "analysisCompleted": "Analiza zakończona pomyślnie!",
     "alertEnterRepo": "Podaj link do repozytorium przed rozpoczęciem!",
     "loading": "Pobieranie repozytorium...",
-    "modal": "Czy na pewno chcesz przerwać pobieranie repozytorium?"
+    "modal": "Czy na pewno chcesz przerwać pobieranie repozytorium?",
+    "repoPlaceholder": "np. https://github.com/johndoe/test.git",
+    "invalidRepoUrl": "Nieprawidłowy adres URL repozytorium. Użyj adresu URL GitHub lub GitLab.",
+    "customDateRange": "Ustaw zakres dat",
+    "dateRequired": "Data jest wymagana",
+    "dateTooEarly": "Data nie może być wcześniejsza niż {date}",
+    "dateTooLate": "Data nie może być późniejsza niż {date}",
+    "fromDateAfterToDate": "Data 'Od' musi być wcześniejsza niż data 'Do'",
+    "toDateBeforeFromDate": "Data 'Do' musi być późniejsza niż data 'Od'"
   },
 
   "notifications": {
@@ -89,6 +95,29 @@
     "clearAll": "Wyczyść wszystko",
     "remove": "Usuń powiadomienie",
     "viewDetails": "Zobacz wyniki"
+  },
+
+  "status": {
+    "downloading": "Pobieranie repozytorium...",
+    "processingData": "Przetwarzanie danych...",
+    "analyzing": "Rozpoczynanie analizy...",
+    "sonar": "Analizowanie...",
+    "unknown": "Nieznany status"
+  },
+
+  "errors": {
+    "failedToParseCompletionData": "Nie udało się przetworzyć danych",
+    "serverError": "Błąd serwera",
+    "unknownServerError": "Nieznany błąd serwera",
+    "connectionFailedMaxRetries": "Połączenie nie powiodło się "
+  },
+
+  "analysis": {
+    "completed": "Proces '{screen}' zakończył się pomyślnie w {duration}s.",
+    "failed": "Proces '{screen}' nie powiódł się: {error}.",
+    "start_failed": "Nie udało się rozpocząć procesu '{screen}': {error}.",
+    "cancelled": "Proces '{screen}' został anulowany",
+    "repo-download": "Analiza repozytorium"
   },
 
   "rightPanel": {

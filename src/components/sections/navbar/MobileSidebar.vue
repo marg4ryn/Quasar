@@ -81,8 +81,13 @@
     padding: 0;
     z-index: 1001;
     position: relative;
+    color: var(--color-text-primary);
 
-    &:focus {
+    &:hover {
+      color: var(--color-primary);
+    }
+
+    &:focus-visible {
       outline: 2px solid var(--color-primary);
       outline-offset: 4px;
       border-radius: 4px;
@@ -91,7 +96,7 @@
     .burger-line {
       width: 30px;
       height: 3px;
-      background-color: var(--color-text-primary);
+      background-color: currentColor;
       border-radius: 2px;
       transition: all 0.3s ease;
       transform-origin: center;
@@ -118,7 +123,7 @@
     left: 0;
     width: 320px;
     height: 100vh;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-primary);
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     border-right: 1px solid var(--color-border);

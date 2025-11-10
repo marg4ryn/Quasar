@@ -1,5 +1,4 @@
 export * from './notification'
 export * from './city'
-export * from './analysis'
+export * from './connection'
 export * from './metric'
-export * from './flatCityNode'

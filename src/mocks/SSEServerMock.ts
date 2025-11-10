@@ -27,7 +27,7 @@ export class MockSSEServer {
         super()
         this.url = url
 
-        if (url.includes('/api/analysis/')) {
+        if (url.includes('/api/analysis')) {
           log.info('Intercepting:', url)
           this.instance = MockSSEServer.createInstance(url, this)
         } else {
@@ -97,11 +97,10 @@ class MockSSEServerInstance {
     }, 100)
 
     const statuses = [
-      AnalysisStatus.INITIALIZING,
+      AnalysisStatus.DOWNLOADING,
       AnalysisStatus.PROCESSING_DATA,
       AnalysisStatus.ANALYZING,
-      AnalysisStatus.GENERATING_RESULTS,
-      AnalysisStatus.FINALIZING,
+      AnalysisStatus.SONAR,
     ]
 
     try {
@@ -122,17 +121,8 @@ class MockSSEServerInstance {
 
       const result: AnalysisResult = {
         success: true,
-        data: {
-          summary: {
-            totalRecords: Math.floor(Math.random() * 1000),
-            dateRange: params,
-          },
-        },
+        data: '',
         timestamp: new Date().toISOString(),
-        metadata: {
-          processingTime: 10000,
-          recordsProcessed: Math.floor(Math.random() * 1000),
-        },
       }
 
       const completeEvent = new MessageEvent('complete', {
@@ -144,6 +134,7 @@ class MockSSEServerInstance {
         data: JSON.stringify({ message: 'Mock error' }),
       })
       this.eventSource.dispatchEvent(errorEvent)
+      log.info(error)
     } finally {
       this.isRunning = false
     }

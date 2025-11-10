@@ -11,6 +11,17 @@
       <RouterView />
     </div>
     <AppFooter />
+
+    <div class="toast-container">
+      <ToastBox
+        v-for="toast in toasts"
+        :key="toast.id"
+        :message="toast.message"
+        :variant="toast.variant"
+        :duration="toast.duration"
+        @close="removeToast(toast.id)"
+      />
+    </div>
   </div>
 </template>
 
@@ -20,19 +31,23 @@
   import { computed } from 'vue'
   import { useUserSettingsStore } from './stores/userSettingsStore'
   import { onBeforeUnmount } from 'vue'
-  import { useAnalysisStore } from '@/stores/analysisStore'
+  import { useConnectionStore } from '@/stores/connectionsStore'
   import { MockSSEServer } from '@/mocks/SSEServerMock'
   import { initializeCityDataMock } from '@/mocks/cityDataMock'
+  import { useToast } from '@/composables/useToast'
 
   import AppBar from '@/components/sections/AppBar.vue'
   import NavBar from '@/components/sections/navbar/NavBar.vue'
   import AppFooter from '@/components/sections/AppFooter.vue'
   import MeshGradient from '@/components/visuals/MeshGradient.vue'
+  import ToastBox from '@/components/modals/ToastBox.vue'
 
   const uiStore = useUIStore()
   const userSettings = useUserSettingsStore()
+  const connectionStore = useConnectionStore()
+  const { toasts, removeToast } = useToast()
+
   const isNavBarVisible = computed(() => uiStore.isNavBarVisible)
-  const analysisStore = useAnalysisStore()
 
   if (import.meta.env.VITE_USE_MOCK_ANALYSIS === 'true') {
     MockSSEServer.initialize()
@@ -43,7 +58,7 @@
   }
 
   onBeforeUnmount(() => {
-    analysisStore.closeAllConnections()
+    connectionStore.closeAllConnections()
   })
 </script>
 
@@ -68,5 +83,18 @@
     position: relative;
     z-index: 1;
     min-width: 0;
+  }
+
+  .toast-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 2000;
+
+    > :deep(*) {
+      pointer-events: auto;
+    }
   }
 </style>

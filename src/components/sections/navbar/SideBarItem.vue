@@ -93,7 +93,13 @@
     background: transparent;
 
     &:hover {
-      background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+      background: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-primary) 20%, transparent) 0%,
+        transparent 30%,
+        transparent 70%,
+        color-mix(in srgb, var(--color-primary) 20%, transparent) 100%
+      );
     }
 
     &:active {
@@ -124,7 +130,13 @@
 
     &--active {
       font-weight: 600;
-      background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+      background: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-primary) 20%, transparent) 0%,
+        transparent 30%,
+        transparent 70%,
+        color-mix(in srgb, var(--color-primary) 20%, transparent) 100%
+      );
       position: relative;
 
       &::before {
@@ -163,7 +175,13 @@
       position: relative;
 
       &:hover {
-        background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+        background: linear-gradient(
+          to right,
+          color-mix(in srgb, var(--color-primary) 20%, transparent) 0%,
+          transparent 30%,
+          transparent 70%,
+          color-mix(in srgb, var(--color-primary) 20%, transparent) 100%
+        );
       }
 
       &.router-link-active,

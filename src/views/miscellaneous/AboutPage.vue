@@ -135,7 +135,7 @@
         transform: translateX(-50%);
         width: 100px;
         height: 2px;
-        background: linear-gradient(90deg, transparent, $color-primary, transparent);
+        background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
       }
     }
 
@@ -144,7 +144,7 @@
       font-weight: $font-weight-bold;
       color: var(--color-text-primary);
       margin: 0 0 $spacing-md;
-      background: $color-primary;
+      background: var(--color-primary);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -156,9 +156,10 @@
       color: var(--color-text-secondary);
       margin: 0;
       letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 
       &.appname {
-        color: $color-primary;
+        color: var(--color-primary);
       }
     }
 
@@ -169,14 +170,14 @@
     }
 
     &__section {
-      background: var(--color-bg-secondary);
+      background: var(--color-bg-primary);
       padding: $spacing-2xl;
       border-radius: $radius-lg;
       border: 1px solid var(--color-border);
       transition: all $transition-base;
 
       &:hover {
-        border-color: $color-primary;
+        border-color: var(--color-primary);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         transform: translateY(-2px);
       }
@@ -199,7 +200,7 @@
     &__icon {
       width: 28px;
       height: 28px;
-      color: $color-primary;
+      color: var(--color-primary);
       flex-shrink: 0;
     }
 
@@ -258,7 +259,7 @@
 
       &--tech {
         padding: $spacing-md;
-        background: var(--color-bg-primary);
+        background: var(--color-bg-secondary);
         border-radius: $radius-md;
         border-left: 3px solid $color-success;
         transition: all $transition-fast;
@@ -271,7 +272,7 @@
 
       &--member {
         padding: $spacing-md;
-        background: var(--color-bg-primary);
+        background: var(--color-bg-secondary);
         border-radius: $radius-md;
         border: 1px solid var(--color-border);
         transition: all $transition-fast;
@@ -289,7 +290,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: $color-primary;
+      background: var(--color-primary);
       flex-shrink: 0;
       margin-top: 6px;
     }
@@ -308,7 +309,7 @@
     &__supervisor {
       margin-top: $spacing-2xl;
       padding: $spacing-lg;
-      background: var(--color-bg-primary);
+      background: var(--color-bg-secondary);
       border-radius: $radius-md;
       border: 2px solid #8b5cf6;
       font-size: $font-size-base;

@@ -24,7 +24,7 @@
     align-items: center;
     height: 30px;
     padding: $spacing-md $spacing-xl;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-primary);
     color: var(--color-text-secondary);
     font-size: $font-size-sm;
     font-weight: $font-weight-light;
@@ -38,6 +38,7 @@
   .footer-btn {
     color: var(--color-text-secondary);
     text-decoration: none;
+    border-radius: $radius-md;
     transition:
       color $transition-base,
       transform $transition-base;

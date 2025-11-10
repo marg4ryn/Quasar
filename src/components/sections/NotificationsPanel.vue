@@ -108,7 +108,8 @@
       align-items: center;
       padding: $spacing-md $spacing-lg;
       border-bottom: 1px solid var(--color-border);
-      background-color: var(--color-bg-tertiary);
+      background-color: var(--color-bg-primary);
+      height: 49px;
     }
 
     &__header-text {
@@ -131,7 +132,7 @@
       transition: all $transition-fast;
 
       &:hover {
-        background-color: rgba(var(--color-primary-rgb), 0.1);
+        transform: scale(1.05);
       }
 
       &:active {
@@ -144,6 +145,7 @@
     overflow-y: auto;
     flex: 1;
     padding: $spacing-xs;
+    @include scrollbar;
   }
 
   .notification-item {
@@ -153,7 +155,7 @@
     padding: $spacing-md;
     margin-bottom: $spacing-xs;
     border-radius: $radius-md;
-    background-color: var(--color-bg-primary);
+    background-color: var(--color-bg-secondary);
     border-left: 3px solid transparent;
     transition: all $transition-fast;
 
@@ -167,7 +169,7 @@
     }
 
     &--success {
-      border-left-color: var(--color-success);
+      border-left-color: $color-success;
 
       .notification-item__message {
         color: var(--color-text-primary);
@@ -175,15 +177,15 @@
     }
 
     &--error {
-      border-left-color: var(--color-error);
+      border-left-color: $color-error;
 
       .notification-item__message {
-        color: var(--color-error-text);
+        color: $color-error-text;
       }
     }
 
     &--info {
-      border-left-color: var(--color-info);
+      border-left-color: $color-info;
 
       .notification-item__message {
         color: var(--color-text-secondary);
@@ -191,10 +193,10 @@
     }
 
     &--warning {
-      border-left-color: var(--color-warning);
+      border-left-color: $color-warning;
 
       .notification-item__message {
-        color: var(--color-waring-text);
+        color: $color-warning-text;
       }
     }
 

@@ -61,7 +61,7 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
       .getPropertyValue('--color-primary')
       .trim()
     colorSecondary.value = getComputedStyle(document.documentElement)
-      .getPropertyValue('--color-bg-primary')
+      .getPropertyValue('--color-bg-secondary')
       .trim()
   }
 

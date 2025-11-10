@@ -73,14 +73,20 @@
     "header": "Welcome to",
     "motto": "Your repository, Your code city.",
     "prompt": "Enter link to analysis target:",
-    "analysisInterval": "Set the analysis interval:",
     "from": "From",
     "to": "To",
     "buttonStart": "Start",
-    "analysisCompleted": "Analysis completed successfully!",
     "alertEnterRepo": "Please enter a repository link before starting!",
     "loading": "Downloading repository...",
-    "modal": "Are you sure you want to abort the repository download?"
+    "modal": "Are you sure you want to abort the repository download?",
+    "repoPlaceholder": "e.g. https://github.com/johndoe/test.git",
+    "invalidRepoUrl": "Invalid repository URL. Use GitHub or GitLab URL.",
+    "customDateRange": "Set date range",
+    "dateRequired": "Date is required",
+    "dateTooEarly": "Date cannot be earlier than {date}",
+    "dateTooLate": "Date cannot be later than {date}",
+    "fromDateAfterToDate": "'From' date must be before 'To' date",
+    "toDateBeforeFromDate": "'To' date must be after 'From' date"
   },
 
   "notifications": {
@@ -89,6 +95,29 @@
     "clearAll": "Clear All",
     "remove": "Remove notification",
     "viewDetails": "View Results"
+  },
+
+  "status": {
+    "downloading": "Downloading repository...",
+    "processingData": "Processing data...",
+    "analyzing": "Starting analysis...",
+    "sonar": "Performing analysis...",
+    "unknown": "Unknown status"
+  },
+
+  "errors": {
+    "failedToParseCompletionData": "Failed to parse completion data",
+    "serverError": "Server error",
+    "unknownServerError": "Unknown server error",
+    "connectionFailedMaxRetries": "Connection failed after multiple retries"
+  },
+
+  "analysis": {
+    "completed": "Process' {screen}' completed successfully in {duration}s.",
+    "failed": "Process '{screen}' failed: {error}.",
+    "start_failed": "Process '{screen}' failed to start: {error}.",
+    "cancelled": "Process '{screen}' was cancelled",
+    "repo-download": "Repository analysis"
   },
 
   "rightPanel": {

@@ -31,11 +31,11 @@
     min-width: 120px;
 
     &--primary {
-      background: #22c55e;
+      background: $color-button-primary;
       color: white;
 
       &:hover {
-        background: #16a34a;
+        background: $color-button-primary-hover;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
       }
@@ -46,13 +46,13 @@
     }
 
     &--secondary {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--color-button-secondary);
       color: white;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid var(--color-border);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.3);
+        background: var(--color-button-secondary-hover);
+        border-color: var(--color-border-hover);
         transform: translateY(-1px);
       }
 
@@ -62,13 +62,13 @@
     }
 
     &--danger {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--color-button-danger-bg);
       color: #fff;
-      border: 1px solid #ef4444;
+      border: 1px solid $color-button-danger;
       transition: all 0.2s ease;
 
       &:hover {
-        background: #ef4444;
+        background: $color-button-danger;
         color: white;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);

@@ -72,7 +72,6 @@
 
 <script setup lang="ts">
   import { useUIStore } from '@/stores/uiStore'
-  import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
   import { useNotificationsStore } from '@/stores/notificationsStore'
   import { useI18n } from 'vue-i18n'
@@ -83,12 +82,11 @@
   const { t } = useI18n()
 
   const showAnalysisTitle = useUIStore().showAnalysisTitle
-  const analysisStore = useNewAnalysisStore()
   const userSettingsStore = useUserSettingsStore()
   const notificationsStore = useNotificationsStore()
-  const repoName = analysisStore.link
-  const fromDate = analysisStore.fromDate
-  const toDate = analysisStore.toDate
+  const repoName = ref('')
+  const fromDate = ref('')
+  const toDate = ref('')
 
   const notificationBtnRef = ref<HTMLElement | null>(null)
   const notificationsPanelRef = ref<InstanceType<typeof NotificationsPanel> | null>(null)
@@ -135,7 +133,7 @@
   .app-bar {
     width: 100%;
     height: 80px;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     display: flex;
     align-items: center;
@@ -157,6 +155,7 @@
       gap: 10px;
       text-decoration: none;
       color: var(--color-text-primary);
+      border-radius: $radius-md;
     }
 
     &__center {
@@ -170,14 +169,16 @@
     .app_logo {
       height: 60px;
       width: 60px;
+      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 1));
     }
 
     .app-name {
-      font-size: 1.2rem;
+      font-size: 1.6rem;
       text-decoration: none;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 
       &__1 {
-        font-weight: 700;
+        font-weight: 800;
         color: var(--color-primary);
       }
       &__2 {

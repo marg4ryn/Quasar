@@ -1,9 +1,7 @@
 <template>
   <nav class="nav-bar">
-    <!-- Mobile Sidebar - pokazuje się tylko na małych ekranach -->
     <MobileSidebar v-if="isMobile" :items="items" class="mobile-only" />
 
-    <!-- Desktop Navigation - pokazuje się tylko na dużych ekranach -->
     <div v-else class="nav-items">
       <NavBarItem
         v-for="item in items"
@@ -93,7 +91,7 @@
   .nav-bar {
     width: 100%;
     height: 50px;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     display: flex;
     align-items: center;

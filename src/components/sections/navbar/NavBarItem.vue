@@ -119,7 +119,7 @@
       margin: 0;
       padding: 5px 0;
       list-style: none;
-      background-color: var(--color-bg-secondary);
+      background-color: var(--color-bg-primary);
       border-radius: 8px;
       min-width: 210px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);

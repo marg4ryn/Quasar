@@ -20,7 +20,7 @@
 
 body {
   font-family: $font-family-base;
-  background: var(--color-bg-primary);
+  background: var(--color-bg-secondary);
   color: var(--color-text-primary);
   @include text-smooth;
   overflow-x: hidden;
@@ -256,4 +256,7 @@ button {
 
 [data-theme='light'] {
   @include export-theme($theme-light);
+  input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(0);
+  }
 }

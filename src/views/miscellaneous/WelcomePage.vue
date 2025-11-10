@@ -8,14 +8,6 @@
       :modal-label="t('welcomePage.modal')"
     />
 
-    <ToastBox
-      v-if="showToast"
-      :message="t('welcomePage.alertEnterRepo')"
-      variant="error"
-      :duration="2000"
-      @close="showToast = false"
-    />
-
     <div class="welcome-content">
       <img :src="logoSrc" alt="HotSpotter Logo" class="logo" />
 
@@ -30,43 +22,69 @@
           id="repo-link"
           type="text"
           v-model="link"
-          placeholder="e.g. https://github.com/johndoe/test.git"
+          :placeholder="t('welcomePage.repoPlaceholder')"
           class="repo-input"
+          :class="{ error: validationError }"
           :disabled="isBusy"
+          @input="validateLink"
+          @blur="validateLink"
         />
+        <span v-if="validationError" class="error-message">{{ validationError }}</span>
       </div>
 
-      <h3 class="input-label">{{ t('welcomePage.analysisInterval') }}</h3>
-      <div class="date-inputs">
-        <div class="date-input-group">
-          <label class="date-label">{{ t('welcomePage.from') }}:</label>
+      <div class="checkbox-section">
+        <label class="checkbox-label">
           <input
-            type="date"
-            class="date-input"
-            v-model="fromDate"
-            :max="toDate"
+            type="checkbox"
+            v-model="showDateInputs"
             :disabled="isBusy"
-            @change="handleFromDateChange"
+            class="checkbox-input"
           />
-        </div>
-        <div class="date-input-group">
-          <label class="date-label">{{ t('welcomePage.to') }}:</label>
-          <input
-            type="date"
-            class="date-input"
-            v-model="toDate"
-            :min="fromDate"
-            :disabled="isBusy"
-            @change="handleToDateChange"
-          />
-        </div>
+          <span>{{ t('welcomePage.customDateRange') }}</span>
+        </label>
       </div>
+
+      <transition name="slide-fade">
+        <div v-if="showDateInputs" class="date-section">
+          <div class="date-inputs">
+            <div class="date-input-group">
+              <label class="date-label">{{ t('welcomePage.from') }}:</label>
+              <input
+                type="date"
+                class="date-input"
+                :class="{ error: fromDateError }"
+                v-model="fromDate"
+                :min="MIN_DATE"
+                :max="MAX_DATE"
+                :disabled="isBusy"
+                @change="handleFromDateChange"
+                @blur="validateFromDate"
+              />
+              <span v-if="fromDateError" class="error-message">{{ fromDateError }}</span>
+            </div>
+            <div class="date-input-group">
+              <label class="date-label">{{ t('welcomePage.to') }}:</label>
+              <input
+                type="date"
+                class="date-input"
+                :class="{ error: toDateError }"
+                v-model="toDate"
+                :min="MIN_DATE"
+                :max="MAX_DATE"
+                :disabled="isBusy"
+                @change="handleToDateChange"
+                @blur="validateToDate"
+              />
+              <span v-if="toDateError" class="error-message">{{ toDateError }}</span>
+            </div>
+          </div>
+        </div>
+      </transition>
 
       <AppButton
         style="margin-top: 20px"
         :label="t('welcomePage.buttonStart')"
         variant="primary"
-        :disabled="isBusy"
         @click="handleStart"
       />
     </div>
@@ -79,26 +97,36 @@
   import { useI18n } from 'vue-i18n'
   import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
-  import { useAnalysis } from '@/composables/useAnalysis'
+  import { useConnection } from '@/composables/useConnection'
+  import { useLogger } from '@/composables/useLogger'
   import AppButton from '@/components/common/AppButton.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
-  import ToastBox from '@/components/modals/ToastBox.vue'
 
   const { t } = useI18n()
   const router = useRouter()
+  const log = useLogger('WelcomePage')
   const newAnalysisStore = useNewAnalysisStore()
   const userSettingsStore = useUserSettingsStore()
 
-  const showToast = ref(false)
-  const link = ref(newAnalysisStore.link || '')
-  const today = new Date().toISOString().split('T')[0]
-  const fromDate = ref(newAnalysisStore.fromDate || '2005-01-01')
-  const toDate = ref(newAnalysisStore.toDate || today)
+  const REPO_URL_PATTERN =
+    /^(?:https:\/\/)?(?:git(?:hub|lab))\.com\/(?:[^/]+)\/(?:(?!\.git$)[^/]+?)(?:\.git)*$/
 
-  const { isBusy, isCompleted, statusLabel, start, stop } = useAnalysis(
-    'download-repository',
-    'Repository Download',
-    '/system-overview'
+  const MIN_DATE = '2005-01-01'
+  const today = new Date().toISOString().split('T')[0]
+  const MAX_DATE = today
+
+  const link = ref(newAnalysisStore.link || '')
+  const validationError = ref('')
+  const isLinkValid = ref(false)
+  const showDateInputs = ref(false)
+  const fromDate = ref(newAnalysisStore.fromDate || MIN_DATE)
+  const toDate = ref(newAnalysisStore.toDate || MAX_DATE)
+  const fromDateError = ref('')
+  const toDateError = ref('')
+
+  const { isBusy, isCompleted, statusLabel, start, stop } = useConnection(
+    '/system-overview',
+    'analysis.repo-download'
   )
 
   const logoSrc = computed(() => {
@@ -112,13 +140,89 @@
     }
   })
 
+  const validateLink = () => {
+    const trimmedLink = link.value.trim()
+
+    if (!trimmedLink) {
+      validationError.value = ''
+      isLinkValid.value = false
+      return
+    }
+
+    if (REPO_URL_PATTERN.test(trimmedLink)) {
+      validationError.value = ''
+      isLinkValid.value = true
+    } else {
+      validationError.value = t('welcomePage.invalidRepoUrl')
+      isLinkValid.value = false
+    }
+  }
+
+  const validateFromDate = () => {
+    if (!fromDate.value) {
+      fromDateError.value = t('welcomePage.dateRequired')
+      return false
+    }
+
+    if (fromDate.value < MIN_DATE) {
+      fromDateError.value = t('welcomePage.dateTooEarly', { date: MIN_DATE })
+      return false
+    }
+
+    if (fromDate.value > MAX_DATE) {
+      fromDateError.value = t('welcomePage.dateTooLate', { date: MAX_DATE })
+      return false
+    }
+
+    if (toDate.value && fromDate.value > toDate.value) {
+      fromDateError.value = t('welcomePage.fromDateAfterToDate')
+      return false
+    }
+
+    fromDateError.value = ''
+    return true
+  }
+
+  const validateToDate = () => {
+    if (!toDate.value) {
+      toDateError.value = t('welcomePage.dateRequired')
+      return false
+    }
+
+    if (toDate.value < MIN_DATE) {
+      toDateError.value = t('welcomePage.dateTooEarly', { date: MIN_DATE })
+      return false
+    }
+
+    if (toDate.value > MAX_DATE) {
+      toDateError.value = t('welcomePage.dateTooLate', { date: MAX_DATE })
+      return false
+    }
+
+    if (fromDate.value && toDate.value < fromDate.value) {
+      toDateError.value = t('welcomePage.toDateBeforeFromDate')
+      return false
+    }
+
+    toDateError.value = ''
+    return true
+  }
+
+  const areDatesValid = computed(() => {
+    if (!showDateInputs.value) return true
+    return validateFromDate() && validateToDate()
+  })
+
   const handleFromDateChange = (event: Event) => {
     const target = event.target as HTMLInputElement
     const date = target.value
 
-    if (date <= toDate.value) {
-      fromDate.value = date
-      newAnalysisStore.setFromDate(date)
+    fromDate.value = date
+    newAnalysisStore.setFromDate(date)
+    validateFromDate()
+
+    if (toDate.value) {
+      validateToDate()
     }
   }
 
@@ -126,26 +230,56 @@
     const target = event.target as HTMLInputElement
     const date = target.value
 
-    if (date >= fromDate.value) {
-      toDate.value = date
-      newAnalysisStore.setToDate(date)
+    toDate.value = date
+    newAnalysisStore.setToDate(date)
+    validateToDate()
+
+    if (fromDate.value) {
+      validateFromDate()
     }
   }
 
   const handleStart = async () => {
-    if (!link.value.trim()) {
-      showToast.value = true
+    const trimmedLink = link.value.trim()
+
+    if (!trimmedLink) {
+      validationError.value = t('welcomePage.alertEnterRepo')
+      isLinkValid.value = false
+      log.warn('Enter the repo link')
       return
     }
 
+    if (REPO_URL_PATTERN.test(trimmedLink)) {
+      validationError.value = ''
+      isLinkValid.value = true
+    } else {
+      validationError.value = t('welcomePage.invalidRepoUrl')
+      isLinkValid.value = false
+      log.warn('Invalid repo link')
+      return
+    }
+
+    if (showDateInputs.value) {
+      if (!areDatesValid.value) {
+        log.warn('Invalid dates')
+        return
+      }
+    }
+
     newAnalysisStore.setLink(link.value.trim())
-    newAnalysisStore.setFromDate(fromDate.value)
-    newAnalysisStore.setToDate(toDate.value)
+
+    if (showDateInputs.value) {
+      newAnalysisStore.setFromDate(fromDate.value)
+      newAnalysisStore.setToDate(toDate.value)
+    } else {
+      newAnalysisStore.setFromDate(MIN_DATE)
+      newAnalysisStore.setToDate(MAX_DATE)
+    }
 
     await start({
-      repoLink: link.value.trim(),
-      fromDate: fromDate.value,
-      toDate: toDate.value,
+      repositoryUrl: link.value.trim(),
+      startDate: fromDate.value,
+      endDate: toDate.value,
     })
   }
 
@@ -158,12 +292,16 @@
 
   const resetNewAnalysisStore = () => {
     newAnalysisStore.setLink('')
-    newAnalysisStore.setFromDate('2005-01-01')
-    newAnalysisStore.setToDate(today)
+    newAnalysisStore.setFromDate(MIN_DATE)
+    newAnalysisStore.setToDate(MAX_DATE)
   }
 
   const handleCancelAnalysis = () => {
     stop()
+  }
+
+  if (link.value) {
+    validateLink()
   }
 </script>
 
@@ -191,6 +329,7 @@
     width: 200px;
     height: 200px;
     margin-bottom: $spacing-md;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 1));
   }
 
   .main-title {
@@ -201,6 +340,7 @@
     line-height: $line-height-tight;
 
     .appname {
+      font-weight: 800;
       color: var(--color-primary);
     }
   }
@@ -229,17 +369,66 @@
   .repo-input {
     @include input-base;
 
+    &.error {
+      border-color: $color-error;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
   }
 
+  .error-message {
+    font-size: $font-size-sm;
+    color: $color-error;
+    text-align: left;
+    width: 100%;
+    margin-top: -$spacing-sm;
+  }
+
+  .checkbox-section {
+    width: 100%;
+    max-width: 400px;
+    margin-top: $spacing-sm;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: $font-size-base;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      color: var(--color-text-primary);
+    }
+  }
+
+  .checkbox-input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .date-section {
+    width: 100%;
+    max-width: 400px;
+  }
+
   .date-inputs {
     display: flex;
     gap: $spacing-xl;
     width: 100%;
-    max-width: 400px;
   }
 
   .date-input-group {
@@ -257,25 +446,16 @@
   }
 
   .date-input {
+    @include input-base;
     padding: $spacing-md;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: $radius-md;
-    color: var(--color-text-primary);
     font-size: $font-size-sm;
     text-align: center;
     cursor: pointer;
     transition: all $transition-fast;
 
-    &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    &:focus {
-      outline: none;
-      background: rgba(255, 255, 255, 0.15);
-      border-color: var(--color-primary);
+    &.error {
+      border-color: $color-error;
+      background: rgba(239, 68, 68, 0.1);
     }
 
     &:disabled {
@@ -287,6 +467,24 @@
       filter: invert(1);
       cursor: pointer;
     }
+  }
+
+  .slide-fade-enter-active {
+    transition: all 0.3s ease-out;
+  }
+
+  .slide-fade-leave-active {
+    transition: all 0.2s ease-in;
+  }
+
+  .slide-fade-enter-from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  .slide-fade-leave-to {
+    transform: translateY(-10px);
+    opacity: 0;
   }
 
   @include respond-to-sm {
@@ -319,6 +517,12 @@
     .logo {
       width: 150px;
       height: 150px;
+    }
+
+    .input-section,
+    .checkbox-section,
+    .date-section {
+      width: 100%;
     }
   }
 </style>

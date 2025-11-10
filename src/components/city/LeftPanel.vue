@@ -57,7 +57,7 @@
 
 <style scoped lang="scss">
   .left-panel {
-    background: var(--color-bg-secondary);
+    background: var(--color-bg-primary);
     backdrop-filter: blur(10px);
     border: 1px solid var(--color-border);
     border-radius: $radius-xl;
@@ -111,25 +111,7 @@
     gap: 0.5rem;
     overflow-y: auto;
     flex: 1;
-
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: var(--color-scrollbar-track);
-      border-radius: 3px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--color-scrollbar-thumb);
-      border-radius: 3px;
-
-      &:hover {
-        cursor: pointer;
-        background: var(--color-scrollbar-track-hover);
-      }
-    }
+    @include scrollbar;
   }
 
   .file-item {

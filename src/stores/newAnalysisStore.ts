@@ -5,7 +5,6 @@ export const useNewAnalysisStore = defineStore('newAnalysis', () => {
   const link = ref('')
   const fromDate = ref('')
   const toDate = ref('')
-  const repoName = ref('')
 
   function setLink(newLink: string) {
     link.value = newLink
@@ -19,19 +18,12 @@ export const useNewAnalysisStore = defineStore('newAnalysis', () => {
     toDate.value = to
   }
 
-  function setDates(from: string, to: string) {
-    fromDate.value = from
-    toDate.value = to
-  }
-
   return {
     link,
     fromDate,
     toDate,
-    repoName,
     setLink,
     setFromDate,
     setToDate,
-    setDates,
   }
 })

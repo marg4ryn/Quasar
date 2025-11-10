@@ -50,12 +50,12 @@
     transition: color 0.2s ease;
 
     &:hover {
-      color: var(--color-button-danger);
+      color: $color-button-danger;
     }
 
-    &:focus {
+    &:focus-visible {
       outline: none;
-      box-shadow: 0 0 0 2px rgba(var(--color-button-danger), 0.5);
+      box-shadow: 0 0 0 2px $color-button-danger;
       border-radius: 4px;
     }
 

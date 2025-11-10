@@ -84,19 +84,19 @@
       opacity 0.3s ease;
 
     &.toast--success {
-      background: linear-gradient(135deg, var(--color-success), var(--color-success-dark));
+      background: linear-gradient(135deg, $color-success, $color-success-dark);
     }
 
     &.toast--error {
-      background: linear-gradient(135deg, var(--color-error), var(--color-error-dark));
+      background: linear-gradient(135deg, $color-error, $color-error-dark);
     }
 
     &.toast--info {
-      background: linear-gradient(135deg, var(--color-info), var(--color-info-dark));
+      background: linear-gradient(135deg, $color-info, $color-info-dark);
     }
 
     &.toast--warning {
-      background: linear-gradient(135deg, var(--color-warning), var(--color-warning-dark));
+      background: linear-gradient(135deg, $color-warning, $color-warning-dark);
     }
 
     .toast-message {

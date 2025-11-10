@@ -1,4 +1,3 @@
-// Stałe
 export const SPACING = 1.5
 export const BUILDING_HEIGHT_SCALE = 30
 export const BUILDING_WIDTH_SCALE = 10
@@ -14,8 +13,8 @@ export const PLATFORM_ZOOM_MULT = 6
 export const COLORS = {
   building: 0xf0f0f0,
   platform: 0xf0f0f0,
-  emissiveColor: 0x666666, // Kolor emissive wspólny dla budynków i platform
-  hover: 0x0643ff,
-  selected: 0xd68100,
+  emissiveColor: 0x666666,
+  hover: 0xe6cc00,
+  selected: 0xe6b400,
   edge: 0x000000,
 } as const

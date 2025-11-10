@@ -89,8 +89,8 @@
 @mixin input-base {
   width: 100%;
   padding: $input-padding-y $input-padding-x;
-  background: var(--color-overlay);
-  border: $input-border-width solid var(--color-border);
+  background: var(--color-input-bg);
+  border: $input-border-width solid var(--color-input-border);
   border-radius: $radius-lg;
   color: var(--color-text-primary);
   font-size: $font-size-base;
@@ -102,15 +102,15 @@
   }
 
   &:hover:not(:disabled) {
-    background: var(--color-overlay-hover);
-    border-color: var(--color-border-hover);
+    background: var(--color-input-bg-hover);
+    border-color: var(--color-input-border-hover);
   }
 
   &:focus {
     outline: none;
-    background: var(--color-overlay-hover);
-    border-color: var(--color-border-focus);
-    box-shadow: 0 0 0 3px var(--focus-ring-color);
+    background: var(--color-input-bg-hover);
+    border-color: var(--color-input-border-hover);
+    box-shadow: 0 0 0 3px var(--color-primary);
   }
 
   &:disabled {
@@ -129,6 +129,27 @@
   &::-webkit-calendar-picker-indicator {
     filter: invert(1);
     cursor: pointer;
+  }
+}
+
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-scrollbar-track);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-thumb);
+    border-radius: 3px;
+
+    &:hover {
+      cursor: pointer;
+      background: var(--color-scrollbar-thumb-hover);
+    }
   }
 }
 

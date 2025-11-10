@@ -1,24 +1,22 @@
 import { computed } from 'vue'
-import { useAnalysisStore } from '@/stores/analysisStore'
-import { getAnalysisStatusLabel } from '@/services/analysisConnection'
+import { useConnectionStore } from '@/stores/connectionsStore'
+import { getAnalysisStatusLabelKey } from '@/types'
 
-export function useAnalysis(screenId: string, screenName?: string, screenRoute?: string) {
-  const store = useAnalysisStore()
+export function useConnection(screenRoute: string, screenName?: string) {
+  const store = useConnectionStore()
 
-  store.initializeAnalysis(screenId, screenName, screenRoute)
+  store.initializeConnection(screenRoute, screenName)
 
-  const analysis = store.getAnalysis(screenId)
-  const isRunning = store.isRunning(screenId)
+  const analysis = store.getConnection(screenRoute)
+  const isRunning = store.isRunning(screenRoute)
   const isBusy = computed(() => analysis.value?.state === 'running')
   const isCompleted = computed(() => analysis.value?.state === 'completed')
   const hasError = computed(() => analysis.value?.state === 'error')
   const isIdle = computed(() => analysis.value?.state === 'idle')
-
   const status = computed(() => analysis.value?.status)
   const statusLabel = computed(() =>
-    status.value !== undefined ? getAnalysisStatusLabel(status.value) : undefined
+    status.value !== undefined ? getAnalysisStatusLabelKey(status.value) : undefined
   )
-
   const result = computed(() => analysis.value?.result)
   const error = computed(() => analysis.value?.error)
   const startedAt = computed(() => analysis.value?.startedAt)
@@ -30,45 +28,44 @@ export function useAnalysis(screenId: string, screenName?: string, screenRoute?:
     return Math.round((end.getTime() - startedAt.value.getTime()) / 1000)
   })
 
-  const start = (params?: Record<string, any>) => {
-    return store.startAnalysis(screenId, params)
+  const durationFormatted = computed(() => {
+    if (duration.value === undefined) return undefined
+    const seconds = duration.value
+    if (seconds < 60) return `${seconds}s`
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = seconds % 60
+    return `${minutes}m ${remainingSeconds}s`
+  })
+
+  const start = (params?: Record<string, string | number | boolean | null | undefined>) => {
+    return store.startConnection(screenRoute, params)
   }
 
   const stop = () => {
-    store.stopAnalysis(screenId)
+    store.stopConnection(screenRoute)
   }
 
   const reset = () => {
-    store.resetAnalysis(screenId)
+    store.resetConnection(screenRoute)
   }
 
   return {
-    // State
     analysis,
     isRunning,
     isBusy,
     isCompleted,
     hasError,
     isIdle,
-
-    // Status
     status,
     statusLabel,
-
-    // Results & errors
     result,
     error,
-
-    // Time
     startedAt,
     completedAt,
     duration,
-
-    // Actions
+    durationFormatted,
     start,
     stop,
     reset,
   }
 }
-
-export { getAnalysisStatusLabel }

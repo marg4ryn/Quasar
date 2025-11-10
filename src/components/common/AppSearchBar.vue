@@ -71,12 +71,12 @@
 
 <style scoped lang="scss">
   .search-bar {
+    @include input-base;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-searchbar-bg);
-    border: 1px solid var(--color-searchbar-border);
     border-radius: 24px;
+    height: 48px;
 
     &.normal {
       width: 400px;

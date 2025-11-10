@@ -154,7 +154,7 @@
 
 <style scoped lang="scss">
   .right-panel {
-    background: var(--color-bg-secondary);
+    background: var(--color-bg-primary);
     backdrop-filter: blur(10px);
     border: 1px solid var(--color-border);
     border-radius: $radius-xl;
@@ -241,25 +241,7 @@
     min-height: 200px;
     overflow-y: auto;
     margin-bottom: 1rem;
-
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: var(--color-scrollbar-track);
-      border-radius: 3px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--color-scrollbar-thumb);
-      border-radius: 3px;
-
-      &:hover {
-        cursor: pointer;
-        background: var(--color-scrollbar-track-hover);
-      }
-    }
+    @include scrollbar;
   }
 
   .metric-item {
@@ -288,25 +270,7 @@
     flex: 1;
     min-height: 200px;
     overflow-y: auto;
-
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: var(--color-scrollbar-track);
-      border-radius: 3px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--color-scrollbar-thumb);
-      border-radius: 3px;
-
-      &:hover {
-        cursor: pointer;
-        background: var(--color-scrollbar-track-hover);
-      }
-    }
+    @include scrollbar;
   }
 
   .child-item {
