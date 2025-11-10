@@ -54,9 +54,10 @@ export function createAnalysisConnection(
         const result: AnalysisResult = JSON.parse(event.data)
 
         if (typeof result.data !== 'string') {
-          log.warn('Result data is not a string, converting...')
           result.data = JSON.stringify(result.data)
         }
+
+        log.info('Result received: ', result)
 
         callbacks?.onComplete(result)
         cleanup()

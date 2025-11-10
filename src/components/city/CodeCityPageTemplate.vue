@@ -130,7 +130,6 @@
     log.info('Clicked on:', name, ' Path:', path, ' Intensity: ', intensity)
     const newPath = path ?? ''
     selectedPath.value = newPath
-    // selectCityNode(newPath) - niepotrzebne wywołanie selecta 
   }
 
   function handleCityNodeSelect(path: string) {
@@ -139,11 +138,11 @@
   }
 
   function handleCityNodeHover(path: string) {
-    log.info('Hovered over: ', path)
+    //log.info('Hovered over: ', path)
   }
 
   function handleCityNodeCancelHover(path: string) {
-    log.info('No longer hovering over: ', path)
+    //log.info('No longer hovering over: ', path)
   }
 
   function navigateUp() {

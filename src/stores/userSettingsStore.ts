@@ -3,7 +3,7 @@ import { ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export const useUserSettingsStore = defineStore('userSettings', () => {
-  const selectedColor = ref<'#bc1922' | '#28abf2'>('#28abf2')
+  const selectedColor = ref<'#bc1922' | '#28abf2'>('#bc1922')
   const selectedTheme = ref<'light' | 'dark' | 'system'>('dark')
   const selectedLanguage = ref<'en' | 'pl' | 'system'>('system')
 

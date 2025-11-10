@@ -18,12 +18,12 @@
             name="color"
             :options="colors"
           />
-          <SectionHeader :label="t('settingsPage.theme')" />
+          <!-- <SectionHeader :label="t('settingsPage.theme')" />
           <RadioButtonGroup
             v-model="useUserSettingsStore().selectedTheme"
             name="theme"
             :options="themes"
-          />
+          /> -->
           <SectionHeader :label="t('settingsPage.language')" />
           <AppDropdownSelect
             id="language-select"
@@ -70,11 +70,11 @@
     { label: t('settingsPage.red'), value: '#bc1922' },
     { label: t('settingsPage.blue'), value: '#28abf2' },
   ]
-  const themes = [
-    { label: t('settingsPage.dark'), value: 'dark' },
-    { label: t('settingsPage.light'), value: 'light' },
-    { label: t('settingsPage.system'), value: 'system' },
-  ]
+  // const themes = [
+  //   { label: t('settingsPage.dark'), value: 'dark' },
+  //   { label: t('settingsPage.light'), value: 'light' },
+  //   { label: t('settingsPage.system'), value: 'system' },
+  // ]
 </script>
 
 <style scoped lang="scss">

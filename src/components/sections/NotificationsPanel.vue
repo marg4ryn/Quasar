@@ -123,7 +123,7 @@
     &__clear-all {
       background: none;
       border: none;
-      color: var(--color-primary);
+      color: var(--color-text-secondary);
       cursor: pointer;
       font-size: $font-size-xs;
       font-weight: $font-weight-medium;
