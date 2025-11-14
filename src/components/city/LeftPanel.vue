@@ -63,7 +63,7 @@
     border-radius: $radius-xl;
     padding: $spacing-xl;
     width: 320px;
-    min-height: 600px;
+    min-height: 400px;
     display: flex;
     flex-direction: column;
     box-shadow: $shadow-lg;

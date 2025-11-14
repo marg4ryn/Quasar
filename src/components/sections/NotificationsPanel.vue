@@ -88,7 +88,7 @@
 <style lang="scss" scoped>
   .notifications-panel {
     position: absolute;
-    top: 80px;
+    top: 50px;
     right: 0;
     width: 350px;
     max-height: 500px;

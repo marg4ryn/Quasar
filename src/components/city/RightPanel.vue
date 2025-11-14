@@ -61,10 +61,7 @@
       </div>
     </div>
 
-    <div
-      v-else-if="selectedItem && selectedItem.type === 'dir' && selectedItem.children"
-      class="directory-children"
-    >
+    <div v-else-if="selectedItem && selectedItem.type === 'dir'" class="directory-children">
       <h3>{{ $t('rightPanel.directoryContents') }}</h3>
       <AppSearchBar
         class="search-bar"
@@ -166,7 +163,7 @@
     border-radius: $radius-xl;
     padding: $spacing-xl;
     width: 320px;
-    min-height: 600px;
+    min-height: 400px;
     display: flex;
     flex-direction: column;
     box-shadow: $shadow-lg;

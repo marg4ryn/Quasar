@@ -102,7 +102,6 @@
     leftPanelConfig?: LeftPanelConfig
     secondLeftPanelConfig?: LeftPanelConfig
     rightPanelConfig?: RightPanelConfig
-    filterItems?: (items: any[], query: string) => any[]
   }
 
   withDefaults(defineProps<Props>(), {
@@ -147,8 +146,8 @@
     return null
   }
 
-  function handleCityNodeClick(name: string | null, path: string | null, intensity?: number) {
-    log.info('Clicked on:', name, ' Path:', path, ' Intensity: ', intensity)
+  function handleCityNodeClick(name: string | null, path: string | null) {
+    log.info('Clicked on:', name, ' Path:', path)
     const newPath = path ?? ''
     selectedPath.value = newPath
   }

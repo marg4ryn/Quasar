@@ -152,13 +152,13 @@
 <style lang="scss" scoped>
   .app-bar {
     width: 100%;
-    height: 80px;
+    height: 50px;
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 12px;
     flex-shrink: 0;
     position: relative;
     transition: background-color 0.3s ease;
@@ -171,7 +171,7 @@
     &__right {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 0px;
     }
 
     &__left {
@@ -197,8 +197,8 @@
     }
 
     .app_logo {
-      height: 60px;
-      width: 60px;
+      height: 40px;
+      width: 40px;
       filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 1));
     }
 
@@ -224,7 +224,7 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 6px;
+      padding: 10px;
       border-radius: 8px;
       color: var(--color-text-primary);
       object-fit: contain;
@@ -247,7 +247,7 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 6px;
+      padding: 10px;
       border-radius: 8px;
       color: var(--color-text-primary);
       object-fit: contain;
@@ -268,8 +268,8 @@
     }
 
     .icon {
-      width: 34px;
-      height: 34px;
+      width: 28px;
+      height: 28px;
       display: block;
     }
 

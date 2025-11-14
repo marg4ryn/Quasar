@@ -133,6 +133,7 @@
 }
 
 @mixin scrollbar {
+  padding-right: 6px;
   &::-webkit-scrollbar {
     width: 6px;
   }
