@@ -14,7 +14,7 @@
   import { useCodeCityScene } from '@/composables/useCodeCityScene'
   import { useCodeCityState } from '@/composables/useCodeCityState'
   import { processNode } from '@/utils/city/layout'
-  import { createGeometry, createMergedEdges, getColorDataForPath } from '@/utils/city/geometry'
+  import { createGeometry, createMergedEdges, getColorDataForPath, createAllInstancedMeshes } from '@/utils/city/geometry'
   import * as THREE from 'three'
   import {
     COLORS,
@@ -105,37 +105,43 @@
   let isMouseOverCanvas = false
 
   // ----- Logika select elementów miasta -----
-  function selectCityNode(mesh: THREE.Mesh, returnEmit: boolean) {
-    const nodeData = objectMap.get(mesh)
-    if (!nodeData) return
+  function selectCityNode(instanceData: any, returnEmit: boolean) {
+    if (!instanceData) return
 
     if (selectedObject.value) {
-      restoreOriginalColor(toRaw(selectedObject.value))
+      restoreOriginalColor(selectedObject.value)
     }
 
-    selectedObject.value = mesh
+    selectedObject.value = instanceData
 
     // Ustaw kolor selected
-    const material = mesh.material as THREE.MeshPhongMaterial
-    material.color.setHex(COLORS.selected)
+    const mesh = instanceData.mesh as THREE.InstancedMesh
+    mesh.setColorAt(instanceData.instanceIndex, new THREE.Color(COLORS.selected))
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
 
-    controls.targetCenter.copy(mesh.position)
-    setRotationCenter(mesh.position)
+    // Pobierz pozycję instancji
+    const matrix = new THREE.Matrix4()
+    mesh.getMatrixAt(instanceData.instanceIndex, matrix)
+    const position = new THREE.Vector3()
+    position.setFromMatrixPosition(matrix)
+
+    controls.targetCenter.copy(position)
+    setRotationCenter(position)
 
     const camera = getCamera()
     if (camera) {
-      controls.targetZoom = calculateOptimalZoom(mesh, camera)
+      controls.targetZoom = calculateOptimalZoom(instanceData, camera)
     }
 
     if (returnEmit) {
-      const colorInfo = getColorDataForPath(nodeData.path)
-      emit('cityNodeClick', nodeData.name, nodeData.path, colorInfo?.intensity)
+      const colorInfo = getColorDataForPath(instanceData.node.path)
+      emit('cityNodeClick', instanceData.node.name, instanceData.node.path, colorInfo?.intensity)
     }
   }
 
   function deselectCityNode(returnEmit: boolean) {
     if (selectedObject.value) {
-      restoreOriginalColor(toRaw(selectedObject.value))
+      restoreOriginalColor(selectedObject.value)
       selectedObject.value = null
       controls.targetCenter = new THREE.Vector3(0, 0.5, 0)
       setRotationCenter(new THREE.Vector3(0, 0.5, 0))
@@ -154,46 +160,41 @@
       return true
     }
 
-    let targetMesh: THREE.Mesh | null = null
+    let targetData = null
 
-    objectMap.forEach((nodeData, mesh) => {
-      if (nodeData.path === path) {
-        targetMesh = mesh
+    objectMap.forEach((data, key) => {
+      if (typeof key === 'string' && data.node.path === path) {
+        targetData = data
       }
     })
 
-    if (!targetMesh) {
+    if (!targetData) {
       return false
     }
 
-    selectCityNode(targetMesh, false)
+    selectCityNode(targetData, false)
     return true
   }
 
   // ----- Logika hover elementów miasta -----
-  function setCityNodeHover(newHoveredObject: THREE.Mesh | null, returnEmit: boolean) {
-    hoveredObject.value = newHoveredObject
+  function setCityNodeHover(newHoveredData: any, returnEmit: boolean) {
+    hoveredObject.value = newHoveredData
 
     // Podświetl nowy obiekt (jeśli nie jest selected)
-    if (hoveredObject.value && toRaw(hoveredObject.value) !== toRaw(selectedObject.value)) {
-      const material = hoveredObject.value.material as THREE.MeshPhongMaterial
-      material.color.setHex(COLORS.hover)
+    if (hoveredObject.value && hoveredObject.value !== selectedObject.value) {
+      const mesh = hoveredObject.value.mesh as THREE.InstancedMesh
+      mesh.setColorAt(hoveredObject.value.instanceIndex, new THREE.Color(COLORS.hover))
+      if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
 
-      const nodeData = objectMap.get(toRaw(hoveredObject.value))
-      if (returnEmit) {
-        emit('cityNodeHover', nodeData.path)
-      }
+      if (returnEmit) { emit('cityNodeHover', hoveredObject.value.node.path) }
     }
   }
 
   function resetCityNodeHover(returnEmit: boolean) {
     if (hoveredObject.value && hoveredObject.value !== selectedObject.value) {
-      restoreOriginalColor(toRaw(hoveredObject.value))
+      restoreOriginalColor(hoveredObject.value)
 
-      const nodeData = objectMap.get(toRaw(hoveredObject.value))
-      if (returnEmit) {
-        emit('cityNodeCancelHover', nodeData.path)
-      }
+      if (returnEmit) { emit('cityNodeCancelHover', hoveredObject.value.node.path) }
     }
   }
 
@@ -203,20 +204,20 @@
       return true
     }
 
-    let targetMesh: THREE.Mesh | null = null
+    let targetData = null
 
-    objectMap.forEach((nodeData, mesh) => {
-      if (nodeData.path === path) {
-        targetMesh = mesh
+    objectMap.forEach((data, key) => {
+      if (typeof key === 'string' && data.node.path === path) {
+        targetData = data
       }
     })
 
-    if (!targetMesh) {
+    if (!targetData) {
       return false
     }
 
     resetCityNodeHover(false)
-    setCityNodeHover(targetMesh, false)
+    setCityNodeHover(targetData, false)
     return true
   }
 
@@ -235,18 +236,25 @@
       raycaster.setFromCamera(mouse, cam)
       const intersects = raycaster.intersectObjects(scn.children, true)
 
-      let clickedObject = null
+      let clickedInstanceData = null
+
       for (let intersect of intersects) {
-        if (intersect.object.userData.isSelectable) {
-          clickedObject = intersect.object as THREE.Mesh
-          break
+        if (intersect.object.userData.isInstanced && intersect.instanceId !== undefined) {
+          const mesh = intersect.object as THREE.InstancedMesh
+          const instanceKey = `${mesh.userData.instanceKey}_${intersect.instanceId}`
+          clickedInstanceData = objectMap.get(instanceKey)
+
+          if (clickedInstanceData) {
+            clickedInstanceData.instanceId = intersect.instanceId
+            break
+          }
         }
       }
 
-      if (!clickedObject) {
+      if (!clickedInstanceData) {
         deselectCityNode(true)
-      } else if (clickedObject !== toRaw(selectedObject.value)) {
-        selectCityNode(clickedObject, true)
+      } else if (clickedInstanceData !== selectedObject.value) {
+        selectCityNode(clickedInstanceData, true)
       }
     }
   }
@@ -261,36 +269,46 @@
     raycaster.setFromCamera(mouse, cam)
     const intersects = raycaster.intersectObjects(scn.children, true)
 
-    let newHoveredObject: THREE.Mesh | null = null
+    let newHoveredData = null
+
     for (let intersect of intersects) {
-      if (intersect.object.userData.isSelectable) {
-        newHoveredObject = intersect.object as THREE.Mesh
-        break
+      if (intersect.object.userData.isInstanced && intersect.instanceId !== undefined) {
+        const mesh = intersect.object as THREE.InstancedMesh
+        const instanceKey = `${mesh.userData.instanceKey}_${intersect.instanceId}`
+        newHoveredData = objectMap.get(instanceKey)
+
+        if (newHoveredData) {
+          newHoveredData.instanceId = intersect.instanceId
+          break
+        }
       }
     }
 
-    if (toRaw(newHoveredObject) === toRaw(hoveredObject.value)) return
+    if (toRaw(newHoveredData) === toRaw(hoveredObject.value)) return
 
     // Przywróć kolor poprzedniego obiektu (jeśli nie jest selected)
     resetCityNodeHover(true)
 
     // Ustaw nowy hovered object
-    setCityNodeHover(newHoveredObject, true)
+    setCityNodeHover(newHoveredData, true)
   }
 
   // ----- UTILS -----
-  function restoreOriginalColor(mesh: THREE.Mesh) {
-    const nodeData = objectMap.get(mesh)
-    const colorInfo = getColorDataForPath(nodeData.path)
-    const material = mesh.material as THREE.MeshPhongMaterial
+  function restoreOriginalColor(instanceData: any) {
+    const colorInfo = getColorDataForPath(instanceData.node.path)
+    const mesh = instanceData.mesh as THREE.InstancedMesh
 
     if (colorInfo) {
       const originalColor = new THREE.Color(COLORS.building)
       const targetColor = new THREE.Color(colorInfo.color)
-      material.color.lerpColors(originalColor, targetColor, colorInfo.intensity * 3)
+      const resultColor = new THREE.Color()
+      resultColor.lerpColors(originalColor, targetColor, colorInfo.intensity * 3)
+      mesh.setColorAt(instanceData.instanceIndex, resultColor)
     } else {
-      material.color.setHex(COLORS.building)
+      mesh.setColorAt(instanceData.instanceIndex, new THREE.Color(COLORS.building))
     }
+
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
   }
 
   function calculateInitialZoom(rootData: any, camera: THREE.PerspectiveCamera): number {
@@ -301,12 +319,10 @@
     return result >= BUILDING_ZOOM ? result : BUILDING_ZOOM
   }
 
-  function calculateOptimalZoom(mesh: THREE.Mesh, camera: THREE.PerspectiveCamera): number {
-    const nodeData = objectMap.get(mesh)
-    if (!nodeData) return controls.targetZoom
-
+  function calculateOptimalZoom(instanceData: any, camera: THREE.PerspectiveCamera): number {
     // Dla platformy
-    if (mesh.userData.type === 'platform') {
+    if (instanceData.type === 'platform') {
+      const mesh = instanceData.mesh as THREE.InstancedMesh
       const geometry = mesh.geometry as THREE.BoxGeometry
       const params = geometry.parameters
       const maxDimension = Math.max(params.width, params.depth)
@@ -342,10 +358,8 @@
       controls.rotationVelocity.y = 0
 
       if (hoveredObject.value && hoveredObject.value !== selectedObject.value) {
-        restoreOriginalColor(toRaw(hoveredObject.value))
-
-        const nodeData = objectMap.get(toRaw(hoveredObject.value))
-        emit('cityNodeCancelHover', nodeData.path)
+        restoreOriginalColor(hoveredObject.value)
+        emit('cityNodeCancelHover', hoveredObject.value.node.path)
 
         hoveredObject.value = null
       }
@@ -381,8 +395,8 @@
 
     rnd.domElement.addEventListener('wheel', (e) => {
       e.preventDefault()
-      controls.targetZoom += e.deltaY * 0.1
-      controls.targetZoom = Math.max(40, Math.min(initialZoom * 2, controls.targetZoom))
+      controls.targetZoom += e.deltaY * 0.0007 * controls.targetZoom
+      controls.targetZoom = Math.max(40, Math.min(initialZoom * 1.5, controls.targetZoom))
     })
 
     rnd.domElement.addEventListener('mouseenter', () => {
@@ -452,8 +466,9 @@
 
     // Przetwórz dane i stwórz miasto
     const rootData = processNode(props.data)
-    const city = createGeometry(props.data, rootData, 0, 0, 0, objectMap)
-    scene.add(city)
+    createGeometry(props.data, rootData, 0, 0, 0, objectMap)
+    const instancedCity = createAllInstancedMeshes(objectMap)
+    scene.add(instancedCity)
 
     const mergedEdges = createMergedEdges()
     scene.add(mergedEdges)
