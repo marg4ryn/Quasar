@@ -70,7 +70,7 @@
       color: var(--color-text-primary);
       text-decoration: none;
       font-size: 16px;
-      min-width: 210px;
+      min-width: 220px;
       max-width: 250px;
       transition: font-weight 0.3s ease;
 

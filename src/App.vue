@@ -6,7 +6,8 @@
       :secondary-color="userSettings.colorSecondary"
       class="background-gradient"
     />
-    <AppBar />
+    <AppBar v-if="isAppBarVisible" />
+    <RightSection />
     <NavBar v-if="isNavBarVisible" />
     <div class="content">
       <RouterView />
@@ -29,7 +30,7 @@
 <script setup lang="ts">
   import { useUIStore } from '@/stores/uiStore'
   import { RouterView } from 'vue-router'
-  import { computed } from 'vue'
+  import { computed, onMounted } from 'vue'
   import { useUserSettingsStore } from './stores/userSettingsStore'
   import { onBeforeUnmount } from 'vue'
   import { useConnectionStore } from '@/stores/connectionsStore'
@@ -37,7 +38,8 @@
   import { initializeCityDataMock } from '@/mocks/cityDataMock'
   import { useToast } from '@/composables/useToast'
 
-  import AppBar from '@/components/sections/AppBar.vue'
+  import AppBar from '@/components/sections/appbar/AppBar.vue'
+  import RightSection from './components/sections/appbar/RightSection.vue'
   import NavBar from '@/components/sections/navbar/NavBar.vue'
   import AppFooter from '@/components/sections/AppFooter.vue'
   import MeshGradient from '@/components/visuals/MeshGradient.vue'
@@ -49,6 +51,7 @@
   const { toasts, removeToast } = useToast()
 
   const isNavBarVisible = computed(() => uiStore.isNavBarVisible)
+  const isAppBarVisible = computed(() => uiStore.isAppBarVisible)
 
   if (import.meta.env.VITE_USE_MOCK_ANALYSIS === 'true') {
     MockSSEServer.initialize()
@@ -57,6 +60,10 @@
   if (import.meta.env.VITE_USE_MOCK_CITY_DATA === 'true') {
     initializeCityDataMock()
   }
+
+  onMounted(() => {
+    connectionStore.resumeInterruptedAnalyses()
+  })
 
   onBeforeUnmount(() => {
     connectionStore.closeAllConnections()

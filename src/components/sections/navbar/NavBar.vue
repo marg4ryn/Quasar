@@ -72,18 +72,6 @@
         { label: t('navbar.developer-relationships'), to: '/developer-relationships' },
       ],
     },
-    {
-      label: t('navbar.mappings'),
-      icon: '/icons/mapping.png',
-      submenu: [
-        { label: t('navbar.developer-mapping'), to: '/developer-mapping' },
-        { label: t('navbar.team-mapping'), to: '/team-mapping' },
-        { label: t('navbar.folder-mapping'), to: '/folder-mapping' },
-        { label: t('navbar.former-developers-mapping'), to: '/former-developers-mapping' },
-        { label: t('navbar.ignored-files-mapping'), to: '/ignored-files-mapping' },
-        { label: t('navbar.ignored-folders-mapping'), to: '/ignored-folders-mapping' },
-      ],
-    },
   ]
 </script>
 

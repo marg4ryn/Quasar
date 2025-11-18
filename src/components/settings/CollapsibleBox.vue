@@ -74,7 +74,6 @@
     border-radius: 12px;
     margin-bottom: 16px;
     overflow: hidden;
-    width: 40%;
     border: 1px solid var(--color-border);
     background-color: var(--color-bg-primary);
     min-width: 450px;

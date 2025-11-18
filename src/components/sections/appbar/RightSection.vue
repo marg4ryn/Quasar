@@ -1,0 +1,191 @@
+<template>
+  <div class="app-bar__right">
+    <div ref="notificationBtnRef" class="notification-wrapper">
+      <button
+        class="icon-btn"
+        :class="{ active: notificationsStore.showPanel }"
+        :title="t('appbar.notifications')"
+        :aria-label="t('appbar.notifications')"
+        @click="openNotifications"
+      >
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+          <path
+            d="M320 64C306.7 64 296 74.7 296 88L296 97.7C214.6 109.3 152 179.4 152 264L152 278.5C152 316.2 142 353.2 123 385.8L101.1 423.2C97.8 429 96 435.5 96 442.2C96 463.1 112.9 480 133.8 480L506.2 480C527.1 480 544 463.1 544 442.2C544 435.5 542.2 428.9 538.9 423.2L517 385.7C498 353.1 488 316.1 488 278.4L488 263.9C488 179.3 425.4 109.2 344 97.6L344 87.9C344 74.6 333.3 63.9 320 63.9zM488.4 432L151.5 432L164.4 409.9C187.7 370 200 324.6 200 278.5L200 264C200 197.7 253.7 144 320 144C386.3 144 440 197.7 440 264L440 278.5C440 324.7 452.3 370 475.5 409.9L488.4 432zM252.1 528C262 556 288.7 576 320 576C351.3 576 378 556 387.9 528L252.1 528z"
+            fill="currentColor"
+          />
+        </svg>
+        <span v-if="notificationsStore.unreadCount > 0" class="notification-badge">
+          {{ notificationsStore.unreadCount > 99 ? '99+' : notificationsStore.unreadCount }}
+        </span>
+      </button>
+    </div>
+
+    <RouterLink
+      to="/settings"
+      class="settings-btn"
+      :title="t('appbar.settings')"
+      :aria-label="t('appbar.settings')"
+    >
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+        <path
+          d="M259.1 73.5C262.1 58.7 275.2 48 290.4 48L350.2 48C365.4 48 378.5 58.7 381.5 73.5L396 143.5C410.1 149.5 423.3 157.2 435.3 166.3L503.1 143.8C517.5 139 533.3 145 540.9 158.2L570.8 210C578.4 223.2 575.7 239.8 564.3 249.9L511 297.3C511.9 304.7 512.3 312.3 512.3 320C512.3 327.7 511.8 335.3 511 342.7L564.4 390.2C575.8 400.3 578.4 417 570.9 430.1L541 481.9C533.4 495 517.6 501.1 503.2 496.3L435.4 473.8C423.3 482.9 410.1 490.5 396.1 496.6L381.7 566.5C378.6 581.4 365.5 592 350.4 592L290.6 592C275.4 592 262.3 581.3 259.3 566.5L244.9 496.6C230.8 490.6 217.7 482.9 205.6 473.8L137.5 496.3C123.1 501.1 107.3 495.1 99.7 481.9L69.8 430.1C62.2 416.9 64.9 400.3 76.3 390.2L129.7 342.7C128.8 335.3 128.4 327.7 128.4 320C128.4 312.3 128.9 304.7 129.7 297.3L76.3 249.8C64.9 239.7 62.3 223 69.8 209.9L99.7 158.1C107.3 144.9 123.1 138.9 137.5 143.7L205.3 166.2C217.4 157.1 230.6 149.5 244.6 143.4L259.1 73.5zM320.3 400C364.5 399.8 400.2 363.9 400 319.7C399.8 275.5 363.9 239.8 319.7 240C275.5 240.2 239.8 276.1 240 320.3C240.2 364.5 276.1 400.2 320.3 400z"
+          fill="currentColor"
+        />
+      </svg>
+    </RouterLink>
+
+    <button
+      class="icon-btn"
+      :title="t('appbar.user-profile')"
+      :aria-label="t('appbar.user-profile')"
+      @click="openProfile"
+    >
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+        <path
+          d="M463 448.2C440.9 409.8 399.4 384 352 384L288 384C240.6 384 199.1 409.8 177 448.2C212.2 487.4 263.2 512 320 512C376.8 512 427.8 487.3 463 448.2zM64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320zM320 336C359.8 336 392 303.8 392 264C392 224.2 359.8 192 320 192C280.2 192 248 224.2 248 264C248 303.8 280.2 336 320 336z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+
+    <NotificationsPanel ref="notificationsPanelRef" />
+  </div>
+</template>
+
+<script setup lang="ts">
+  import { useNotificationsStore } from '@/stores/notificationsStore'
+  import { useI18n } from 'vue-i18n'
+  import { RouterLink } from 'vue-router'
+  import { ref, onMounted, onUnmounted } from 'vue'
+  import NotificationsPanel from '@/components/sections/NotificationsPanel.vue'
+
+  const { t } = useI18n()
+  const notificationsStore = useNotificationsStore()
+  const notificationBtnRef = ref<HTMLElement | null>(null)
+  const notificationsPanelRef = ref<InstanceType<typeof NotificationsPanel> | null>(null)
+
+  function openNotifications() {
+    notificationsStore.togglePanel()
+  }
+
+  function openProfile() {}
+
+  function handleClickOutside(event: MouseEvent) {
+    if (!notificationsStore.showPanel) return
+
+    const target = event.target as Node
+    const btn = notificationBtnRef.value
+    const panel = notificationsPanelRef.value?.panelElement
+
+    if (btn && !btn.contains(target) && panel && !panel.contains(target)) {
+      notificationsStore.closePanel()
+    }
+  }
+
+  onMounted(() => {
+    document.addEventListener('click', handleClickOutside, true)
+  })
+
+  onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside, true)
+  })
+</script>
+
+<style lang="scss" scoped>
+  .app-bar__right {
+    position: absolute;
+    top: 2px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 0px;
+    z-index: 1001;
+  }
+
+  .notification-wrapper {
+    position: relative;
+  }
+
+  .settings-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    object-fit: contain;
+    transition:
+      color 0.25s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      color: var(--color-primary);
+      transform: scale(1.2);
+    }
+
+    &.router-link-exact-active {
+      color: var(--color-primary);
+      transform: scale(1);
+    }
+  }
+
+  .icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    object-fit: contain;
+    transition:
+      color 0.25s ease,
+      transform 0.2s ease;
+    position: relative;
+
+    &:hover {
+      color: var(--color-primary);
+      transform: scale(1.2);
+    }
+
+    &.active {
+      color: var(--color-primary);
+      transform: scale(1);
+    }
+  }
+
+  .icon {
+    width: 28px;
+    height: 28px;
+    display: block;
+  }
+
+  .notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.4);
+    border: 2px solid var(--color-bg-secondary);
+    animation: badge-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes badge-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+</style>

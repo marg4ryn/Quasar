@@ -1,10 +1,17 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 export const useUIStore = defineStore('ui', () => {
-  const isNavBarVisible = ref(true)
-  const isAppBarVisible = ref(true)
-  const showAnalysisTitle = ref(false)
+  const isNavBarVisible = ref(localStorage.getItem('isNavBarVisible') === 'true')
+  const isAppBarVisible = ref(localStorage.getItem('isAppBarVisible') === 'true')
+
+  watch(isNavBarVisible, (value) => {
+    localStorage.setItem('isNavBarVisible', String(value))
+  })
+
+  watch(isAppBarVisible, (value) => {
+    localStorage.setItem('isAppBarVisible', String(value))
+  })
 
   function setIsNavBarVisible(value: boolean) {
     isNavBarVisible.value = value
@@ -14,16 +21,10 @@ export const useUIStore = defineStore('ui', () => {
     isAppBarVisible.value = value
   }
 
-  function setShowAnalysisTitle(value: boolean) {
-    showAnalysisTitle.value = value
-  }
-
   return {
     isNavBarVisible,
     isAppBarVisible,
-    showAnalysisTitle,
     setIsNavBarVisible,
     setIsAppBarVisible,
-    setShowAnalysisTitle,
   }
 })

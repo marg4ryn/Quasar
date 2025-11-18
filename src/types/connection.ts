@@ -10,6 +10,8 @@ export interface AnalysisState {
   error?: string
   startedAt?: Date
   completedAt?: Date
+  params?: Record<string, string | number | boolean | null | undefined>
+  wasInterrupted?: boolean
 }
 
 export interface AnalysisConnection {

@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import type { Notification } from '@/types'
 //import { useToast } from '@/composables/useToast'
 
 export const useNotificationsStore = defineStore('notifications', () => {
   const showPanel = ref(false)
-  const notifications = ref<Notification[]>([])
+  const notifications = ref<Notification[]>(
+    JSON.parse(localStorage.getItem('notifications') || '[]')
+  )
   //const { showToast } = useToast()
 
   const unreadCount = computed(() => notifications.value.filter((n) => !n.read).length)
@@ -59,6 +61,14 @@ export const useNotificationsStore = defineStore('notifications', () => {
   const clearAll = () => {
     notifications.value = []
   }
+
+  watch(
+    notifications,
+    (value) => {
+      localStorage.setItem('notifications', JSON.stringify(value))
+    },
+    { deep: true }
+  )
 
   return {
     showPanel,

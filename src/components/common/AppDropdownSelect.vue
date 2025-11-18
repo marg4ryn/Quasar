@@ -3,7 +3,7 @@
     <div class="custom-select-wrapper">
       <select :id="id" :value="modelValue" @change="handleChange" class="dropdown-select">
         <option v-for="option in options" :key="option.value" :value="option.value">
-          {{ option.label }}
+          {{ t(option.label) }}
         </option>
       </select>
 
@@ -26,6 +26,10 @@
 </template>
 
 <script setup lang="ts">
+  import { useI18n } from 'vue-i18n'
+
+  const { t } = useI18n()
+
   interface SelectOption {
     label: string
     value: string

@@ -1,14 +1,62 @@
 import { defineStore } from 'pinia'
 import { useI18n } from 'vue-i18n'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { createAnalysisConnection } from '@/services/analysisConnection'
 import { useNotificationsStore } from '@/stores/notificationsStore'
 import { AnalysisState, AnalysisConnection } from '@/types'
 
+const STORAGE_KEY = 'hotspotter-analyses'
+
+const serializeAnalyses = (analyses: Map<string, AnalysisState>): string => {
+  const serializable = Array.from(analyses.entries()).map(([key, value]) => [
+    key,
+    {
+      ...value,
+      startedAt: value.startedAt?.toISOString(),
+      completedAt: value.completedAt?.toISOString(),
+    },
+  ])
+  return JSON.stringify(serializable)
+}
+
+const deserializeAnalyses = (json: string): Map<string, AnalysisState> => {
+  try {
+    const parsed = JSON.parse(json)
+    const map = new Map<string, AnalysisState>()
+
+    parsed.forEach(([key, value]: [string, any]) => {
+      map.set(key, {
+        ...value,
+        startedAt: value.startedAt ? new Date(value.startedAt) : undefined,
+        completedAt: value.completedAt ? new Date(value.completedAt) : undefined,
+        state: value.state,
+        wasInterrupted: value.state === 'running',
+      })
+    })
+
+    return map
+  } catch (error) {
+    console.error('Failed to deserialize analyses from localStorage:', error)
+    return new Map()
+  }
+}
+
 export const useConnectionStore = defineStore('connections', () => {
   const { t } = useI18n()
-  const analyses = ref<Map<string, AnalysisState>>(new Map())
+
+  const storedData = localStorage.getItem(STORAGE_KEY)
+  const analyses = ref<Map<string, AnalysisState>>(
+    storedData ? deserializeAnalyses(storedData) : new Map()
+  )
   const connections = ref<Map<string, AnalysisConnection>>(new Map())
+
+  watch(
+    analyses,
+    (newAnalyses) => {
+      localStorage.setItem(STORAGE_KEY, serializeAnalyses(newAnalyses))
+    },
+    { deep: true }
+  )
 
   const getConnection = (screenRoute: string) => {
     return computed(() => analyses.value.get(screenRoute))
@@ -22,6 +70,39 @@ export const useConnectionStore = defineStore('connections', () => {
     return Array.from(analyses.value.values()).filter((a) => a.state === 'running')
   })
 
+  const getInterruptedAnalyses = () => {
+    return Array.from(analyses.value.values()).filter((a) => a.wasInterrupted)
+  }
+
+  const resumeInterruptedAnalyses = async () => {
+    const notificationsStore = useNotificationsStore()
+    const interrupted = getInterruptedAnalyses()
+
+    if (interrupted.length === 0) {
+      return
+    }
+
+    interrupted.forEach((analysis) => {
+      const screenNameKey = analysis.screenName || analysis.screenRoute
+      notificationsStore.addNotification({
+        message: t('analysis.interrupted', {
+          screen: t(screenNameKey),
+        }),
+        type: 'warning',
+        screenRoute: analysis.screenRoute,
+      })
+
+      analysis.wasInterrupted = false
+      analysis.state = 'idle'
+    })
+
+    setTimeout(() => {
+      interrupted.forEach((analysis) => {
+        startConnection(analysis.screenRoute, analysis.params)
+      })
+    }, 1000)
+  }
+
   const initializeConnection = (screenRoute: string, screenName?: string) => {
     if (!analyses.value.has(screenRoute)) {
       analyses.value.set(screenRoute, {
@@ -29,6 +110,7 @@ export const useConnectionStore = defineStore('connections', () => {
         screenRoute,
         screenName: screenName || screenRoute,
         state: 'idle',
+        wasInterrupted: false,
       })
     }
   }
@@ -56,6 +138,8 @@ export const useConnectionStore = defineStore('connections', () => {
     analysis.result = undefined
     analysis.startedAt = new Date()
     analysis.completedAt = undefined
+    analysis.params = params
+    analysis.wasInterrupted = false
 
     const notificationsStore = useNotificationsStore()
 
@@ -101,7 +185,7 @@ export const useConnectionStore = defineStore('connections', () => {
             notificationsStore.addNotification({
               message: t('analysis.failed', {
                 screen: t(screenNameKey),
-                error,
+                error: t(error),
               }),
               type: 'error',
             })
@@ -120,7 +204,7 @@ export const useConnectionStore = defineStore('connections', () => {
       notificationsStore.addNotification({
         message: t('analysis.start_failed', {
           screen: t(screenNameKey),
-          error: analysis.error,
+          error: t(analysis.error),
         }),
         type: 'error',
       })
@@ -139,7 +223,7 @@ export const useConnectionStore = defineStore('connections', () => {
       notificationsStore.addNotification({
         message: t('analysis.cancelled', {
           screen: t(screenNameKey),
-          error: analysis.error,
+          error: t(analysis.error as string),
         }),
         type: 'info',
       })
@@ -155,6 +239,7 @@ export const useConnectionStore = defineStore('connections', () => {
       analysis.error = undefined
       analysis.startedAt = undefined
       analysis.completedAt = undefined
+      analysis.wasInterrupted = false
     }
     closeConnection(screenRoute)
   }
@@ -174,16 +259,24 @@ export const useConnectionStore = defineStore('connections', () => {
     connections.value.clear()
   }
 
+  const clearStorage = () => {
+    localStorage.removeItem(STORAGE_KEY)
+    analyses.value.clear()
+  }
+
   return {
     analyses,
     getConnection,
     isRunning,
     getAllRunning,
+    getInterruptedAnalyses,
+    resumeInterruptedAnalyses,
     initializeConnection,
     startConnection,
     stopConnection,
     resetConnection,
     closeConnection,
     closeAllConnections,
+    clearStorage,
   }
 })

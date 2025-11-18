@@ -315,6 +315,10 @@
       font-size: 0.85rem;
       color: var(--color-text-secondary);
       flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .child-type {

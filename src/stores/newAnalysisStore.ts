@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 export const useNewAnalysisStore = defineStore('newAnalysis', () => {
-  const link = ref('')
-  const fromDate = ref('')
-  const toDate = ref('')
+  const link = ref(localStorage.getItem('link') || '')
+  const fromDate = ref(localStorage.getItem('fromDate') || '')
+  const toDate = ref(localStorage.getItem('toDate') || '')
 
   function setLink(newLink: string) {
     link.value = newLink
@@ -17,6 +17,18 @@ export const useNewAnalysisStore = defineStore('newAnalysis', () => {
   function setToDate(to: string) {
     toDate.value = to
   }
+
+  watch(link, (value) => {
+    localStorage.setItem('link', value)
+  })
+
+  watch(fromDate, (value) => {
+    localStorage.setItem('fromDate', value)
+  })
+
+  watch(toDate, (value) => {
+    localStorage.setItem('toDate', value)
+  })
 
   return {
     link,

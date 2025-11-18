@@ -77,7 +77,7 @@
     align-items: center;
     justify-content: space-between;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    z-index: 2000;
+    z-index: 2001;
     cursor: default;
     transition:
       transform 0.3s ease,

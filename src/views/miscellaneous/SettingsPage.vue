@@ -3,96 +3,95 @@
   <div class="page-container">
     <h1 class="page-header">{{ t('settingsPage.header') }}</h1>
     <div class="content">
-      <CollapsibleGroup
-        :items="[
-          { label: t('settingsPage.appearance'), slotName: 'first' },
-          { label: t('settingsPage.mappings'), slotName: 'second' },
-          { label: t('settingsPage.performance'), slotName: 'third' },
-          { label: t('settingsPage.notifications'), slotName: 'fourth' },
-        ]"
-      >
-        <template #first>
-          <SectionHeader :label="t('settingsPage.mainColor')" />
-          <RadioButtonGroup
-            v-model="useUserSettingsStore().selectedColor"
-            name="color"
-            :options="colors"
-          />
-          <!-- <SectionHeader :label="t('settingsPage.theme')" />
-          <RadioButtonGroup
-            v-model="useUserSettingsStore().selectedTheme"
-            name="theme"
-            :options="themes"
-          /> -->
-          <SectionHeader :label="t('settingsPage.gradient')" />
-          <RadioButtonGroup
-            v-model="useUserSettingsStore().isGradientOn"
-            name="gradient"
-            :options="gradient"
-          />
-          <SectionHeader :label="t('settingsPage.language')" />
-          <AppDropdownSelect
-            id="language-select"
-            :options="languages"
-            v-model="useUserSettingsStore().selectedLanguage"
-          />
-        </template>
+      <div class="collapsible-group">
+        <CollapsibleBox
+          v-for="(item, index) in items"
+          :key="index"
+          :label="item.label"
+          :is-collapsed="openIndex !== index"
+          @toggle="toggleBox(index)"
+        >
+          <template v-if="index === 0">
+            <SectionHeader :label="t('settingsPage.mainColor')" />
+            <RadioButtonGroup
+              v-model="useUserSettingsStore().selectedColor"
+              name="color"
+              :options="colors"
+            />
+            <SectionHeader :label="t('settingsPage.gradient')" />
+            <RadioButtonGroup
+              v-model="useUserSettingsStore().isGradientOn"
+              name="gradient"
+              :options="gradient"
+            />
+            <SectionHeader :label="t('settingsPage.language')" />
+            <AppDropdownSelect
+              id="language-select"
+              :options="languages"
+              v-model="useUserSettingsStore().selectedLanguage"
+            />
+          </template>
 
-        <template #second>
-          <p>{{ t('common.inDevelopmentLabel') }}</p>
-        </template>
-
-        <template #third>
-          <p>{{ t('common.inDevelopmentLabel') }}</p>
-        </template>
-
-        <template #fourth>
-          <p>{{ t('common.inDevelopmentLabel') }}</p>
-        </template>
-      </CollapsibleGroup>
+          <template v-else>
+            <p>{{ t('common.inDevelopmentLabel') }}</p>
+          </template>
+        </CollapsibleBox>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { ref } from 'vue'
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
   import { useI18n } from 'vue-i18n'
 
   import AppButtonClose from '@/components/common/AppButtonClose.vue'
-  import CollapsibleGroup from '@/components/settings/CollapsibleGroup.vue'
+  import CollapsibleBox from '@/components/settings/CollapsibleBox.vue'
   import RadioButtonGroup from '@/components/settings/RadioButtonGroup.vue'
   import SectionHeader from '@/components/settings/SectionHeader.vue'
   import AppDropdownSelect from '@/components/common/AppDropdownSelect.vue'
 
   const { t } = useI18n()
 
+  const items = [
+    { label: t('settingsPage.appearance'), slotName: 'first' },
+    { label: t('settingsPage.mappings'), slotName: 'second' },
+    { label: t('settingsPage.performance'), slotName: 'third' },
+    { label: t('settingsPage.notifications'), slotName: 'fourth' },
+  ]
+
+  const openIndex = ref(0)
+
+  const toggleBox = (index: number) => {
+    openIndex.value = openIndex.value === index ? -1 : index
+  }
+
   const languages = [
-    { label: t('settingsPage.systemDefault'), value: 'system' },
+    { label: 'settingsPage.systemDefault', value: 'system' },
     { label: 'English', value: 'en' },
     { label: 'Polski', value: 'pl' },
   ]
 
   const colors = [
-    { label: t('settingsPage.red'), value: '#bc1922' },
-    { label: t('settingsPage.blue'), value: '#28abf2' },
+    { label: 'settingsPage.red', value: '#bc1922' },
+    { label: 'settingsPage.blue', value: '#28abf2' },
   ]
 
   const gradient = [
-    { label: t('settingsPage.on'), value: 'on' },
-    { label: t('settingsPage.off'), value: 'off' },
+    { label: 'settingsPage.on', value: 'on' },
+    { label: 'settingsPage.off', value: 'off' },
   ]
-
-  // const themes = [
-  //   { label: t('settingsPage.dark'), value: 'dark' },
-  //   { label: t('settingsPage.light'), value: 'light' },
-  //   { label: t('settingsPage.system'), value: 'system' },
-  // ]
 </script>
 
 <style scoped lang="scss">
   .page-container {
-    @include flex-center;
-    @include flex-column;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex: 1;
     animation: slideInFromTop 0.6s ease-out;
   }
 
@@ -100,11 +99,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     font-size: 1.8em;
     font-weight: 400;
     color: var(--color-text-primary);
     margin: 8px;
     text-align: center;
+    flex: 0 1 auto;
+    min-height: 50px;
+    height: 150px;
   }
 
   .content {
@@ -112,9 +115,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     width: 100%;
-    height: 100%;
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+
+  .collapsible-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
 
   @keyframes slideInFromTop {

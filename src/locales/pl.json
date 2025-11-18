@@ -1,24 +1,18 @@
 {
   "title": {
     "settings": "Ustawienia",
-    "about": "O projekcie",
-    "change-coupling": "Powiązania plików",
-    "system-overview": "Przegląd systemu",
-    "technical-sprawl": "Technologie",
+    "about": "O Projekcie",
+    "change-coupling": "Powiązania Plików",
+    "system-overview": "Przegląd Repozytorium",
+    "technical-sprawl": "Rozszerzenia Plików",
     "hotspots": "Hotspoty",
-    "complexity-trends": "Trendy złożoności",
-    "code-age": "Wiek kodu",
-    "developer-view": "Widok dewelopera",
-    "team-view": "Widok zespołu",
-    "abandoned-code": "Martwy kod",
-    "responsibility-diffusion": "Rozproszenie odpowiedzialności",
-    "developer-relationships": "Relacje deweloperów",
-    "developer-mapping": "Deweloperzy",
-    "team-mapping": "Zespoły",
-    "folder-mapping": "Foldery",
-    "former-developers-mapping": "Byli deweloperzy",
-    "ignored-files-mapping": "Ignorowane pliki",
-    "ignored-folders-mapping": "Ignorowane foldery"
+    "complexity-trends": "Trendy Złożoności",
+    "code-age": "Wiek Kodu",
+    "developer-view": "Aktywność Dewelopera",
+    "team-view": "Aktywność Zespołu",
+    "abandoned-code": "Martwy Kod",
+    "responsibility-diffusion": "Rozproszenie Własności",
+    "developer-relationships": "Relacje Deweloperów"
   },
 
   "appbar": {
@@ -31,26 +25,19 @@
 
   "navbar": {
     "summary": "Podsumowanie",
-    "code-health": "Jakość kodu",
-    "change-coupling": "Powiązania plików",
+    "code-health": "Jakość Kodu",
+    "change-coupling": "Powiązania Plików",
     "developers": "Deweloperzy",
-    "mappings": "Mapowania",
-    "system-overview": "Przegląd systemu",
-    "technical-sprawl": "Technologie",
+    "system-overview": "Przegląd Repozytorium",
+    "technical-sprawl": "Rozszerzenia Plików",
     "hotspots": "Hotspoty",
-    "complexity-trends": "Trendy złożoności",
-    "code-age": "Wiek kodu",
-    "developer-view": "Widok dewelopera",
-    "team-view": "Widok zespołu",
-    "abandoned-code": "Martwy kod",
-    "responsibility-diffusion": "Rozproszenie odpowiedzialności",
-    "developer-relationships": "Powiązania deweloperów",
-    "developer-mapping": "Deweloperzy",
-    "team-mapping": "Zespoły",
-    "folder-mapping": "Foldery",
-    "former-developers-mapping": "Byli deweloperzy",
-    "ignored-files-mapping": "Ignorowane pliki",
-    "ignored-folders-mapping": "Ignorowane foldery"
+    "complexity-trends": "Trendy Złożoności",
+    "code-age": "Wiek Kodu",
+    "developer-view": "Aktywność Dewelopera",
+    "team-view": "Aktywność Zespołu",
+    "abandoned-code": "Martwy Kod",
+    "responsibility-diffusion": "Rozproszenie Własności",
+    "developer-relationships": "Powiązania Deweloperów"
   },
 
   "settingsPage": {
@@ -131,7 +118,8 @@
     "failed": "Proces '{screen}' nie powiódł się: {error}.",
     "start_failed": "Nie udało się rozpocząć procesu '{screen}': {error}.",
     "cancelled": "Proces '{screen}' został anulowany",
-    "repo-download": "Analiza repozytorium"
+    "repo-download": "Analiza repozytorium",
+    "interrupted": "Analiza {screen} została przerwana przez odświeżenie strony i zostanie wznowiona"
   },
 
   "rightPanel": {

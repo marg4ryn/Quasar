@@ -14,7 +14,7 @@
           :value="option.value"
           v-model="internalValue"
         />
-        <span class="label-text">{{ option.label }}</span>
+        <span class="label-text">{{ t(option.label) }}</span>
       </label>
     </div>
   </div>
@@ -22,6 +22,9 @@
 
 <script setup lang="ts">
   import { ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
+
+  const { t } = useI18n()
 
   interface RadioOption {
     label: string

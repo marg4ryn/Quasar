@@ -100,7 +100,6 @@
   import { useConnection } from '@/composables/useConnection'
   import { useApi } from '@/composables/useApi'
   import { useLogger } from '@/composables/useLogger'
-  import { useUIStore } from '@/stores/uiStore'
   import AppButton from '@/components/common/AppButton.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
@@ -109,7 +108,6 @@
   const log = useLogger('WelcomePage')
   const newAnalysisStore = useNewAnalysisStore()
   const userSettingsStore = useUserSettingsStore()
-  const uiStore = useUIStore()
 
   const REPO_URL_PATTERN =
     /^(?:https:\/\/)?(?:git(?:hub|lab))\.com\/(?:[^/]+)\/(?:(?!\.git$)[^/]+?)(?:\.git)*$/
@@ -291,7 +289,6 @@
     if (newValue) {
       await fetchCodeCity()
       resetNewAnalysisStore()
-      uiStore.isAppBarVisible = true
       router.push('/system-overview')
     }
   })

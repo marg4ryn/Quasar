@@ -3,22 +3,16 @@
     "settings": "Settings",
     "about": "About",
     "change-coupling": "Change Coupling",
-    "system-overview": "System Overview",
-    "technical-sprawl": "Technical Sprawl",
+    "system-overview": "Repository Overview",
+    "technical-sprawl": "File Extensions",
     "hotspots": "Hotspots",
     "complexity-trends": "Complexity Trends",
     "code-age": "Code Age",
-    "developer-view": "Developer View",
-    "team-view": "Team View",
+    "developer-view": "Developer Activity",
+    "team-view": "Team Activity",
     "abandoned-code": "Abandoned Code",
-    "responsibility-diffusion": "Responsibility Diffusion",
-    "developer-relationships": "Relationships",
-    "developer-mapping": "Developers",
-    "team-mapping": "Teams",
-    "folder-mapping": "Folders",
-    "former-developers-mapping": "Former Developers",
-    "ignored-files-mapping": "Ignored Files",
-    "ignored-folders-mapping": "Ignored Folders"
+    "responsibility-diffusion": "Ownership Diffusion",
+    "developer-relationships": "Relationships"
   },
 
   "appbar": {
@@ -34,23 +28,16 @@
     "code-health": "Code Health",
     "change-coupling": "Change Coupling",
     "developers": "Developers",
-    "mappings": "Mappings",
-    "system-overview": "System Overview",
-    "technical-sprawl": "Technical Sprawl",
+    "system-overview": "Repository Overview",
+    "technical-sprawl": "File Extensions",
     "hotspots": "Hotspots",
     "complexity-trends": "Complexity Trends",
     "code-age": "Code Age",
-    "developer-view": "Developer View",
-    "team-view": "Team View",
+    "developer-view": "Developer Activity",
+    "team-view": "Team Activity",
     "abandoned-code": "Abandoned Code",
-    "responsibility-diffusion": "Responsibility Diffusion",
-    "developer-relationships": "Relationships",
-    "developer-mapping": "Developers",
-    "team-mapping": "Teams",
-    "folder-mapping": "Folders",
-    "former-developers-mapping": "Former Developers",
-    "ignored-files-mapping": "Ignored Files",
-    "ignored-folders-mapping": "Ignored Folders"
+    "responsibility-diffusion": "Ownership Diffusion",
+    "developer-relationships": "Relationships"
   },
 
   "settingsPage": {
@@ -132,7 +119,8 @@
     "failed": "Process '{screen}' failed: {error}.",
     "start_failed": "Process '{screen}' failed to start: {error}.",
     "cancelled": "Process '{screen}' was cancelled",
-    "repo-download": "Repository analysis"
+    "repo-download": "Repository analysis",
+    "interrupted": "Analysis {screen} was interrupted by page refresh and will be resumed"
   },
 
   "rightPanel": {

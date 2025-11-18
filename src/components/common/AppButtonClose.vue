@@ -4,6 +4,7 @@
     @click="handleBack"
     :title="t('common.close')"
     :aria-label="t('common.close')"
+    :style="{ top: buttonTop }"
   >
     <svg
       width="24"
@@ -22,21 +23,25 @@
 </template>
 
 <script setup lang="ts">
+  import { computed } from 'vue'
   import { useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
+  import { useUIStore } from '@/stores/uiStore'
 
   const { t } = useI18n()
   const router = useRouter()
+  const uiStore = useUIStore()
 
   const handleBack = () => {
     router.back()
   }
+
+  const buttonTop = computed(() => (uiStore.isAppBarVisible ? '8px' : '48px'))
 </script>
 
 <style lang="scss" scoped>
   .icon-button {
     position: absolute;
-    top: 8px;
     right: 8px;
     background: none;
     border: none;

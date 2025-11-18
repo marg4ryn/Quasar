@@ -19,20 +19,14 @@ const TeamView = () => import('@/views/cities/TeamViewPage.vue')
 const AbandonedCode = () => import('@/views/cities/AbandonedCodePage.vue')
 const ResponsibilityDiffusion = () => import('@/views/cities/ResponsibilityDiffusionPage.vue')
 
-const DeveloperMapping = () => import('@/views/mappings/DeveloperMappingPage.vue')
-const TeamMapping = () => import('@/views/mappings/TeamMappingPage.vue')
-const FolderMapping = () => import('@/views/mappings/FolderMappingPage.vue')
-const FormerDevsMapping = () => import('@/views/mappings/FormerDevsMappingPage.vue')
-const IgnoredFilesMapping = () => import('@/views/mappings/IgnoredFilesMappingPage.vue')
-const IgnoredFoldersMapping = () => import('@/views/mappings/IgnoredFoldersMappingPage.vue')
-
 export default function (): Router {
   const routes = [
     {
       path: '/',
       name: 'welcome',
       meta: {
-        showNavBar: true,
+        showNavBar: false,
+        showAppBar: false,
       },
       component: Welcome,
     },
@@ -60,6 +54,7 @@ export default function (): Router {
       meta: {
         titleKey: 'title.system-overview',
         showNavBar: true,
+        showAppBar: true,
       },
       component: SystemOverview,
     },
@@ -70,6 +65,7 @@ export default function (): Router {
       meta: {
         titleKey: 'title.technical-sprawl',
         showNavBar: true,
+        showAppBar: true,
       },
       component: TechnicalSprawl,
     },
@@ -79,6 +75,7 @@ export default function (): Router {
       meta: {
         titleKey: 'title.hotspots',
         showNavBar: true,
+        showAppBar: true,
       },
       component: Hotspots,
     },
@@ -88,6 +85,7 @@ export default function (): Router {
       meta: {
         titleKey: 'title.complexity-trends',
         showNavBar: true,
+        showAppBar: true,
       },
       component: ComplexityTrends,
     },
@@ -97,6 +95,7 @@ export default function (): Router {
       meta: {
         titleKey: 'title.code-age',
         showNavBar: true,
+        showAppBar: true,
       },
       component: CodeAge,
     },
@@ -106,6 +105,7 @@ export default function (): Router {
       meta: {
         titleKey: 'title.change-coupling',
         showNavBar: true,
+        showAppBar: true,
       },
       component: ChangeCoupling,
     },
@@ -115,6 +115,7 @@ export default function (): Router {
       meta: {
         titleKey: 'title.developer-view',
         showNavBar: true,
+        showAppBar: true,
       },
       component: DeveloperView,
     },
@@ -124,6 +125,7 @@ export default function (): Router {
       meta: {
         titleKey: 'title.team-view',
         showNavBar: true,
+        showAppBar: true,
       },
       component: TeamView,
     },
@@ -133,6 +135,7 @@ export default function (): Router {
       meta: {
         titleKey: 'title.abandoned-code',
         showNavBar: true,
+        showAppBar: true,
       },
       component: AbandonedCode,
     },
@@ -142,6 +145,7 @@ export default function (): Router {
       meta: {
         titleKey: 'title.responsibility-diffusion',
         showNavBar: true,
+        showAppBar: true,
       },
       component: ResponsibilityDiffusion,
     },
@@ -152,63 +156,9 @@ export default function (): Router {
       meta: {
         titleKey: 'title.developer-relationships',
         showNavBar: true,
+        showAppBar: true,
       },
       component: DeveloperRelationships,
-    },
-
-    {
-      path: '/developer-mapping',
-      name: 'developer-mapping',
-      meta: {
-        titleKey: 'title.developer-mapping',
-        showNavBar: true,
-      },
-      component: DeveloperMapping,
-    },
-    {
-      path: '/team-mapping',
-      name: 'team-mapping',
-      meta: {
-        titleKey: 'title.team-mapping',
-        showNavBar: true,
-      },
-      component: TeamMapping,
-    },
-    {
-      path: '/folder-mapping',
-      name: 'folder-mapping',
-      meta: {
-        titleKey: 'title.folder-mapping',
-        showNavBar: true,
-      },
-      component: FolderMapping,
-    },
-    {
-      path: '/former-developers-mapping',
-      name: 'former-developers-mapping',
-      meta: {
-        titleKey: 'title.former-developers-mapping',
-        showNavBar: true,
-      },
-      component: FormerDevsMapping,
-    },
-    {
-      path: '/ignored-files-mapping',
-      name: 'ignored-files-mapping',
-      meta: {
-        titleKey: 'title.ignored-files-mapping',
-        showNavBar: true,
-      },
-      component: IgnoredFilesMapping,
-    },
-    {
-      path: '/ignored-folders-mapping',
-      name: 'ignored-folders-mapping',
-      meta: {
-        titleKey: 'title.ignored-folders-mapping',
-        showNavBar: true,
-      },
-      component: IgnoredFoldersMapping,
     },
 
     {
@@ -232,6 +182,10 @@ export default function (): Router {
       uiStore.isNavBarVisible = to.meta.showNavBar
     } else {
       uiStore.isNavBarVisible = true
+    }
+
+    if (typeof to.meta.showAppBar === 'boolean') {
+      uiStore.isAppBarVisible = to.meta.showAppBar
     }
 
     next()

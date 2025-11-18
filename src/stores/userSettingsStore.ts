@@ -3,10 +3,21 @@ import { ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export const useUserSettingsStore = defineStore('userSettings', () => {
-  const selectedColor = ref<'#bc1922' | '#28abf2'>('#bc1922')
-  const selectedTheme = ref<'light' | 'dark' | 'system'>('dark')
-  const selectedLanguage = ref<'en' | 'pl' | 'system'>('system')
-  const isGradientOn = ref<'on' | 'off'>('on')
+  const selectedColor = ref<'#bc1922' | '#28abf2'>(
+    (localStorage.getItem('selectedColor') as '#bc1922' | '#28abf2') || '#bc1922'
+  )
+
+  const selectedTheme = ref<'light' | 'dark' | 'system'>(
+    (localStorage.getItem('selectedTheme') as 'light' | 'dark' | 'system') || 'dark'
+  )
+
+  const selectedLanguage = ref<'en' | 'pl' | 'system'>(
+    (localStorage.getItem('selectedLanguage') as 'en' | 'pl' | 'system') || 'system'
+  )
+
+  const isGradientOn = ref<'on' | 'off'>(
+    (localStorage.getItem('isGradientOn') as 'on' | 'off') || 'on'
+  )
 
   const colorPrimary = ref('')
   const colorSecondary = ref('')
@@ -89,6 +100,7 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
   watch(
     selectedColor,
     async (newColor) => {
+      localStorage.setItem('selectedColor', newColor)
       await applyMainColor(newColor)
     },
     { immediate: true }
@@ -97,6 +109,7 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
   watch(
     selectedTheme,
     async (newTheme) => {
+      localStorage.setItem('selectedTheme', newTheme)
       await applyTheme(newTheme)
     },
     { immediate: true }
@@ -105,10 +118,15 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
   watch(
     selectedLanguage,
     (newLanguage) => {
+      localStorage.setItem('selectedLanguage', newLanguage)
       applyLanguage(newLanguage)
     },
     { immediate: true }
   )
+
+  watch(isGradientOn, (value) => {
+    localStorage.setItem('isGradientOn', value)
+  })
 
   return {
     selectedColor,
