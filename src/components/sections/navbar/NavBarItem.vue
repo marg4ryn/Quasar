@@ -1,15 +1,13 @@
 <template>
   <div class="nav-item-wrapper" @mouseenter="hover = true" @mouseleave="hover = false">
-    <component
-      :is="submenu && submenu.length && !to ? 'div' : RouterLink"
+    <div
       class="nav-item"
       :class="{ 'nav-item--active': isActive }"
-      v-bind="to ? { to } : {}"
-      :tabindex="!to && submenu && submenu.length ? 0 : undefined"
+      :tabindex="submenu && submenu.length ? 0 : undefined"
     >
       <img v-if="icon" :src="icon" class="nav-item__icon" alt="" />
       <span class="nav-item__text">{{ label }}</span>
-    </component>
+    </div>
 
     <Transition name="submenu-fade-slide">
       <ul v-show="submenu && submenu.length && hover" class="submenu">
@@ -34,7 +32,6 @@
   const props = defineProps<{
     label: string
     icon?: string
-    to?: string
     active?: boolean
     submenu?: SubmenuItem[]
   }>()
@@ -44,7 +41,6 @@
 
   const isActive = computed(() => {
     if (props.active) return true
-    if (props.to && route.path === props.to) return true
     if (props.submenu?.some((item) => route.path === item.to)) return true
     return false
   })
@@ -154,7 +150,6 @@
           &.router-link-active,
           &.router-link-exact-active {
             font-weight: 600;
-            color: var(--color-primary);
             &::after {
               content: '';
               position: absolute;

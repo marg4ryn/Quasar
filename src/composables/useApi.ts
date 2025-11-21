@@ -30,7 +30,6 @@ export function useApi() {
       const data = await api.fetchStructure(analysisId)
       store.setStructure(data)
       log.info('Structure fetched successfully')
-      log.info('data', data)
       return true
     } catch (err) {
       const error = err as ApiError
@@ -67,12 +66,140 @@ export function useApi() {
     return await fetchStructure(analysisId)
   }
 
+  async function fetchFileList(analysisId: string) {
+    if (!analysisId) {
+      const errorMsg = t('api.errors.noAnalysisId')
+      store.setError('fileList', errorMsg)
+      log.error('No analysis ID provided for file list')
+      return false
+    }
+
+    log.info(`Fetching file list for analysis: ${analysisId}`)
+    store.setLoading('fileList', true)
+    store.setError('fileList', null)
+
+    try {
+      const data = await api.fetchFileList(analysisId)
+      store.setFileList(data)
+      log.info(`File list fetched successfully: ${data.length} files`)
+      log.info(`Data: `, data)
+      return true
+    } catch (err) {
+      const error = err as ApiError
+      const errorMsg = t(error.message) || t('api.errors.fetchFileListFailed')
+      store.setError('fileList', errorMsg)
+      log.error('Failed to fetch file list:', error)
+      return false
+    } finally {
+      store.setLoading('fileList', false)
+    }
+  }
+
+  async function fetchFileDetails(analysisId: string, filePath: string, force = false) {
+    if (!analysisId) {
+      const errorMsg = t('api.errors.noAnalysisId')
+      store.setError('fileDetails', errorMsg)
+      log.error('No analysis ID provided for file details')
+      return false
+    }
+
+    if (!filePath) {
+      const errorMsg = t('api.errors.noFilePath')
+      store.setError('fileDetails', errorMsg)
+      log.error('No file path provided')
+      return false
+    }
+
+    if (!force && store.hasFileDetails(filePath)) {
+      log.info(`Using cached file details for: ${filePath}`)
+      store.setSelectedFile(filePath)
+      return true
+    }
+
+    log.info(`Fetching file details for: ${filePath}`)
+    store.setLoading('fileDetails', true)
+    store.setError('fileDetails', null)
+
+    try {
+      const data = await api.fetchFileDetails(analysisId, filePath)
+      store.setFileDetails(filePath, data)
+      store.setSelectedFile(filePath)
+      log.info(`File details fetched successfully for: ${filePath}`)
+      log.info(`Data: `, data)
+      return true
+    } catch (err) {
+      const error = err as ApiError
+      const errorMsg = t(error.message) || t('api.errors.fetchFileDetailsFailed')
+      store.setError('fileDetails', errorMsg)
+      log.error('Failed to fetch file details:', error)
+      return false
+    } finally {
+      store.setLoading('fileDetails', false)
+    }
+  }
+
+  async function fetchHotspotsDetails(analysisId: string) {
+    if (!analysisId) {
+      const errorMsg = t('api.errors.noAnalysisId')
+      store.setError('hotspotsDetails', errorMsg)
+      log.error('No analysis ID provided for hotspots details')
+      return false
+    }
+
+    log.info(`Fetching hotspots details for analysis: ${analysisId}`)
+    store.setLoading('hotspotsDetails', true)
+    store.setError('hotspotsDetails', null)
+
+    try {
+      const data = await api.fetchHotspotsDetails(analysisId)
+      store.setHotspotsDetails(data)
+      log.info('Hotspots details fetched successfully')
+      log.info(`Data: `, data)
+      return true
+    } catch (err) {
+      const error = err as ApiError
+      const errorMsg = t(error.message) || t('api.errors.fetchHotspotsDetailsFailed')
+      store.setError('hotspotsDetails', errorMsg)
+      log.error('Failed to fetch hotspots details:', error)
+      return false
+    } finally {
+      store.setLoading('hotspotsDetails', false)
+    }
+  }
+
+  const selectedFileDetails = computed(() => {
+    if (!store.selectedFilePath) return null
+    return store.getFileDetails(store.selectedFilePath)
+  })
+
   return {
+    // Structure
     structure: computed(() => store.structure),
-    isLoading,
-    error: computed(() => store.errors.structure || null),
     fetchStructure,
     fetchCodeCity,
+
+    // File list
+    fileList: computed(() => store.fileList),
+    fetchFileList,
+
+    // File details
+    fileDetails: computed(() => store.fileDetails),
+    selectedFilePath: computed(() => store.selectedFilePath),
+    selectedFileDetails,
+    fetchFileDetails,
+    selectFile: store.setSelectedFile,
+
+    // Hotspots details
+    hotspotsDetails: computed(() => store.getHotspotsDetails()),
+    fetchHotspotsDetails,
+
+    // Common
+    isLoading,
+    error: computed(
+      () => store.errors.structure || store.errors.fileList || store.errors.fileDetails || null
+    ),
+    errors: computed(() => store.errors),
     clearAll: store.clearAll,
+    clearFileData: store.clearFileData,
   }
 }

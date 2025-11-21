@@ -77,6 +77,10 @@
             </svg>
             {{ t('about.team.title') }}
           </h3>
+          <p class="about__supervisor">
+            <span class="about__supervisor-label">{{ t('about.team.supervisorLabel') }}:</span>
+            {{ t('about.team.supervisorDegree') }} {{ supervisor }}
+          </p>
           <ul class="about__list about__list--team">
             <li
               v-for="(member, index) in teamMembers"
@@ -87,10 +91,6 @@
               {{ member }}
             </li>
           </ul>
-          <p class="about__supervisor">
-            <span class="about__supervisor-label">{{ t('about.team.supervisorLabel') }}:</span>
-            {{ t('about.team.supervisorDegree') }} {{ supervisor }}
-          </p>
         </div>
       </div>
     </div>
@@ -200,7 +200,7 @@
     &__icon {
       width: 28px;
       height: 28px;
-      color: var(--color-primary);
+      color: #28abf2;
       flex-shrink: 0;
     }
 
@@ -307,7 +307,7 @@
     }
 
     &__supervisor {
-      margin-top: $spacing-2xl;
+      margin-bottom: $spacing-2xl;
       padding: $spacing-lg;
       background: var(--color-bg-secondary);
       border-radius: $radius-md;

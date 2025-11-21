@@ -46,5 +46,5 @@ const ANALYSIS_STATUS_LABEL_KEYS: Record<AnalysisStatus, string> = {
 }
 
 export function getAnalysisStatusLabelKey(status: AnalysisStatus): string {
-  return ANALYSIS_STATUS_LABEL_KEYS[status] || 'analysis.status.unknown'
+  return ANALYSIS_STATUS_LABEL_KEYS[status] || 'status.unknown'
 }

@@ -85,7 +85,7 @@ export const useConnectionStore = defineStore('connections', () => {
     interrupted.forEach((analysis) => {
       const screenNameKey = analysis.screenName || analysis.screenRoute
       notificationsStore.addNotification({
-        message: t('analysis.interrupted', {
+        message: t('notifications.analysis.interrupted', {
           screen: t(screenNameKey),
         }),
         type: 'warning',
@@ -164,7 +164,7 @@ export const useConnectionStore = defineStore('connections', () => {
               : 0
 
             notificationsStore.addNotification({
-              message: t('analysis.completed', {
+              message: t('notifications.analysis.completed', {
                 screen: t(screenNameKey),
                 duration,
               }),
@@ -183,7 +183,7 @@ export const useConnectionStore = defineStore('connections', () => {
 
             const screenNameKey = current.screenName || screenRoute
             notificationsStore.addNotification({
-              message: t('analysis.failed', {
+              message: t('notifications.analysis.failed', {
                 screen: t(screenNameKey),
                 error: t(error),
               }),
@@ -202,7 +202,7 @@ export const useConnectionStore = defineStore('connections', () => {
 
       const screenNameKey = analysis.screenName || screenRoute
       notificationsStore.addNotification({
-        message: t('analysis.start_failed', {
+        message: t('notifications.analysis.start-failed', {
           screen: t(screenNameKey),
           error: t(analysis.error),
         }),
@@ -221,7 +221,7 @@ export const useConnectionStore = defineStore('connections', () => {
       const notificationsStore = useNotificationsStore()
       const screenNameKey = analysis.screenName || screenRoute
       notificationsStore.addNotification({
-        message: t('analysis.cancelled', {
+        message: t('notifications.analysis.cancelled', {
           screen: t(screenNameKey),
           error: t(analysis.error as string),
         }),

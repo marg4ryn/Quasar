@@ -37,14 +37,39 @@
     <div v-if="selectedItem && selectedItem.type === 'file'" class="file-details">
       <h3>{{ $t('rightPanel.fileMetrics') }}</h3>
 
-      <div v-if="displayMetrics && displayMetrics.length" class="metrics-container">
+      <div v-if="isLoadingMetrics" class="metrics-loading">
+        <span>{{ $t('common.loading') }}</span>
+      </div>
+
+      <div v-else-if="metricsError" class="metrics-error">
+        <span>{{ metricsError }}</span>
+        <button @click="retryLoadMetrics" class="retry-button">
+          {{ $t('rightPanel.retry') }}
+        </button>
+      </div>
+
+      <div v-else-if="displayMetrics && displayMetrics.length" class="metrics-container">
         <div v-for="(metric, index) in displayMetrics" :key="index" class="metric-item">
-          <span class="metric-label">{{ metric.label }}:</span>
+          <span class="metric-label"
+            >{{ $t(metric.label) }}:
+            <button v-if="metric.description" class="info-button" :title="$t(metric.description)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+                <path
+                  d="M8 7V11M8 5V5.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </span>
           <span
             class="metric-value"
+            :class="{ 'metric-unavailable': isMetricUnavailable(metric) }"
             :style="metric.getStyle ? metric.getStyle(selectedItem, metricsStore) : {}"
           >
-            {{ metric.getValue(selectedItem, metricsStore) }}
+            {{ getMetricDisplayValue(metric) }}
           </span>
         </div>
       </div>
@@ -64,7 +89,7 @@
     <div v-else-if="selectedItem && selectedItem.type === 'dir'" class="directory-children">
       <h3>{{ $t('rightPanel.directoryContents') }}</h3>
       <AppSearchBar
-        class="search-bar"
+        class="search-bar-wrapper"
         type="mini"
         :placeholder="$t('rightPanel.searchPlaceholder')"
         :items="selectedItem?.children || []"
@@ -76,7 +101,7 @@
           :key="child.path"
           class="child-item"
           :class="{ 'custom-hover': hoveredPath === child.path }"
-          @click="handleCityNodeSelect(child.path)"
+          @click="handleSelect(child.path)"
           @mouseenter="handleCityNodeHover?.(child.path)"
           @mouseleave="handleCityNodeCancelHover?.(child.path)"
         >
@@ -117,9 +142,11 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import { CityNode } from '@/types'
-  import { MetricType, MetricsStore, getMetricsByTypes } from '@/types'
+  import { MetricType, MetricsStore, MetricItem, getMetricsByTypes, requiresApiData } from '@/types'
+  import { useApi } from '@/composables/useApi'
+  import { useConnectionStore } from '@/stores/connectionsStore'
   import SourceCodeButton from '@/components/city/SourceCodeButton.vue'
   import AppButton from '@/components/common/AppButton.vue'
   import AppSearchBar from '@/components/common/AppSearchBar.vue'
@@ -135,7 +162,15 @@
     showFindCoupling?: boolean
   }>()
 
-  const metricsStore = ref<MetricsStore>({})
+  const connectionStore = useConnectionStore()
+  const { fileDetails, fetchFileDetails, errors } = useApi()
+
+  const metricsStore = ref<MetricsStore>({
+    fileDetails: new Map(),
+  })
+
+  const isLoadingMetrics = ref(false)
+  const metricsError = ref<string | null>(null)
 
   const displayMetrics = computed(() => {
     if (!props.metricTypes || props.metricTypes.length === 0) {
@@ -155,6 +190,80 @@
     })
   })
 
+  watch(
+    () => fileDetails.value,
+    (newDetails) => {
+      metricsStore.value.fileDetails = new Map(Object.entries(newDetails))
+    },
+    { deep: true, immediate: true }
+  )
+
+  watch(
+    () => props.selectedItem,
+    async (newItem) => {
+      if (!newItem || newItem.type !== 'file') {
+        metricsError.value = null
+        return
+      }
+
+      if (!props.metricTypes || !requiresApiData(props.metricTypes)) {
+        return
+      }
+
+      if (metricsStore.value.fileDetails?.has(newItem.path)) {
+        return
+      }
+
+      await loadFileMetrics(newItem.path)
+    },
+    { immediate: true }
+  )
+
+  function handleSelect(path: string): void {
+    props.handleCityNodeCancelHover?.(path)
+    props.handleCityNodeSelect(path)
+  }
+
+  async function loadFileMetrics(filePath: string) {
+    const analysis = connectionStore.analyses.get('/system-overview')
+
+    if (!analysis?.result?.data) {
+      metricsError.value = 'Analysis ID not found'
+      return
+    }
+
+    const analysisId = analysis.result.data
+    isLoadingMetrics.value = true
+    metricsError.value = null
+
+    const success = await fetchFileDetails(analysisId, filePath)
+
+    isLoadingMetrics.value = false
+
+    if (!success) {
+      metricsError.value = errors.value.fileDetails || 'Failed to load metrics'
+    }
+  }
+
+  async function retryLoadMetrics() {
+    if (props.selectedItem?.path) {
+      await loadFileMetrics(props.selectedItem.path)
+    }
+  }
+
+  function isMetricUnavailable(metric: MetricItem): boolean {
+    if (!props.selectedItem) return true
+    const value = metric.getValue(props.selectedItem, metricsStore.value)
+    return value === null || value === undefined
+  }
+
+  function getMetricDisplayValue(metric: MetricItem): string {
+    if (!props.selectedItem) return '-'
+    const value = metric.getValue(props.selectedItem, metricsStore.value)
+    if (value === null || value === undefined) return '-'
+    return String(value)
+  }
+
   function getChildrenCount(node: CityNode): number {
     return node.children?.length || 0
   }
@@ -165,6 +274,46 @@
 </script>
 
 <style scoped lang="scss">
+  .metrics-loading,
+  .metrics-error {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .metrics-loading {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+  }
+
+  .metrics-error {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .retry-button {
+    padding: 0.5rem 1rem;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .retry-button:hover {
+    opacity: 0.8;
+  }
+
+  .metric-unavailable {
+    color: var(--color-text-tertiary);
+    font-style: italic;
+  }
+
   .right-panel {
     background: var(--color-bg-primary);
     backdrop-filter: blur(10px);
@@ -178,7 +327,7 @@
     box-shadow: $shadow-lg;
   }
 
-  .search-bar {
+  .search-bar-wrapper {
     margin-bottom: $spacing-lg;
   }
 
@@ -266,12 +415,35 @@
     .metric-label {
       font-size: 0.8rem;
       color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .metric-value {
       font-size: 0.9rem;
       font-weight: 600;
       word-break: break-all;
+    }
+
+    .metric-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .info-button {
+      background: none;
+      border: none;
+      color: var(--color-icon);
+      cursor: pointer;
+      padding: 0.25rem;
+      display: flex;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: var(--color-icon-hover);
+      }
     }
   }
 

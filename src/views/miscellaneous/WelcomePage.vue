@@ -16,77 +16,80 @@
       </h1>
       <h2 class="subtitle">{{ t('welcomePage.motto') }}</h2>
 
-      <div class="input-section">
-        <label for="repo-link" class="input-label">{{ t('welcomePage.prompt') }}</label>
-        <input
-          id="repo-link"
-          type="text"
-          v-model="link"
-          :placeholder="t('welcomePage.repoPlaceholder')"
-          class="repo-input"
-          :class="{ error: validationError }"
-          :disabled="isBusy"
-          @input="validateLink"
-          @blur="validateLink"
-        />
-        <span v-if="validationError" class="error-message">{{ validationError }}</span>
-      </div>
-
-      <div class="checkbox-section">
-        <label class="checkbox-label">
+      <form @submit.prevent="onSubmit">
+        <div class="input-section">
+          <label for="repo-link" class="input-label">{{ t('welcomePage.prompt') }}</label>
           <input
-            type="checkbox"
-            v-model="showDateInputs"
+            id="repo-link"
+            type="text"
+            v-model="link"
+            :placeholder="t('welcomePage.repoPlaceholder')"
+            class="repo-input"
+            :class="{ error: validationError }"
             :disabled="isBusy"
-            class="checkbox-input"
+            @input="validateLink"
+            @blur="validateLink"
           />
-          <span>{{ t('welcomePage.customDateRange') }}</span>
-        </label>
-      </div>
+          <span v-if="validationError" class="error-message">{{ validationError }}</span>
+        </div>
 
-      <transition name="slide-fade">
-        <div v-if="showDateInputs" class="date-section">
-          <div class="date-inputs">
-            <div class="date-input-group">
-              <label class="date-label">{{ t('welcomePage.from') }}:</label>
-              <input
-                type="date"
-                class="date-input"
-                :class="{ error: fromDateError }"
-                v-model="fromDate"
-                :min="MIN_DATE"
-                :max="MAX_DATE"
-                :disabled="isBusy"
-                @change="handleFromDateChange"
-                @blur="validateFromDate"
-              />
-              <span v-if="fromDateError" class="error-message">{{ fromDateError }}</span>
-            </div>
-            <div class="date-input-group">
-              <label class="date-label">{{ t('welcomePage.to') }}:</label>
-              <input
-                type="date"
-                class="date-input"
-                :class="{ error: toDateError }"
-                v-model="toDate"
-                :min="MIN_DATE"
-                :max="MAX_DATE"
-                :disabled="isBusy"
-                @change="handleToDateChange"
-                @blur="validateToDate"
-              />
-              <span v-if="toDateError" class="error-message">{{ toDateError }}</span>
+        <div class="checkbox-section">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              v-model="showDateInputs"
+              :disabled="isBusy"
+              class="checkbox-input"
+            />
+            <span>{{ t('welcomePage.customDateRange') }}</span>
+          </label>
+        </div>
+
+        <transition name="slide-fade">
+          <div v-if="showDateInputs" class="date-section">
+            <div class="date-inputs">
+              <div class="date-input-group">
+                <label class="date-label">{{ t('welcomePage.from') }}:</label>
+                <input
+                  type="date"
+                  class="date-input"
+                  :class="{ error: fromDateError }"
+                  v-model="fromDate"
+                  :min="MIN_DATE"
+                  :max="MAX_DATE"
+                  :disabled="isBusy"
+                  @change="handleFromDateChange"
+                  @blur="validateFromDate"
+                />
+                <span v-if="fromDateError" class="error-message">{{ fromDateError }}</span>
+              </div>
+              <div class="date-input-group">
+                <label class="date-label">{{ t('welcomePage.to') }}:</label>
+                <input
+                  type="date"
+                  class="date-input"
+                  :class="{ error: toDateError }"
+                  v-model="toDate"
+                  :min="MIN_DATE"
+                  :max="MAX_DATE"
+                  :disabled="isBusy"
+                  @change="handleToDateChange"
+                  @blur="validateToDate"
+                />
+                <span v-if="toDateError" class="error-message">{{ toDateError }}</span>
+              </div>
             </div>
           </div>
-        </div>
-      </transition>
+        </transition>
 
-      <AppButton
-        style="margin-top: 20px"
-        :label="t('welcomePage.buttonStart')"
-        variant="primary"
-        @click="handleStart"
-      />
+        <AppButton
+          type="submit"
+          style="margin-top: 20px"
+          :label="t('welcomePage.buttonStart')"
+          variant="primary"
+          @click="onSubmit"
+        />
+      </form>
     </div>
   </section>
 </template>
@@ -127,7 +130,7 @@
 
   const { isBusy, isCompleted, statusLabel, start, stop } = useConnection(
     '/system-overview',
-    'analysis.repo-download'
+    'notifications.analysis.repo-download'
   )
   const { fetchCodeCity } = useApi()
 
@@ -241,7 +244,7 @@
     }
   }
 
-  const handleStart = async () => {
+  const onSubmit = async () => {
     const trimmedLink = link.value.trim()
 
     if (!trimmedLink) {
@@ -328,7 +331,6 @@
   }
 
   .logo {
-    @include floating-logo;
     width: 200px;
     height: 200px;
     margin-bottom: $spacing-md;
@@ -426,6 +428,7 @@
   .date-section {
     width: 100%;
     max-width: 400px;
+    margin-top: 8px;
   }
 
   .date-inputs {

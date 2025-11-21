@@ -1,7 +1,7 @@
 <template>
   <div class="collapsible-box">
     <div class="collapsible-header" @click="handleClick">
-      <h2 class="collapsible-label">{{ label }}</h2>
+      <h2 class="collapsible-label">{{ t(label) }}</h2>
       <svg
         :class="{ rotated: !isCollapsed }"
         width="24"
@@ -26,6 +26,10 @@
 </template>
 
 <script setup lang="ts">
+  import { useI18n } from 'vue-i18n'
+
+  const { t } = useI18n()
+
   defineOptions({ name: 'CollapsibleBox' })
 
   defineProps<{

@@ -15,13 +15,15 @@
       <aside v-show="isOpen" class="mobile-sidebar">
         <div class="sidebar-content">
           <SidebarItem
-            v-for="item in items"
+            v-for="(item, index) in items"
             :key="item.label"
             :label="item.label"
             :icon="item.icon"
             :to="item.to"
             :submenu="item.submenu"
+            :isExpanded="expandedIndex === index"
             @navigate="handleNavigate"
+            @toggle="toggleItem(index)"
           />
         </div>
       </aside>
@@ -34,7 +36,8 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
+  import { useRoute } from 'vue-router'
   import SidebarItem from '@/components/sections/navbar/SideBarItem.vue'
 
   interface SubmenuItem {
@@ -49,18 +52,43 @@
     submenu?: SubmenuItem[]
   }
 
-  defineProps<{
+  const props = defineProps<{
     items: NavItem[]
   }>()
 
+  const route = useRoute()
   const isOpen = ref(false)
+  const expandedIndex = ref<number | null>(null)
+
+  const setInitialExpanded = () => {
+    const activeIndex = props.items.findIndex((item) => {
+      if (item.to && route.path === item.to) return true
+      if (item.submenu?.some((subitem) => route.path === subitem.to)) return true
+      return false
+    })
+
+    if (activeIndex !== -1 && props.items[activeIndex].submenu?.length) {
+      expandedIndex.value = activeIndex
+    }
+  }
+
+  setInitialExpanded()
+
+  watch(() => route.path, setInitialExpanded)
 
   const toggleSidebar = () => {
     isOpen.value = !isOpen.value
+    if (isOpen.value) {
+      setInitialExpanded()
+    }
   }
 
   const closeSidebar = () => {
     isOpen.value = false
+  }
+
+  const toggleItem = (index: number) => {
+    expandedIndex.value = expandedIndex.value === index ? null : index
   }
 
   const handleNavigate = () => {

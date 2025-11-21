@@ -3,7 +3,7 @@
     <div class="footer-left">2025 HotSpotter</div>
 
     <div class="footer-right">
-      <RouterLink to="/about" class="footer-btn" :aria-label="t('footer.aria.about')">
+      <RouterLink to="/about" class="footer-btn" :aria-label="t('footer.aria')">
         {{ t('footer.about') }}
       </RouterLink>
     </div>

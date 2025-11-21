@@ -12,19 +12,19 @@
           @toggle="toggleBox(index)"
         >
           <template v-if="index === 0">
-            <SectionHeader :label="t('settingsPage.mainColor')" />
+            <SectionHeader :label="t('settingsPage.appearance.mainColor')" />
             <RadioButtonGroup
               v-model="useUserSettingsStore().selectedColor"
               name="color"
               :options="colors"
             />
-            <SectionHeader :label="t('settingsPage.gradient')" />
+            <SectionHeader :label="t('settingsPage.appearance.gradient')" />
             <RadioButtonGroup
               v-model="useUserSettingsStore().isGradientOn"
               name="gradient"
               :options="gradient"
             />
-            <SectionHeader :label="t('settingsPage.language')" />
+            <SectionHeader :label="t('settingsPage.appearance.language')" />
             <AppDropdownSelect
               id="language-select"
               :options="languages"
@@ -55,10 +55,9 @@
   const { t } = useI18n()
 
   const items = [
-    { label: t('settingsPage.appearance'), slotName: 'first' },
-    { label: t('settingsPage.mappings'), slotName: 'second' },
-    { label: t('settingsPage.performance'), slotName: 'third' },
-    { label: t('settingsPage.notifications'), slotName: 'fourth' },
+    { label: 'settingsPage.appearance.header', slotName: 'first' },
+    { label: 'settingsPage.analysis-preferences.header', slotName: 'second' },
+    { label: 'settingsPage.notifications.header', slotName: 'third' },
   ]
 
   const openIndex = ref(0)
@@ -68,19 +67,19 @@
   }
 
   const languages = [
-    { label: 'settingsPage.systemDefault', value: 'system' },
-    { label: 'English', value: 'en' },
-    { label: 'Polski', value: 'pl' },
+    { label: 'settingsPage.appearance.systemDefault', value: 'system' },
+    { label: 'settingsPage.appearance.english', value: 'en' },
+    { label: 'settingsPage.appearance.polish', value: 'pl' },
   ]
 
   const colors = [
-    { label: 'settingsPage.red', value: '#bc1922' },
-    { label: 'settingsPage.blue', value: '#28abf2' },
+    { label: 'settingsPage.appearance.red', value: '#bc1922' },
+    { label: 'settingsPage.appearance.blue', value: '#28abf2' },
   ]
 
   const gradient = [
-    { label: 'settingsPage.on', value: 'on' },
-    { label: 'settingsPage.off', value: 'off' },
+    { label: 'settingsPage.appearance.on', value: 'on' },
+    { label: 'settingsPage.appearance.off', value: 'off' },
   ]
 </script>
 

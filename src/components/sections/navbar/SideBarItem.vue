@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { computed } from 'vue'
   import { RouterLink, useRoute } from 'vue-router'
 
   interface SubmenuItem {
@@ -48,14 +48,15 @@
     icon?: string
     to?: string
     submenu?: SubmenuItem[]
+    isExpanded?: boolean
   }>()
 
   const emit = defineEmits<{
     navigate: []
+    toggle: []
   }>()
 
   const route = useRoute()
-  const isExpanded = ref(false)
 
   const isActive = computed(() => {
     if (props.to && route.path === props.to) return true
@@ -65,7 +66,7 @@
 
   const handleClick = () => {
     if (props.submenu && props.submenu.length) {
-      isExpanded.value = !isExpanded.value
+      emit('toggle')
     } else if (props.to) {
       emit('navigate')
     }
@@ -130,13 +131,6 @@
 
     &--active {
       font-weight: 600;
-      background: linear-gradient(
-        to right,
-        color-mix(in srgb, var(--color-primary) 20%, transparent) 0%,
-        transparent 30%,
-        transparent 70%,
-        color-mix(in srgb, var(--color-primary) 20%, transparent) 100%
-      );
       position: relative;
 
       &::before {
@@ -187,7 +181,6 @@
       &.router-link-active,
       &.router-link-exact-active {
         font-weight: 600;
-        color: var(--color-primary);
 
         &::before {
           content: '';

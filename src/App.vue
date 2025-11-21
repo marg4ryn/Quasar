@@ -34,7 +34,6 @@
   import { useUserSettingsStore } from './stores/userSettingsStore'
   import { onBeforeUnmount } from 'vue'
   import { useConnectionStore } from '@/stores/connectionsStore'
-  import { MockSSEServer } from '@/mocks/SSEServerMock'
   import { initializeCityDataMock } from '@/mocks/cityDataMock'
   import { useToast } from '@/composables/useToast'
 
@@ -52,10 +51,6 @@
 
   const isNavBarVisible = computed(() => uiStore.isNavBarVisible)
   const isAppBarVisible = computed(() => uiStore.isAppBarVisible)
-
-  if (import.meta.env.VITE_USE_MOCK_ANALYSIS === 'true') {
-    MockSSEServer.initialize()
-  }
 
   if (import.meta.env.VITE_USE_MOCK_CITY_DATA === 'true') {
     initializeCityDataMock()

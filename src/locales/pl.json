@@ -1,18 +1,18 @@
 {
   "title": {
     "settings": "Ustawienia",
-    "about": "O Projekcie",
-    "change-coupling": "Powiązania Plików",
-    "system-overview": "Przegląd Repozytorium",
-    "technical-sprawl": "Rozszerzenia Plików",
+    "about": "O projekcie",
+    "change-coupling": "Powiązania plików",
+    "system-overview": "Przegląd repozytorium",
+    "technical-sprawl": "Rozszerzenia plików",
     "hotspots": "Hotspoty",
-    "complexity-trends": "Trendy Złożoności",
-    "code-age": "Wiek Kodu",
-    "developer-view": "Aktywność Dewelopera",
-    "team-view": "Aktywność Zespołu",
-    "abandoned-code": "Martwy Kod",
-    "responsibility-diffusion": "Rozproszenie Własności",
-    "developer-relationships": "Relacje Deweloperów"
+    "complexity-trends": "Trendy złożoności",
+    "code-age": "Wiek kodu",
+    "developer-view": "Główni deweloperzy",
+    "team-view": "Aktywność zespołu",
+    "abandoned-code": "Martwy kod",
+    "responsibility-diffusion": "Rozproszenie własności",
+    "developer-relationships": "Relacje deweloperów"
   },
 
   "appbar": {
@@ -25,44 +25,63 @@
 
   "navbar": {
     "summary": "Podsumowanie",
-    "code-health": "Jakość Kodu",
-    "change-coupling": "Powiązania Plików",
+    "code-health": "Jakość kodu",
+    "change-coupling": "Powiązania plików",
     "developers": "Deweloperzy",
-    "system-overview": "Przegląd Repozytorium",
-    "technical-sprawl": "Rozszerzenia Plików",
+    "system-overview": "Przegląd repozytorium",
+    "technical-sprawl": "Rozszerzenia plików",
     "hotspots": "Hotspoty",
-    "complexity-trends": "Trendy Złożoności",
-    "code-age": "Wiek Kodu",
-    "developer-view": "Aktywność Dewelopera",
-    "team-view": "Aktywność Zespołu",
-    "abandoned-code": "Martwy Kod",
-    "responsibility-diffusion": "Rozproszenie Własności",
-    "developer-relationships": "Powiązania Deweloperów"
+    "complexity-trends": "Trendy złożoności",
+    "code-age": "Wiek kodu",
+    "developer-view": "Główni deweloperzy",
+    "team-view": "Aktywność zespołu",
+    "abandoned-code": "Martwy kod",
+    "responsibility-diffusion": "Rozproszenie własności",
+    "developer-relationships": "Powiązania deweloperów"
+  },
+
+  "notifications": {
+    "header": "Powiadomienia",
+    "noNotifications": "Brak powiadomień",
+    "clearAll": "Wyczyść wszystko",
+    "remove": "Usuń powiadomienie",
+    "viewDetails": "Zobacz wyniki",
+    "analysis": {
+      "completed": "Proces '{screen}' zakończył się pomyślnie w {duration}s.",
+      "failed": "Proces '{screen}' nie powiódł się: {error}.",
+      "start-failed": "Nie udało się rozpocząć procesu '{screen}': {error}.",
+      "cancelled": "Proces '{screen}' został anulowany",
+      "repo-download": "Analiza repozytorium",
+      "interrupted": "Analiza {screen} została przerwana przez odświeżenie strony i zostanie wznowiona"
+    }
   },
 
   "settingsPage": {
     "header": "USTAWIENIA",
-    "appearance": "Wygląd",
-    "mainColor": "Główny kolor",
-    "red": "Czerwony",
-    "blue": "Niebieski",
-    "theme": "Motyw",
-    "light": "Jasny",
-    "dark": "Ciemny",
-    "system": "Systemowy",
-    "language": "Język",
-    "systemDefault": "Domyślny systemowy",
-    "mappings": "Mapowania",
-    "performance": "Wydajność",
-    "notifications": "Powiadomienia",
-    "gradient": "Gradient tła",
-    "on": "Włączony",
-    "off": "Wyłączony"
+    "appearance": {
+      "header": "Wygląd",
+      "mainColor": "Główny kolor",
+      "red": "Czerwony",
+      "blue": "Niebieski",
+      "gradient": "Gradient tła",
+      "on": "Włączony",
+      "off": "Wyłączony",
+      "language": "Język",
+      "systemDefault": "Domyślny systemowy",
+      "english": "Angielski",
+      "polish": "Polski"
+    },
+    "analysis-preferences": {
+      "header": "Preferencje analiz"
+    },
+    "notifications": {
+      "header": "Powiadomienia"
+    }
   },
 
   "welcomePage": {
     "header": "Witamy w",
-    "motto": "Twoje repozytorium, Twoje miasto kodu.",
+    "motto": "Twoje repozytorium, Twoje miasto kodu",
     "prompt": "Wprowadź link do repozytorium:",
     "from": "Od",
     "to": "Do",
@@ -80,14 +99,6 @@
     "toDateBeforeFromDate": "Data 'Do' musi być późniejsza niż data 'Od'"
   },
 
-  "notifications": {
-    "header": "Powiadomienia",
-    "noNotifications": "Brak powiadomień",
-    "clearAll": "Wyczyść wszystko",
-    "remove": "Usuń powiadomienie",
-    "viewDetails": "Zobacz wyniki"
-  },
-
   "status": {
     "downloading": "Pobieranie repozytorium...",
     "processingData": "Przetwarzanie danych...",
@@ -100,26 +111,13 @@
     "failedToParseCompletionData": "Nie udało się przetworzyć danych",
     "serverError": "Błąd serwera",
     "unknownServerError": "Nieznany błąd serwera",
-    "connectionFailedMaxRetries": "Połączenie nie powiodło się "
-  },
-  "api": {
-    "errors": {
-      "unknown": "Nieznany błąd",
-      "httpError": "Wystąpił błąd HTTP",
-      "timeout": "Przekroczono limit czasu",
-      "requestTimeout": "Żądanie trwało zbyt długo",
-      "noAnalysisId": "Nie podano ID analizy",
-      "fetchStructureFailed": "Nie udało się załadować struktury"
-    }
-  },
-
-  "analysis": {
-    "completed": "Proces '{screen}' zakończył się pomyślnie w {duration}s.",
-    "failed": "Proces '{screen}' nie powiódł się: {error}.",
-    "start_failed": "Nie udało się rozpocząć procesu '{screen}': {error}.",
-    "cancelled": "Proces '{screen}' został anulowany",
-    "repo-download": "Analiza repozytorium",
-    "interrupted": "Analiza {screen} została przerwana przez odświeżenie strony i zostanie wznowiona"
+    "connectionFailedMaxRetries": "Połączenie nie powiodło się ",
+    "unknown": "Nieznany błąd",
+    "httpError": "Wystąpił błąd HTTP",
+    "timeout": "Przekroczono limit czasu",
+    "requestTimeout": "Żądanie trwało zbyt długo",
+    "noAnalysisId": "Nie podano ID analizy",
+    "fetchStructureFailed": "Nie udało się załadować struktury"
   },
 
   "rightPanel": {
@@ -134,6 +132,32 @@
     "noSelection": "Wybierz plik lub katalog, aby zobaczyć szczegóły"
   },
 
+  "metrics": {
+    "name": "Nazwa",
+    "path": "Ścieżka",
+    "height": "Wysokość",
+    "width": "Szerokość",
+    "fileType": "Typ pliku",
+    "fileSize": "Rozmiar pliku",
+    "totalLines": "Łączna liczba linii",
+    "codeLines": "Linie kodu",
+    "commentLines": "Linie komentarzy",
+    "blankLines": "Puste linie",
+    "totalCommits": "Łączna liczba commitów",
+    "firstCommitDate": "Pierwszy commit",
+    "lastCommitDate": "Ostatni commit",
+    "commitsLastMonth": "Commity (ostatni miesiąc)",
+    "commitsLastYear": "Commity (ostatni rok)",
+    "leadAuthor": "Główny autor",
+    "leadAuthorInfo": "Informacje o głównym autorze",
+    "activeAuthors": "Aktywni autorzy",
+    "activeAuthorsInfo": "Informacje o aktywnych autorach",
+    "knowledgeRisk": "Ryzyko wiedzy",
+    "knowledgeRiskInfo": "Informacje o ryzyku wiedzy",
+    "knowledgeLoss": "Utrata wiedzy",
+    "knowledgeLossInfo": "Informacje o utracie wiedzy"
+  },
+
   "common": {
     "inDevelopmentLabel": "W trakcie rozwoju",
     "close": "Zamknij",
@@ -142,21 +166,25 @@
     "abort": "Przerwij",
     "confirm": "Potwierdź",
     "tryAgain": "Spróbuj ponownie",
-    "loading": "Wczytywanie...",
-    "searchBarPlaceholder": "Wyszukaj pliki..."
+    "loading": "Wczytywanie..."
+  },
+
+  "search": {
+    "placeholder": "Szukaj plików...",
+    "noResults": "Nie znaleziono plików",
+    "results": "{count} wyników",
+    "moreResults": "więcej wyników"
   },
 
   "footer": {
     "about": "O projekcie",
-    "aria": {
-      "about": "Strona o projekcie"
-    }
+    "aria": "Strona o projekcie"
   },
 
   "about": {
     "team": {
       "title": "Zespół projektowy",
-      "supervisorLabel": "Opiekun zespołu",
+      "supervisorLabel": "Promotor",
       "supervisorDegree": "dr inż."
     },
     "description": {

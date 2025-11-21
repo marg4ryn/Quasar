@@ -1,25 +1,48 @@
 <template>
   <CodeCityPageTemplate
+    v-if="!isLoading"
     :tabs="tabs"
-    :colorData="colorData"
+    :colorData="hotspotsColorData"
     :leftPanelConfig="leftPanelConfig"
     :rightPanelConfig="rightPanelConfig"
   />
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
-  import { CityNode } from '@/types/city'
-  import { colorData } from '@/utils/city/cityData'
-  import { useCityStore } from '@/stores/cityStore'
+  import { ref, computed, onMounted } from 'vue'
+  import { useApi } from '@/composables/useApi'
+  import { useConnectionStore } from '@/stores/connectionsStore'
   import { MetricType } from '@/types'
+  import type { HotspotsDetails } from '@/types'
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
 
-  const cityStore = useCityStore()
-  const cityData = cityStore.cityData
+  const connectionStore = useConnectionStore()
+  const { fetchHotspotsDetails, hotspotsDetails } = useApi()
+
+  const isLoading = ref(false)
 
   const rightPanelConfig = ref({
-    metricTypes: ['name', 'path', 'height', 'width'] as MetricType[],
+    metricTypes: [
+      'name',
+      'path',
+      'height',
+      'width',
+      'fileSize',
+      'fileType',
+      'totalLines',
+      'codeLines',
+      'commentLines',
+      'blankLines',
+      'totalCommits',
+      'firstCommitDate',
+      'lastCommitDate',
+      'commitsLastMonth',
+      'commitsLastYear',
+      'activeAuthors',
+      'leadAuthor',
+      'knowledgeRisk',
+      'knowledgeLoss',
+    ] as MetricType[],
     showFindCoupling: false,
   })
 
@@ -29,41 +52,46 @@
     { id: 'code-age', label: 'navbar.code-age', route: '/code-age' },
   ]
 
-  const flattenedFilesForList = computed(() => {
-    const files: Array<CityNode & { intensity?: number }> = []
-
-    function traverse(node: CityNode) {
-      const colorInfo = colorData.find((c) => c.path === node.path)
-      if (colorInfo) {
-        files.push({
-          ...node,
-          intensity: colorInfo.intensity,
-        })
-      }
-      if (node.children) {
-        node.children.forEach(traverse)
-      }
+  const hotspotsColorData = computed(() => {
+    if (!hotspotsDetails.value || !Array.isArray(hotspotsDetails.value)) {
+      return []
     }
 
-    traverse(cityData)
-    return files.sort((a, b) => b.intensity! - a.intensity!)
+    return hotspotsDetails.value.map((item: HotspotsDetails) => ({
+      path: item.path,
+      color: 0xbf1b1b,
+      intensity: item.normalizedValue,
+    }))
   })
 
-  const itemsForLeftPanel = ref(flattenedFilesForList.value)
+  const hotspotsItems = computed(() => {
+    if (!hotspotsDetails.value || !Array.isArray(hotspotsDetails.value)) {
+      return []
+    }
+
+    return hotspotsDetails.value.map((item: HotspotsDetails) => ({
+      ...item,
+      normalizedValue: Math.round(item.normalizedValue * 100),
+    }))
+  })
 
   const leftPanelConfig = computed(() => ({
     label: 'SUSPICIOUS FILES',
-    items: itemsForLeftPanel.value,
+    items: hotspotsItems.value,
     showInfo: true,
   }))
 
-  function getIntensityColor(intensity: number): string {
-    if (intensity >= 0.8) return '#ff4444'
-    if (intensity >= 0.6) return '#ff8844'
-    if (intensity >= 0.4) return '#ffaa44'
-    if (intensity >= 0.2) return '#ffcc44'
-    return '#ffee44'
-  }
+  onMounted(async () => {
+    isLoading.value = true
+
+    const analysis = connectionStore.analyses.get('/system-overview')
+
+    if (analysis?.result?.success && analysis.result.data) {
+      await fetchHotspotsDetails(analysis.result.data)
+    }
+
+    isLoading.value = false
+  })
 </script>
 
 <style scoped lang="scss"></style>

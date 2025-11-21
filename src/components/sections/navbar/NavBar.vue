@@ -8,7 +8,6 @@
         :key="item.label"
         :label="item.label"
         :icon="item.icon"
-        :to="item.to"
         :submenu="item.submenu"
       />
     </div>
@@ -54,12 +53,8 @@
         { label: t('navbar.hotspots'), to: '/hotspots' },
         { label: t('navbar.complexity-trends'), to: '/complexity-trends' },
         { label: t('navbar.code-age'), to: '/code-age' },
+        { label: t('navbar.change-coupling'), to: '/change-coupling' },
       ],
-    },
-    {
-      label: t('navbar.change-coupling'),
-      icon: '/icons/coupling.png',
-      to: '/change-coupling',
     },
     {
       label: t('navbar.developers'),

@@ -16,35 +16,53 @@
       </button>
     </div>
     <AppSearchBar
-      class="search-bar"
+      class="search-bar-wrapper"
       type="mini"
       :placeholder="$t('rightPanel.searchPlaceholder')"
       :items="items || []"
-      @filtered="filteredItems = $event"
+      @filtered="handleFiltered"
     />
     <div class="item-list">
       <div
-        v-for="item in filteredItems"
+        v-for="item in sortedFilteredItems"
         :key="item.path"
         class="file-item"
         :class="{ active: props.selectedPath === item.path }"
-        @click="props.handleFileSelect(item.path)"
+        @click="props.handleFileSelect?.(item.path)"
+        @mouseenter="props.handleFileHover?.(item.path)"
+        @mouseleave="props.handleFileCancelHover?.()"
       >
-        <slot name="item" :item="item" />
+        <slot name="item" :item="item">
+          <span class="item-name">{{ item.name }}</span>
+          <span
+            v-if="item.normalizedValue !== undefined"
+            class="item-value"
+            :style="{ color: getIntensityColor(item.normalizedValue) }"
+          >
+            {{ Math.round(item.normalizedValue * 100) }}%
+          </span>
+        </slot>
       </div>
     </div>
   </aside>
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import AppSearchBar from '@/components/common/AppSearchBar.vue'
 
   const props = defineProps<{
-    items: Array<{ path: string; name?: string; [key: string]: any }>
+    items: Array<{
+      path: string
+      name?: string
+      normalizedValue?: number
+      [key: string]: any
+    }>
     label: string
     selectedPath?: string
-    handleFileSelect: (path: string) => void
+    handleFileSelect?: (path: string) => void
+    handleFileHover?: (path: string) => void
+    handleFileCancelHover?: () => void
     showInfo?: boolean
     onInfoHover?: () => void
     maxHeight?: string
@@ -53,6 +71,36 @@
   const maxHeight = computed(() => props.maxHeight || '100%')
 
   const filteredItems = ref<typeof props.items>(props.items || [])
+
+  const sortedFilteredItems = computed(() => {
+    return [...filteredItems.value].sort((a, b) => {
+      const valA = a.normalizedValue ?? 0
+      const valB = b.normalizedValue ?? 0
+      return valB - valA // malejąco
+    })
+  })
+
+  watch(
+    () => props.items,
+    (newItems) => {
+      filteredItems.value = newItems
+    },
+    { immediate: true }
+  )
+
+  function handleFiltered(filtered: typeof props.items) {
+    filteredItems.value = filtered
+  }
+
+  function getIntensityColor(normalizedValue: number): string {
+    // normalizedValue jest 0-1, więc mnożymy przez 100
+    const percent = normalizedValue * 100
+    if (percent >= 80) return '#ff4444'
+    if (percent >= 60) return '#ff8844'
+    if (percent >= 40) return '#ffaa44'
+    if (percent >= 20) return '#ffcc44'
+    return '#ffee44'
+  }
 </script>
 
 <style scoped lang="scss">
@@ -69,7 +117,7 @@
     box-shadow: $shadow-lg;
   }
 
-  .search-bar {
+  .search-bar-wrapper {
     margin-bottom: $spacing-lg;
   }
 
@@ -135,6 +183,18 @@
     &.active {
       background: var(--color-item-bg-hover);
       border-color: var(--color-border);
+    }
+
+    .item-name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .item-value {
+      font-weight: 600;
+      font-size: $font-size-base;
     }
   }
 </style>

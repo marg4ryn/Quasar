@@ -10,7 +10,15 @@
 
     <TabNavigation class="tab-nav" :tabs="tabs" />
 
-    <AppSearchBar v-model="searchQuery" class="search-bar-wrapper" type="normal" />
+    <AppSearchBar
+      class="search-bar-wrapper"
+      type="normal"
+      :file-list="fileList"
+      :placeholder="$t('search.placeholder')"
+      @select="handleSearchSelect"
+      @hover="handleSearchHover"
+      @hover-leave="handleSearchHoverLeave"
+    />
 
     <div class="left-panels-container">
       <LeftPanel
@@ -21,11 +29,12 @@
         :items="leftPanelConfig.items"
         :selectedPath="selectedPath"
         :handleFileSelect="handleCityNodeSelect"
+        :handleFileHover="handleCityNodeHover"
         :showInfo="leftPanelConfig.showInfo"
       >
         <template #item="{ item }">
           <slot name="leftPanelItem" :item="item">
-            <div class="default-item">{{ item.name }}</div>
+            {{ item.name }}
           </slot>
         </template>
       </LeftPanel>
@@ -41,7 +50,7 @@
       >
         <template #item="{ item }">
           <slot name="secondLeftPanelItem" :item="item">
-            <div class="default-item">{{ item.name }}</div>
+            {{ item.name }}
           </slot>
         </template>
       </LeftPanel>
@@ -77,7 +86,10 @@
   import { useCodeCityController } from '@/composables/useCodeCityController'
   import { useCityStore } from '@/stores/cityStore'
   import { useApiStore } from '@/stores/apiStore'
+  import { useApi } from '@/composables/useApi'
+  import { useConnectionStore } from '@/stores/connectionsStore'
   import { MetricType, CityNode } from '@/types'
+  import type { FileListItem } from '@/types/api'
 
   import TabNavigation from '@/components/city/TabNavigation.vue'
   import AppSearchBar from '@/components/common/AppSearchBar.vue'
@@ -108,22 +120,23 @@
     leftPanelConfig: undefined,
     secondLeftPanelConfig: undefined,
     rightPanelConfig: undefined,
-    filterItems: undefined,
   })
 
   const { selectCityNode, setCityNodeHoverByPath } = useCodeCityController()
+  const { fileList, fetchFileList } = useApi()
+  const connectionStore = useConnectionStore()
   const log = useLogger('CodeCityPageTemplate')
   const cityStore = useCityStore()
-  const searchQuery = ref('')
+  const apiStore = useApiStore()
+
   const selectedPath = ref<string>('')
   const hoveredPath = ref<string>('')
   const mouseX = ref(0)
   const mouseY = ref(0)
   const showToolbar = ref(true)
-  const apiStore = useApiStore()
+
   const isEmpty = Object.keys(apiStore.structure).length === 0
   const cityData = !isEmpty ? apiStore.structure : cityStore.cityData
-  console.log(cityData)
 
   const selectedItem = computed(() => {
     return findNodeByPath(selectedPath.value, cityData)
@@ -131,6 +144,21 @@
 
   const hoveredItem = computed(() => {
     return findNodeByPath(hoveredPath.value, cityData)
+  })
+
+  onMounted(async () => {
+    window.addEventListener('mousemove', handleMouseMove)
+
+    const analysis = connectionStore.analyses.get('/system-overview')
+    if (analysis?.result?.data) {
+      const analysisId = analysis.result.data
+      await fetchFileList(analysisId)
+      log.info(`File list loaded: ${fileList.value.length} files`)
+    }
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('mousemove', handleMouseMove)
   })
 
   function findNodeByPath(path: string, root: CityNode): CityNode | null {
@@ -167,6 +195,18 @@
     setCityNodeHoverByPath('')
   }
 
+  function handleSearchSelect(item: FileListItem) {
+    handleCityNodeSelect(item.path)
+  }
+
+  function handleSearchHover(item: FileListItem) {
+    handleCityNodeHover(item.path)
+  }
+
+  function handleSearchHoverLeave() {
+    handleCityNodeCancelHover()
+  }
+
   function navigateUp() {
     const parentPath = selectedPath.value.split('/').slice(0, -1).join('/') || '/'
     selectedPath.value = parentPath
@@ -177,17 +217,11 @@
     mouseX.value = e.clientX + 10
     mouseY.value = e.clientY + 10
     const target = e.target as HTMLElement
-    const isOverPanel = target.closest('.left-panel, .left-panels-container, .right-panel')
+    const isOverPanel = target.closest(
+      '.left-panel, .left-panels-container, .right-panel, .search-dropdown'
+    )
     showToolbar.value = !isOverPanel
   }
-
-  onMounted(() => {
-    window.addEventListener('mousemove', handleMouseMove)
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener('mousemove', handleMouseMove)
-  })
 </script>
 
 <style scoped lang="scss">
@@ -272,29 +306,5 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-  }
-
-  .default-item {
-    .file-info {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex: 1;
-      min-width: 0;
-
-      .file-name {
-        font-size: 0.85rem;
-        color: #e6e6e6;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-
-    .file-suspicion {
-      font-size: 0.8rem;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
   }
 </style>

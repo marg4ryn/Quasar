@@ -8,7 +8,7 @@
     "hotspots": "Hotspots",
     "complexity-trends": "Complexity Trends",
     "code-age": "Code Age",
-    "developer-view": "Developer Activity",
+    "developer-view": "Lead Developers",
     "team-view": "Team Activity",
     "abandoned-code": "Abandoned Code",
     "responsibility-diffusion": "Ownership Diffusion",
@@ -33,36 +33,55 @@
     "hotspots": "Hotspots",
     "complexity-trends": "Complexity Trends",
     "code-age": "Code Age",
-    "developer-view": "Developer Activity",
+    "developer-view": "Lead Developers",
     "team-view": "Team Activity",
     "abandoned-code": "Abandoned Code",
     "responsibility-diffusion": "Ownership Diffusion",
     "developer-relationships": "Relationships"
   },
 
+  "notifications": {
+    "header": "Notifications",
+    "noNotifications": "No notifications yet",
+    "clearAll": "Clear All",
+    "remove": "Remove notification",
+    "viewDetails": "View Results",
+    "analysis": {
+      "completed": "Process' {screen}' completed successfully in {duration}s.",
+      "failed": "Process '{screen}' failed: {error}.",
+      "start-failed": "Process '{screen}' failed to start: {error}.",
+      "cancelled": "Process '{screen}' was cancelled",
+      "repo-download": "Repository analysis",
+      "interrupted": "Analysis {screen} was interrupted by page refresh and will be resumed"
+    }
+  },
+
   "settingsPage": {
     "header": "SETTINGS",
-    "appearance": "Appearance",
-    "mainColor": "Main color",
-    "red": "Red",
-    "blue": "Blue",
-    "theme": "Theme",
-    "light": "Light",
-    "dark": "Dark",
-    "system": "System",
-    "language": "Language",
-    "systemDefault": "System default",
-    "mappings": "Mappings",
-    "performance": "Performance",
-    "notifications": "Notifications",
-    "gradient": "Background gradient",
-    "on": "On",
-    "off": "Off"
+    "appearance": {
+      "header": "Appearance",
+      "mainColor": "Main color",
+      "red": "Red",
+      "blue": "Blue",
+      "gradient": "Background gradient",
+      "on": "On",
+      "off": "Off",
+      "language": "Language",
+      "systemDefault": "System default",
+      "english": "English",
+      "polish": "Polish"
+    },
+    "analysis-preferences": {
+      "header": "Analysis Preferences"
+    },
+    "notifications": {
+      "header": "Notifications"
+    }
   },
 
   "welcomePage": {
     "header": "Welcome to",
-    "motto": "Your repository, Your code city.",
+    "motto": "Your repository, Your code city",
     "prompt": "Enter link to analysis target:",
     "from": "From",
     "to": "To",
@@ -80,14 +99,6 @@
     "toDateBeforeFromDate": "'To' date must be after 'From' date"
   },
 
-  "notifications": {
-    "header": "Notifications",
-    "noNotifications": "No notifications yet",
-    "clearAll": "Clear All",
-    "remove": "Remove notification",
-    "viewDetails": "View Results"
-  },
-
   "status": {
     "downloading": "Downloading repository...",
     "processingData": "Processing data...",
@@ -100,27 +111,13 @@
     "failedToParseCompletionData": "Failed to parse completion data",
     "serverError": "Server error",
     "unknownServerError": "Unknown server error",
-    "connectionFailedMaxRetries": "Connection failed after multiple retries"
-  },
-
-  "api": {
-    "errors": {
-      "unknown": "Unknown error",
-      "httpError": "HTTP error occurred",
-      "timeout": "Request timeout",
-      "requestTimeout": "The request took too long to complete",
-      "noAnalysisId": "No analysis ID provided",
-      "fetchStructureFailed": "Failed to load structure"
-    }
-  },
-
-  "analysis": {
-    "completed": "Process' {screen}' completed successfully in {duration}s.",
-    "failed": "Process '{screen}' failed: {error}.",
-    "start_failed": "Process '{screen}' failed to start: {error}.",
-    "cancelled": "Process '{screen}' was cancelled",
-    "repo-download": "Repository analysis",
-    "interrupted": "Analysis {screen} was interrupted by page refresh and will be resumed"
+    "connectionFailedMaxRetries": "Connection failed after multiple retries",
+    "unknown": "Unknown error",
+    "httpError": "HTTP error occurred",
+    "timeout": "Request timeout",
+    "requestTimeout": "The request took too long to complete",
+    "noAnalysisId": "No analysis ID provided",
+    "fetchStructureFailed": "Failed to load structure"
   },
 
   "rightPanel": {
@@ -143,21 +140,51 @@
     "abort": "Abort",
     "confirm": "Confirm",
     "tryAgain": "Try Again",
-    "loading": "Loading...",
-    "searchBarPlaceholder": "Search files..."
+    "loading": "Loading..."
+  },
+
+  "metrics": {
+    "name": "Name",
+    "path": "Path",
+    "height": "Height",
+    "width": "Width",
+    "fileType": "File Type",
+    "fileSize": "File Size",
+    "totalLines": "Total Lines",
+    "codeLines": "Code Lines",
+    "commentLines": "Comment Lines",
+    "blankLines": "Blank Lines",
+    "totalCommits": "Total Commits",
+    "firstCommitDate": "First Commit",
+    "lastCommitDate": "Last Commit",
+    "commitsLastMonth": "Commits (Last Month)",
+    "commitsLastYear": "Commits (Last Year)",
+    "leadAuthor": "Lead Author",
+    "leadAuthorInfo": "Lead Author Info",
+    "activeAuthors": "Active Authors",
+    "activeAuthorsInfo": "Active Authors Info",
+    "knowledgeRisk": "Knowledge Risk",
+    "knowledgeRiskInfo": "knowledge Risk Info",
+    "knowledgeLoss": "Knowledge Loss",
+    "knowledgeLossInfo": "Knowledge Loss Info"
+  },
+
+  "search": {
+    "placeholder": "Search files...",
+    "noResults": "No files found",
+    "results": "{count} results",
+    "moreResults": "more results"
   },
 
   "footer": {
     "about": "About",
-    "aria": {
-      "about": "About page"
-    }
+    "aria": "About page"
   },
 
   "about": {
     "team": {
       "title": "Project team",
-      "supervisorLabel": "Team supervisor",
+      "supervisorLabel": "Supervisor",
       "supervisorDegree": "Dr."
     },
     "description": {

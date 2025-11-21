@@ -1,4 +1,10 @@
-import type { ApiError, CityNode } from '@/types'
+import type {
+  ApiError,
+  CityNode,
+  FileListResponse,
+  FileDetailsResponse,
+  HotspotsResponse,
+} from '@/types'
 import { useLogger } from '@/composables/useLogger'
 
 const log = useLogger('api')
@@ -52,10 +58,34 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   }
 }
 
+function buildQueryString(params: Record<string, string | number | boolean>): string {
+  const searchParams = new URLSearchParams()
+  Object.entries(params).forEach(([key, value]) => {
+    searchParams.append(key, String(value))
+  })
+  return searchParams.toString()
+}
+
 export const api = {
   async fetchStructure(analysisId: string): Promise<CityNode> {
     log.info(`Fetching structure for analysis: ${analysisId}`)
     return request<CityNode>(`analysis/${analysisId}/structure`)
+  },
+
+  async fetchFileList(analysisId: string): Promise<FileListResponse> {
+    log.info(`Fetching file list for analysis: ${analysisId}`)
+    return request<FileListResponse>(`analysis/${analysisId}/files`)
+  },
+
+  async fetchFileDetails(analysisId: string, filePath: string): Promise<FileDetailsResponse> {
+    log.info(`Fetching file details for: ${filePath}`)
+    const queryString = buildQueryString({ path: filePath })
+    return request<FileDetailsResponse>(`analysis/${analysisId}/files?${queryString}`)
+  },
+
+  async fetchHotspotsDetails(analysisId: string): Promise<HotspotsResponse> {
+    log.info(`Fetching hotspots details for: ${analysisId}`)
+    return request<HotspotsResponse>(`analysis/${analysisId}/files/hotspots`)
   },
 
   async get<T>(endpoint: string): Promise<T> {
