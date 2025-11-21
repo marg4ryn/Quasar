@@ -226,8 +226,8 @@ export function collectBuildingInstance(
   y: number,
   z: number
 ): void {
-  const buildWidth = nodeData.width < 0.1 * BUILDING_WIDTH_SCALE ? 0.1 * BUILDING_WIDTH_SCALE : nodeData.width
-  const buildHeight = nodeData.height < 0.1 * BUILDING_HEIGHT_SCALE ? 0.1 * BUILDING_HEIGHT_SCALE : nodeData.height
+  const buildWidth = nodeData.width
+  const buildHeight = nodeData.height
 
   const key = `building_${buildWidth}_${buildHeight}_${buildWidth}`
   
