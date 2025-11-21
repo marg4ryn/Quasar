@@ -34,7 +34,6 @@
   import { useUserSettingsStore } from './stores/userSettingsStore'
   import { onBeforeUnmount } from 'vue'
   import { useConnectionStore } from '@/stores/connectionsStore'
-  import { initializeCityDataMock } from '@/mocks/cityDataMock'
   import { useToast } from '@/composables/useToast'
 
   import AppBar from '@/components/sections/appbar/AppBar.vue'
@@ -51,10 +50,6 @@
 
   const isNavBarVisible = computed(() => uiStore.isNavBarVisible)
   const isAppBarVisible = computed(() => uiStore.isAppBarVisible)
-
-  if (import.meta.env.VITE_USE_MOCK_CITY_DATA === 'true') {
-    initializeCityDataMock()
-  }
 
   onMounted(() => {
     connectionStore.resumeInterruptedAnalyses()

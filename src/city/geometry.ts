@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import type { CityNode, ProcessedNodeData } from '@/types'
-import { COLORS, BUILDING_HEIGHT_SCALE, BUILDING_WIDTH_SCALE } from '@/utils/city/constants'
+import { COLORS } from '@/city/constants'
 
 const geometryCache = new Map<string, THREE.BoxGeometry>()
 const edgesCache = new Map<string, Float32Array>()
@@ -150,14 +150,7 @@ export function createGeometry(
       const childZ = z - nodeData.depth / 2 + pos.z
       const childY = y + nodeData.height
 
-      createGeometry(
-        child,
-        nodeData.children[index],
-        childX,
-        childY,
-        childZ,
-        objectMap
-      )
+      createGeometry(child, nodeData.children[index], childX, childY, childZ, objectMap)
     })
   }
 }
@@ -199,7 +192,7 @@ export function clearColorData(objectMap: Map<any, any>): void {
 
   objectMap.forEach((data, key) => {
     if (typeof key !== 'string') return
-    
+
     if (data.type === 'building') {
       const mesh = data.mesh as THREE.InstancedMesh
       mesh.setColorAt(data.instanceIndex, new THREE.Color(COLORS.building))
@@ -207,7 +200,7 @@ export function clearColorData(objectMap: Map<any, any>): void {
     }
   })
 
-  updatedMeshes.forEach(mesh => {
+  updatedMeshes.forEach((mesh) => {
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
   })
 }
@@ -230,21 +223,21 @@ export function collectBuildingInstance(
   const buildHeight = nodeData.height
 
   const key = `building_${buildWidth}_${buildHeight}_${buildWidth}`
-  
+
   if (!instanceGroups.has(key)) {
     instanceGroups.set(key, { buildings: [] })
   }
-  
+
   const instance = instanceGroups.get(key)!
   const matrix = new THREE.Matrix4()
   matrix.setPosition(x, y + buildHeight / 2, z)
-  
+
   instance.buildings.push({
     node,
     matrix,
-    index: instance.buildings.length
+    index: instance.buildings.length,
   })
-  
+
   // Zbieranie edges
   const geometry = geometryCache.get(key.replace('building_', ''))
   if (!geometry) {
@@ -264,21 +257,21 @@ export function collectPlatformInstance(
   z: number
 ): void {
   const key = `platform_${nodeData.width}_${nodeData.height}_${nodeData.depth}`
-  
+
   if (!instanceGroups.has(key)) {
     instanceGroups.set(key, { buildings: [] })
   }
-  
+
   const instance = instanceGroups.get(key)!
   const matrix = new THREE.Matrix4()
   matrix.setPosition(x, y + nodeData.height / 2, z)
-  
+
   instance.buildings.push({
     node,
     matrix,
-    index: instance.buildings.length
+    index: instance.buildings.length,
   })
-  
+
   const geometry = geometryCache.get(key.replace('platform_', ''))
   if (!geometry) {
     const geom = new THREE.BoxGeometry(nodeData.width, nodeData.height, nodeData.depth)
@@ -290,17 +283,15 @@ export function collectPlatformInstance(
 }
 
 // Tworzenie wszystkich instancjonowanych mesh'y naraz
-export function createAllInstancedMeshes(
-  objectMap: Map<any, any>
-): THREE.Group {
+export function createAllInstancedMeshes(objectMap: Map<any, any>): THREE.Group {
   const group = new THREE.Group()
-  
+
   instanceGroups.forEach((instance, key) => {
     const [type, width, height, depth] = key.split('_')
     const w = parseFloat(width)
     const h = parseFloat(height)
     const d = parseFloat(depth)
-    
+
     // Pobierz lub stwórz geometrię
     const geomKey = `${w}_${h}_${d}`
     let geometry = geometryCache.get(geomKey)
@@ -308,52 +299,48 @@ export function createAllInstancedMeshes(
       geometry = new THREE.BoxGeometry(w, h, d)
       geometryCache.set(geomKey, geometry)
     }
-    
+
     // Stwórz material
     const color = type === 'building' ? COLORS.building : COLORS.platform
     const material = new THREE.MeshPhongMaterial({
       color: color,
       emissive: COLORS.emissiveColor,
     })
-    
+
     // Stwórz InstancedMesh
-    const mesh = new THREE.InstancedMesh(
-      geometry,
-      material,
-      instance.buildings.length
-    )
+    const mesh = new THREE.InstancedMesh(geometry, material, instance.buildings.length)
     mesh.castShadow = true
     mesh.receiveShadow = true
-    mesh.userData = { 
+    mesh.userData = {
       type: type,
       isInstanced: true,
-      instanceKey: key
+      instanceKey: key,
     }
-    
+
     // Ustaw matrixa i kolory dla każdej instancji
     instance.buildings.forEach((building, i) => {
       mesh.setMatrixAt(i, building.matrix)
       mesh.setColorAt(i, new THREE.Color(color))
-      
+
       // Mapuj indeks instancji do node
       // Klucz: `${instanceKey}_${instanceIndex}`
       objectMap.set(`${key}_${i}`, {
         node: building.node,
         mesh: mesh,
         instanceIndex: i,
-        type: type
+        type: type,
       })
     })
-    
+
     mesh.instanceMatrix.needsUpdate = true
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
-    
+
     group.add(mesh)
   })
-  
+
   // Wyczyść po użyciu
   instanceGroups.clear()
-  
+
   return group
 }
 

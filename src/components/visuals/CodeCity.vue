@@ -13,8 +13,13 @@
   import type { CityNode } from '@/types/city'
   import { useCodeCityScene } from '@/composables/useCodeCityScene'
   import { useCodeCityState } from '@/composables/useCodeCityState'
-  import { processNode } from '@/utils/city/layout'
-  import { createGeometry, createMergedEdges, getColorDataForPath, createAllInstancedMeshes } from '@/utils/city/geometry'
+  import { processNode } from '@/city/layout'
+  import {
+    createGeometry,
+    createMergedEdges,
+    getColorDataForPath,
+    createAllInstancedMeshes,
+  } from '@/city/geometry'
   import * as THREE from 'three'
   import {
     COLORS,
@@ -24,9 +29,9 @@
     CENTER_TRANSITION_SPEED,
     BUILDING_ZOOM,
     PLATFORM_ZOOM_MULT,
-  } from '@/utils/city/constants'
+  } from '@/city/constants'
   import { toRaw } from 'vue'
-  import { applyColorData, clearColorData } from '@/utils/city/geometry'
+  import { applyColorData, clearColorData } from '@/city/geometry'
   import { useCodeCityController } from '@/composables/useCodeCityController'
 
   const {
@@ -186,7 +191,9 @@
       mesh.setColorAt(hoveredObject.value.instanceIndex, new THREE.Color(COLORS.hover))
       if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
 
-      if (returnEmit) { emit('cityNodeHover', hoveredObject.value.node.path) }
+      if (returnEmit) {
+        emit('cityNodeHover', hoveredObject.value.node.path)
+      }
     }
   }
 
@@ -194,7 +201,9 @@
     if (hoveredObject.value && hoveredObject.value !== selectedObject.value) {
       restoreOriginalColor(hoveredObject.value)
 
-      if (returnEmit) { emit('cityNodeCancelHover', hoveredObject.value.node.path) }
+      if (returnEmit) {
+        emit('cityNodeCancelHover', hoveredObject.value.node.path)
+      }
     }
   }
 
