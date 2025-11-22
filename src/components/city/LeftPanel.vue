@@ -1,9 +1,9 @@
 <template>
   <aside class="left-panel" :style="{ maxHeight }">
     <div class="panel-header">
-      <h2>{{ props.label }}</h2>
+      <h2>{{ $t(props.labelKey) }}</h2>
 
-      <button v-if="props.showInfo" class="info-button" @mouseenter="props.onInfoHover?.()">
+      <button v-if="props.infoKey" class="info-button" :title="$t(props.infoKey)">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
           <path
@@ -20,7 +20,7 @@
       class="search-bar-wrapper"
       type="mini"
       :placeholder="$t('rightPanel.searchPlaceholder')"
-      :items="items || []"
+      :items="props.items || []"
       @filtered="handleFiltered"
     />
 
@@ -36,13 +36,6 @@
       >
         <slot name="item" :item="item">
           <span class="item-name">{{ item.name }}</span>
-          <span
-            v-if="item.displayValue !== undefined"
-            class="item-value"
-            :style="{ color: getIntensityColor(item.normalizedValue || 0) }"
-          >
-            {{ item.displayValue }}%
-          </span>
         </slot>
       </div>
     </div>
@@ -58,23 +51,17 @@
       items: Array<{
         path: string
         name: string
-        normalizedValue?: number
-        displayValue?: number
         [key: string]: any
       }>
-      label: string
-      sortBy?: string
-      sortOrder?: 'asc' | 'desc'
+      labelKey: string
+      infoKey?: string
       selectedPath?: string
       handleFileSelect?: (path: string) => void
       handleFileHover?: (path: string) => void
       handleFileCancelHover?: () => void
-      showInfo?: boolean
-      onInfoHover?: () => void
       maxHeight?: string
     }>(),
     {
-      sortOrder: 'desc',
       maxHeight: '100%',
     }
   )
@@ -82,40 +69,8 @@
   const maxHeight = computed(() => props.maxHeight)
   const filteredItems = ref<typeof props.items>([])
 
-  const sortedItems = computed(() => {
-    if (!props.sortBy) {
-      return props.items
-    }
-
-    return [...props.items].sort((a, b) => {
-      const aVal = a[props.sortBy!]
-      const bVal = b[props.sortBy!]
-
-      if (aVal === undefined || bVal === undefined) return 0
-
-      const comparison = aVal > bVal ? 1 : aVal < bVal ? -1 : 0
-      return props.sortOrder === 'desc' ? -comparison : comparison
-    })
-  })
-
-  const sortedFilteredItems = computed(() => {
-    if (!props.sortBy || filteredItems.value.length === 0) {
-      return filteredItems.value
-    }
-
-    return [...filteredItems.value].sort((a, b) => {
-      const aVal = a[props.sortBy!]
-      const bVal = b[props.sortBy!]
-
-      if (aVal === undefined || bVal === undefined) return 0
-
-      const comparison = aVal > bVal ? 1 : aVal < bVal ? -1 : 0
-      return props.sortOrder === 'desc' ? -comparison : comparison
-    })
-  })
-
   const displayItems = computed(() => {
-    return filteredItems.value.length > 0 ? sortedFilteredItems.value : sortedItems.value
+    return filteredItems.value
   })
 
   watch(
@@ -128,15 +83,6 @@
 
   function handleFiltered(filtered: typeof props.items) {
     filteredItems.value = filtered
-  }
-
-  function getIntensityColor(normalizedValue: number): string {
-    const percent = normalizedValue * 100
-    if (percent >= 80) return '#ff4444'
-    if (percent >= 60) return '#ff8844'
-    if (percent >= 40) return '#ffaa44'
-    if (percent >= 20) return '#ffcc44'
-    return '#ffee44'
   }
 </script>
 
@@ -228,12 +174,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-
-    .item-value {
-      flex: 0.5;
-      font-weight: 600;
-      font-size: $font-size-base;
     }
   }
 </style>

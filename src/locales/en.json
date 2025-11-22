@@ -100,12 +100,12 @@
 
   "sse": {
     "status": {
-      "queued": "Queued",
-      "cloning": "Cloning",
-      "updating": "Updating repository",
-      "processing-data": "Processing data",
-      "analyzing": "Analyzing",
-      "finalizing": "Finalizing",
+      "queued": "Waiting in queue...",
+      "cloning": "Cloning...",
+      "updating": "Updating repository...",
+      "processing-data": "Processing data...",
+      "analyzing": "Analyzing...",
+      "finalizing": "Finalizing...",
       "unknown": "Unknown status"
     },
     "analysis": {
@@ -136,6 +136,13 @@
     "searchPlaceholder": "Search in directory...",
     "items": "items",
     "noSelection": "Select a file or directory to view details"
+  },
+
+  "leftPanel": {
+    "hotspots": {
+      "header": "SUSPICIOUS FILES",
+      "info": "Files suspected of being system critical. Refactoring is recommended."
+    }
   },
 
   "common": {

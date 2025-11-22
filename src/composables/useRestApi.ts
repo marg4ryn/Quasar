@@ -47,23 +47,24 @@ export function useRestApi() {
   }
 
   function structure() {
-    if (!store.structure) {
-      const analysisId = getAnalysisId()
-      if (analysisId) {
-        handleFetch(
-          async () => {
-            const data = await api.fetchStructure(analysisId)
-            store.setStructure(data)
-          },
-          'structure',
-          'Structure fetched successfully'
-        )
-      }
-    } else {
+    const analysisId = getAnalysisId()
+
+    const structureComputed = computed(() => store.structure)
+
+    if (!store.structure && analysisId) {
+      handleFetch(
+        async () => {
+          const data = await api.fetchStructure(analysisId)
+          store.setStructure(data)
+        },
+        'structure',
+        'Structure fetched successfully'
+      )
+    } else if (store.structure) {
       log.info('Returning cached structure')
     }
 
-    return computed(() => store.structure)
+    return structureComputed
   }
 
   function fileMap() {

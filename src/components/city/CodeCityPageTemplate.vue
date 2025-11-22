@@ -25,52 +25,38 @@
         v-if="leftPanelConfig"
         class="left-panel"
         :class="{ 'has-second-panel': secondLeftPanelConfig }"
-        :label="leftPanelConfig.label"
+        :labelKey="leftPanelConfig.labelKey"
+        :infoKey="leftPanelConfig.infoKey"
         :items="leftPanelConfig.items"
-        :sortBy="leftPanelConfig.sortBy"
-        :sortOrder="leftPanelConfig.sortOrder"
         :selectedPath="selectedPath"
         :handleFileSelect="handleCityNodeSelect"
         :handleFileHover="handleCityNodeHover"
         :handleFileCancelHover="handleCityNodeCancelHover"
-        :showInfo="leftPanelConfig.showInfo"
       >
         <template #item="{ item }">
-          <slot name="leftPanelItem" :item="item">
-            <span class="item-name">{{ item.name }}</span>
-            <span
-              v-if="item.displayValue !== undefined"
-              class="item-value"
-              :style="{ color: getIntensityColor(item.normalizedValue ?? 0) }"
-            >
-              {{ item.displayValue }}%
-            </span>
-          </slot>
+          <slot name="leftPanelItem" :item="item" />
         </template>
       </LeftPanel>
 
       <LeftPanel
         v-if="secondLeftPanelConfig"
         class="left-panel second-panel"
-        :label="secondLeftPanelConfig.label"
+        :labelKey="secondLeftPanelConfig.labelKey"
+        :infoKey="secondLeftPanelConfig.infoKey"
         :items="secondLeftPanelConfig.items"
-        :sortBy="secondLeftPanelConfig.sortBy"
-        :sortOrder="secondLeftPanelConfig.sortOrder"
         :selectedPath="selectedPath"
         :handleFileSelect="handleCityNodeSelect"
         :handleFileHover="handleCityNodeHover"
         :handleFileCancelHover="handleCityNodeCancelHover"
-        :showInfo="secondLeftPanelConfig.showInfo"
       >
         <template #item="{ item }">
-          <slot name="secondLeftPanelItem" :item="item">
-            <span class="item-name">{{ item.name }}</span>
-          </slot>
+          <slot name="secondLeftPanelItem" :item="item" />
         </template>
       </LeftPanel>
     </div>
 
     <CodeCity
+      v-if="cityDataComputed"
       class="code-city"
       :data="cityDataComputed"
       :colorData="colorData"
@@ -107,17 +93,13 @@
   import CodeCity from '@/components/visuals/CodeCity.vue'
 
   interface LeftPanelConfig {
-    label: string
+    labelKey: string
+    infoKey?: string
     items: Array<{
       path: string
       name: string
-      normalizedValue?: number
-      displayValue?: number
       [key: string]: any
     }>
-    sortBy?: string
-    sortOrder?: 'asc' | 'desc'
-    showInfo?: boolean
   }
 
   interface RightPanelConfig {
@@ -210,12 +192,12 @@
   }
 
   function handleCityNodeHover(path: string) {
-    //hoveredPath.value = path
+    hoveredPath.value = path
     setCityNodeHoverByPath(path)
   }
 
   function handleCityNodeCancelHover() {
-    //hoveredPath.value = ''
+    hoveredPath.value = ''
     setCityNodeHoverByPath('')
   }
 

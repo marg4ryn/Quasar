@@ -1,11 +1,21 @@
 <template>
   <CodeCityPageTemplate
-    v-if="!isLoading"
     :tabs="tabs"
     :colorData="hotspotsColorData"
     :leftPanelConfig="leftPanelConfig"
     :rightPanelConfig="rightPanelConfig"
-  />
+  >
+    <template #leftPanelItem="{ item }">
+      <span class="item-name">{{ item.name }}</span>
+      <span
+        v-if="item.displayValue !== undefined"
+        class="item-value"
+        :style="{ color: getIntensityColor(item.normalizedValue ?? 0) }"
+      >
+        {{ item.displayValue }}%
+      </span>
+    </template>
+  </CodeCityPageTemplate>
 </template>
 
 <script setup lang="ts">
@@ -19,7 +29,6 @@
 
   const detailsRef = hotspotsDetails()
   const fileMapRef = fileMap()
-  const isLoading = ref(false)
 
   const rightPanelConfig = ref({
     metricTypes: [
@@ -75,24 +84,46 @@
       return []
     }
 
-    return data.map((item: HotspotsDetails) => {
-      const file = fileMap.get(item.path)
-      return {
-        path: item.path,
-        name: file?.name || item.path,
-        normalizedValue: item.normalizedValue,
-        displayValue: Math.round(item.normalizedValue * 100),
-      }
-    })
+    return data
+      .map((item: HotspotsDetails) => {
+        const file = fileMap.get(item.path)
+        return {
+          path: item.path,
+          name: file?.name || item.path,
+          normalizedValue: item.normalizedValue,
+          displayValue: Math.round(item.normalizedValue * 100),
+        }
+      })
+      .sort((a, b) => b.normalizedValue - a.normalizedValue)
   })
 
   const leftPanelConfig = computed(() => ({
-    label: 'SUSPICIOUS FILES',
+    labelKey: 'leftPanel.hotspots.header',
+    infoKey: 'leftPanel.hotspots.info',
     items: hotspotsItems.value,
-    sortBy: 'normalizedValue',
-    sortOrder: 'desc' as 'asc' | 'desc',
-    showInfo: true,
   }))
+
+  function getIntensityColor(normalizedValue: number): string {
+    const percent = normalizedValue * 100
+    if (percent >= 80) return '#ff4444'
+    if (percent >= 60) return '#ff8844'
+    if (percent >= 40) return '#ffaa44'
+    if (percent >= 20) return '#ffcc44'
+    return '#ffee44'
+  }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .item-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .item-value {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+</style>

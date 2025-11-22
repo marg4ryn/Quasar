@@ -100,12 +100,12 @@
 
   "sse": {
     "status": {
-      "queued": "Oczekuje w kolejce",
-      "cloning": "Klonowanie",
-      "updating": "Aktualizowanie repozytorium",
-      "processing-data": "Przetwarzanie danych",
-      "analyzing": "Analiza",
-      "finalizing": "Finalizowanie",
+      "queued": "Oczekiwanie w kolejce...",
+      "cloning": "Klonowanie...",
+      "updating": "Aktualizowanie repozytorium...",
+      "processing-data": "Przetwarzanie danych...",
+      "analyzing": "Analizowanie...",
+      "finalizing": "Finalizowanie...",
       "unknown": "Nieznany status"
     },
     "analysis": {
@@ -136,6 +136,13 @@
     "searchPlaceholder": "Szukaj w katalogu...",
     "items": "elementów",
     "noSelection": "Wybierz plik lub katalog, aby zobaczyć szczegóły"
+  },
+
+  "leftPanel": {
+    "hotspots": {
+      "header": "PODEJRZANE PLIKI",
+      "info": "Pliki podejrzane o bycie punktami krytycznymi systemu. Zalecana jest ich refaktoryzacja."
+    }
   },
 
   "metrics": {

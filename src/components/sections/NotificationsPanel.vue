@@ -155,7 +155,7 @@
     padding: $spacing-md;
     margin-bottom: $spacing-xs;
     border-radius: $radius-md;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-primary);
     border-left: 3px solid transparent;
     transition: all $transition-fast;
 
@@ -164,7 +164,7 @@
     }
 
     &:hover {
-      background-color: var(--color-bg-tertiary);
+      background-color: var(--color-bg-secondary);
       transform: translateX(2px);
     }
 
