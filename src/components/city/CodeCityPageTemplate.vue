@@ -210,12 +210,12 @@
   }
 
   function handleCityNodeHover(path: string) {
-    hoveredPath.value = path
+    //hoveredPath.value = path
     setCityNodeHoverByPath(path)
   }
 
   function handleCityNodeCancelHover() {
-    hoveredPath.value = ''
+    //hoveredPath.value = ''
     setCityNodeHoverByPath('')
   }
 
