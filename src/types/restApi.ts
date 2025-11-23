@@ -61,8 +61,6 @@ export interface FileListItem {
 export interface HotspotsDetails {
   path: string
   name: string
-  commitsInHotspotAnalysisPeriod: number
-  codeLines: number
   normalizedValue: number
 }
 

@@ -38,7 +38,12 @@
       <h3>{{ $t('rightPanel.fileMetrics') }}</h3>
 
       <div v-if="isDataLoading" class="metrics-loading">
-        <span>{{ $t('common.loading') }}</span>
+        <span
+          ><LoadingBar
+            :show="isFileDetailsLoading"
+            :label="'common.loading'"
+            :show-cancel-button="false"
+        /></span>
       </div>
 
       <div v-else-if="metricsError" class="metrics-error">
@@ -140,6 +145,7 @@
   import SourceCodeButton from '@/components/city/SourceCodeButton.vue'
   import AppButton from '@/components/common/AppButton.vue'
   import AppSearchBar from '@/components/common/AppSearchBar.vue'
+  import LoadingBar from '@/components/sections/LoadingBar.vue'
 
   const props = defineProps<{
     selectedItem?: CityNode | null
@@ -151,7 +157,7 @@
     metricTypes?: MetricType[]
   }>()
 
-  const { fileDetails } = useRestApi()
+  const { fileDetails, isFileDetailsLoading } = useRestApi()
   const metricsError = ref<string | null>(null)
 
   const currentFileDetails = computed<FileDetails | null>(() => {
@@ -243,6 +249,12 @@
   }
 
   .metrics-loading {
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
     background-color: var(--color-bg-secondary);
     color: var(--color-text-secondary);
   }

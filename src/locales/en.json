@@ -195,8 +195,10 @@
     "bugs": "Bugs",
     "vulnerabilities": "Vulnerabilities",
     "codeSmells": "Code Smells",
-    "complexity": "Complexity",
-    "duplicatedLinesDensity": "Duplicated Lines Density",
+    "codeSmellsInfo": "Number of quality problems found",
+    "complexity": "Cyclomatic Complexity",
+    "complexityInfo": "A measure of how many independent logical paths there are in the code, i.e. how difficult it is to test and maintain.",
+    "duplicatedLinesDensity": "Duplicated Lines",
     "knowledgeRiskEnum": {
       "abandoned": "ABANDONED",
       "singleOwner": "SINGLE OWNER",

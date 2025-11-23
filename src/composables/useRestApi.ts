@@ -39,7 +39,7 @@ export function useRestApi() {
       const error = err as ApiError
       const errorMsg = t(error.message) || t(`api.errors.${errorKey}Failed`)
       store.setError(errorKey, errorMsg)
-      log.error(`Failed to fetch ${errorKey}:`, error)
+      log.error(`${errorKey}:`, error)
       return false
     } finally {
       store.setLoading(errorKey, false)
@@ -171,7 +171,15 @@ export function useRestApi() {
     return computed(() => store.fileCouplingDetails)
   }
 
-  const isLoading = computed(() => Object.values(store.loading).some((v) => v))
+  const loadingValue = computed(() => store.loading)
+
+  const isFileDetailsLoading = computed(() => Boolean(loadingValue.value['fileDetails']))
+
+  const isGeneralLoading = computed(() =>
+    Object.entries(loadingValue.value)
+      .filter(([key]) => key !== 'fileDetails')
+      .some(([, v]) => v)
+  )
 
   return {
     structure,
@@ -181,7 +189,8 @@ export function useRestApi() {
     codeAgeDetails,
     fileCouplingDetails,
 
-    isLoading,
+    isFileDetailsLoading,
+    isGeneralLoading,
     errors: computed(() => store.errors),
 
     clearAll: store.clearAll,

@@ -1,4 +1,5 @@
 <template>
+  <LoadingBar :show="isGeneralLoading" :label="'common.loading'" :show-cancel-button="false" />
   <CodeCityPageTemplate
     ref="codeCityRef"
     :tabs="tabs"
@@ -39,8 +40,9 @@
   import { MetricType } from '@/types'
   import type { FileCouplingDetails, CoupledFile } from '@/types'
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
+  import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const { fileCouplingDetails, fileMap } = useRestApi()
+  const { fileCouplingDetails, fileMap, isGeneralLoading } = useRestApi()
 
   const detailsRef = fileCouplingDetails()
   const fileMapRef = fileMap()
@@ -56,6 +58,11 @@
       'codeLines',
       'commentLines',
       'blankLines',
+      'duplicatedLinesDensity',
+      'bugs',
+      'vulnerabilities',
+      'codeSmells',
+      'complexity',
       'totalCommits',
       'firstCommitDate',
       'lastCommitDate',
@@ -65,11 +72,6 @@
       'leadAuthor',
       'knowledgeRisk',
       'knowledgeLoss',
-      'bugs',
-      'vulnerabilities',
-      'codeSmells',
-      'complexity',
-      'duplicatedLinesDensity',
     ] as MetricType[],
   })
 

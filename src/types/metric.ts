@@ -263,6 +263,7 @@ export const allMetrics: MetricItem[] = [
       return details?.staticAnalysis?.codeSmells ?? null
     },
     requiresApi: true,
+    description: 'metrics.codeSmellsInfo',
   },
   {
     type: 'complexity',
@@ -272,13 +273,16 @@ export const allMetrics: MetricItem[] = [
       return details?.staticAnalysis?.complexity ?? null
     },
     requiresApi: true,
+    description: 'metrics.complexityInfo',
   },
   {
     type: 'duplicatedLinesDensity',
     label: 'metrics.duplicatedLinesDensity',
     getValue: (node: CityNode, metrics?: MetricsStore) => {
       const details = metrics?.fileDetails?.get(node.path)
-      return details?.staticAnalysis?.duplicatedLinesDensity ?? null
+      const duplicatedLinesDensity = details?.staticAnalysis?.duplicatedLinesDensity
+      if (!duplicatedLinesDensity && duplicatedLinesDensity !== 0) return null
+      return `${duplicatedLinesDensity.toFixed(1)}%`
     },
     requiresApi: true,
   },

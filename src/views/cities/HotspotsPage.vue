@@ -1,4 +1,5 @@
 <template>
+  <LoadingBar :show="isGeneralLoading" :label="'common.loading'" :show-cancel-button="false" />
   <CodeCityPageTemplate
     :tabs="tabs"
     :colorData="colorData"
@@ -24,8 +25,9 @@
   import { MetricType } from '@/types'
   import type { HotspotsDetails } from '@/types'
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
+  import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const { hotspotsDetails, fileMap } = useRestApi()
+  const { hotspotsDetails, fileMap, isGeneralLoading } = useRestApi()
 
   const detailsRef = hotspotsDetails()
   const fileMapRef = fileMap()
@@ -40,6 +42,11 @@
       'codeLines',
       'commentLines',
       'blankLines',
+      'duplicatedLinesDensity',
+      'bugs',
+      'vulnerabilities',
+      'codeSmells',
+      'complexity',
       'totalCommits',
       'firstCommitDate',
       'lastCommitDate',
@@ -49,11 +56,6 @@
       'leadAuthor',
       'knowledgeRisk',
       'knowledgeLoss',
-      'bugs',
-      'vulnerabilities',
-      'codeSmells',
-      'complexity',
-      'duplicatedLinesDensity',
     ] as MetricType[],
   })
 
