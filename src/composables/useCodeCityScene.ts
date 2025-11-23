@@ -25,14 +25,12 @@ export function useCodeCityScene(
   function initScene() {
     if (!container.value) return false
 
-    // Initialize raycaster and mouse
     raycaster = new THREE.Raycaster()
+    raycaster.params.Line = { threshold: 0.1 }
+    raycaster.params.Points = { threshold: 0.1 }
     mouse = new THREE.Vector2()
-
-    // Create a scene
     scene = new THREE.Scene()
 
-    // Create a camera
     camera = new THREE.PerspectiveCamera(
       60,
       container.value.clientWidth / container.value.clientHeight,
@@ -41,13 +39,12 @@ export function useCodeCityScene(
     )
     camera.position.set(initialZoom, initialZoom, initialZoom)
 
-    // Create a renderer
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(container.value.clientWidth, container.value.clientHeight)
     renderer.shadowMap.enabled = true
     container.value.appendChild(renderer.domElement)
 
-    // Add lights
+    // Lights
     const ambientLight = new THREE.AmbientLight(0xd9d9d9, 0.5)
     scene.add(ambientLight)
 

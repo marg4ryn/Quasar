@@ -283,8 +283,12 @@ export function collectPlatformInstance(
 }
 
 // Tworzenie wszystkich instancjonowanych mesh'y naraz
-export function createAllInstancedMeshes(objectMap: Map<any, any>): THREE.Group {
+export function createAllInstancedMeshes(objectMap: Map<any, any>): {
+  group: THREE.Group
+  meshes: THREE.InstancedMesh[]
+} {
   const group = new THREE.Group()
+  const meshes: THREE.InstancedMesh[] = []
 
   instanceGroups.forEach((instance, key) => {
     const [type, width, height, depth] = key.split('_')
@@ -335,13 +339,14 @@ export function createAllInstancedMeshes(objectMap: Map<any, any>): THREE.Group 
     mesh.instanceMatrix.needsUpdate = true
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
 
+    meshes.push(mesh)
     group.add(mesh)
   })
 
   // Wyczyść po użyciu
   instanceGroups.clear()
 
-  return group
+  return { group, meshes }
 }
 
 export function clearInstanceCache(): void {

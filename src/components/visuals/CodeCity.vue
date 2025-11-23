@@ -29,6 +29,9 @@
     CENTER_TRANSITION_SPEED,
     BUILDING_ZOOM,
     PLATFORM_ZOOM_MULT,
+    MIN_CAMERA_ROTATION_X,
+    MAX_CAMERA_ROTATION_X,
+    HOVER_CHECK_INTERVAL
   } from '@/city/constants'
   import { toRaw } from 'vue'
   import { applyColorData, clearColorData } from '@/city/geometry'
@@ -62,6 +65,9 @@
 
   const containerRef = ref<HTMLDivElement | null>(null)
   let animationId: number | null = null
+  let instancedMeshes: THREE.InstancedMesh[] = []
+  let isHoverCheckScheduled = false
+  let hoverCheckFrameCounter = 0
 
   // Composables
   const {
@@ -98,7 +104,7 @@
     rotationVelocity: { x: 0, y: 0 },
     zoom: props.initialZoom,
     targetZoom: props.initialZoom,
-    lastInteractionTime: Date.now() - 3000,
+    lastInteractionTime: Date.now() - AUTO_ROTATE_DELAY,
     currentCenter: new THREE.Vector3(0, 0.5, 0),
     targetCenter: new THREE.Vector3(0, 0.5, 0),
   }
@@ -137,6 +143,8 @@
     if (camera) {
       controls.targetZoom = calculateOptimalZoom(instanceData, camera)
     }
+
+    controls.lastInteractionTime = Date.now()
 
     if (returnEmit) {
       const colorInfo = getColorDataForPath(instanceData.node.path)
@@ -269,37 +277,43 @@
   }
 
   function handleHover(cam: THREE.Camera, scn: THREE.Scene) {
-    if (controls.isDragging) return
+    if (controls.isDragging || isHoverCheckScheduled) return
+  
+    isHoverCheckScheduled = true
+    
+    requestAnimationFrame(() => {
+      const raycaster = getRaycaster()
+      const mouse = getMouse()
+      if (!raycaster || !mouse) {
+        isHoverCheckScheduled = false
+        return
+      }
 
-    const raycaster = getRaycaster()
-    const mouse = getMouse()
-    if (!raycaster || !mouse) return
+      raycaster.setFromCamera(mouse, cam)
+      const intersects = raycaster.intersectObjects(instancedMeshes, false)
 
-    raycaster.setFromCamera(mouse, cam)
-    const intersects = raycaster.intersectObjects(scn.children, true)
+      let newHoveredData = null
 
-    let newHoveredData = null
-
-    for (let intersect of intersects) {
-      if (intersect.object.userData.isInstanced && intersect.instanceId !== undefined) {
-        const mesh = intersect.object as THREE.InstancedMesh
-        const instanceKey = `${mesh.userData.instanceKey}_${intersect.instanceId}`
-        newHoveredData = objectMap.get(instanceKey)
-
-        if (newHoveredData) {
-          newHoveredData.instanceId = intersect.instanceId
-          break
+      // Pierwszy intersect
+      if (intersects.length > 0) {
+        const intersect = intersects[0]
+        if (intersect.object.userData.isInstanced && intersect.instanceId !== undefined) {
+          const mesh = intersect.object as THREE.InstancedMesh
+          const instanceKey = `${mesh.userData.instanceKey}_${intersect.instanceId}`
+          newHoveredData = objectMap.get(instanceKey)
+          if (newHoveredData) {
+            newHoveredData.instanceId = intersect.instanceId
+          }
         }
       }
-    }
 
-    if (toRaw(newHoveredData) === toRaw(hoveredObject.value)) return
-
-    // Przywróć kolor poprzedniego obiektu (jeśli nie jest selected)
-    resetCityNodeHover(true)
-
-    // Ustaw nowy hovered object
-    setCityNodeHover(newHoveredData, true)
+      if (toRaw(newHoveredData) !== toRaw(hoveredObject.value)) {
+        resetCityNodeHover(true)
+        setCityNodeHover(newHoveredData, true)
+      }
+      
+      isHoverCheckScheduled = false
+    })
   }
 
   // ----- UTILS -----
@@ -434,11 +448,12 @@
 
       controls.targetRotation.x += controls.rotationVelocity.x
       controls.targetRotation.y += controls.rotationVelocity.y
-      controls.targetRotation.x = Math.max(
-        -Math.PI / 2,
-        Math.min(Math.PI / 2, controls.targetRotation.x)
-      )
     }
+
+    controls.targetRotation.x = Math.max(
+      MIN_CAMERA_ROTATION_X,
+      Math.min(MAX_CAMERA_ROTATION_X, controls.targetRotation.x)
+    )
 
     controls.rotation.x += (controls.targetRotation.x - controls.rotation.x) * CAMERA_DAMPING
     controls.rotation.y += (controls.targetRotation.y - controls.rotation.y) * CAMERA_DAMPING
@@ -476,7 +491,8 @@
     // Przetwórz dane i stwórz miasto
     const rootData = processNode(props.data)
     createGeometry(props.data, rootData, 0, 0, 0, objectMap)
-    const instancedCity = createAllInstancedMeshes(objectMap)
+    const { group: instancedCity, meshes } = createAllInstancedMeshes(objectMap)
+    instancedMeshes = meshes
     scene.add(instancedCity)
 
     const mergedEdges = createMergedEdges()
@@ -498,12 +514,19 @@
       animationId = requestAnimationFrame(animate)
       if (camera && scene && renderer) {
         updateCamera(camera)
+
         if (isMouseOverCanvas) {
-          handleHover(camera, scene)
+          hoverCheckFrameCounter++
+          if (hoverCheckFrameCounter >= HOVER_CHECK_INTERVAL) {
+            handleHover(camera, scene)
+            hoverCheckFrameCounter = 0
+          }
         }
+
         renderer.render(scene, camera)
       }
     }
+
     animate()
 
     // Obsługa resize

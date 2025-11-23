@@ -5,10 +5,13 @@ export const PLATFORM_HEIGHT = 1
 export const AREA_BUFFER = 1.4
 export const CAMERA_DAMPING = 0.05
 export const CENTER_TRANSITION_SPEED = 0.05
-export const AUTO_ROTATE_DELAY = 3000
+export const AUTO_ROTATE_DELAY = 30000
 export const AUTO_ROTATE_SPEED = 0.0015
 export const BUILDING_ZOOM = 100
 export const PLATFORM_ZOOM_MULT = 4
+export const MIN_CAMERA_ROTATION_X = 0
+export const MAX_CAMERA_ROTATION_X = Math.PI / 2  // (90 stopni)
+export const HOVER_CHECK_INTERVAL = 2 // w klatkach
 
 export const COLORS = {
   building: 0xf0f0f0,
