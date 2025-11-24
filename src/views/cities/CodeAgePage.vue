@@ -98,7 +98,7 @@
           displayValue: item.codeAgeDays,
         }
       })
-      .sort((a, b) => b.normalizedValue - a.normalizedValue)
+      .sort((a, b) => a.displayValue - b.displayValue)
   })
 
   const leftPanelConfig = computed(() => ({

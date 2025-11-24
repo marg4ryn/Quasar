@@ -143,11 +143,7 @@
   })
 
   const hoveredItem = computed(() => {
-    const rootData = cityDataComputed.value
-    if (!rootData) {
-      return null
-    }
-    return findNodeByPath(hoveredPath.value, rootData)
+    return filesComputed.value.get(hoveredPath.value) ?? null
   })
 
   onMounted(async () => {
@@ -183,7 +179,10 @@
   }
 
   function handleCityNodeHover(path: string) {
+    const start = performance.now()
     hoveredPath.value = path
+    const end = performance.now()
+    log.info(`lookup time: ${(end - start).toFixed(4)} ms, path: "${hoveredPath.value}"`)
     setCityNodeHoverByPath(path)
   }
 

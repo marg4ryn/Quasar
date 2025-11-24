@@ -28,12 +28,14 @@ export const useNotificationsStore = defineStore('notifications', () => {
     notifications.value = notifications.value.filter((n) => n.id !== id)
   }
 
-  const addNotification = (notification: Omit<Notification, 'id' | 'time' | 'read'>) => {
+  const addNotification = (notification: Omit<Notification, 'id' | 'date' | 'time' | 'read'>) => {
     const now = new Date()
+    const date = now.toISOString().split('T')[0]
     const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
     notifications.value.unshift({
       id: Date.now(),
+      date,
       time,
       read: false,
       ...notification,
@@ -47,6 +49,16 @@ export const useNotificationsStore = defineStore('notifications', () => {
     }
 
     showToast(notification.message, variantMap[notification.type] || 'info', 5000)
+  }
+
+  const formatNotificationTime = (notificationDate: string, notificationTime: string) => {
+    const today = new Date().toISOString().split('T')[0]
+
+    if (notificationDate === today) {
+      return notificationTime
+    }
+
+    return `${notificationDate} ${notificationTime}`
   }
 
   const markAsRead = (id: number) => {
@@ -79,6 +91,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
     closePanel,
     removeNotification,
     addNotification,
+    formatNotificationTime,
     markAsRead,
     markAllAsRead,
     clearAll,

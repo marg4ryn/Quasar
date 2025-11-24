@@ -20,7 +20,9 @@
             :class="['notification-item', `notification-item--${n.type}`]"
           >
             <div class="notification-item__header">
-              <span class="notification-item__time">{{ n.time }}</span>
+              <span class="notification-item__time">
+                {{ notificationsStore.formatNotificationTime(n.date, n.time) }}</span
+              >
               <button
                 class="notification-item__close"
                 @click.stop="notificationsStore.removeNotification(n.id)"
