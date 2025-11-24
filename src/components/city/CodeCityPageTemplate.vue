@@ -60,6 +60,7 @@
       class="code-city"
       :data="cityDataComputed"
       :colorData="colorData"
+      :autoRotate="autoRotate"
       @cityNodeClick="handleCityNodeClick"
       @cityNodeHover="handleCityNodeHover"
       @cityNodeCancelHover="handleCityNodeCancelHover"
@@ -133,6 +134,7 @@
   const mouseX = ref(0)
   const mouseY = ref(0)
   const showToolbar = ref(true)
+  const autoRotate = ref(true)
 
   const selectedItem = computed(() => {
     const rootData = cityDataComputed.value

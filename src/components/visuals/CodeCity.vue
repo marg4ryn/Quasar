@@ -95,6 +95,15 @@
     { deep: true }
   )
 
+  watch(
+    () => props.autoRotate,
+    (newValue) => {
+      if (newValue) {
+        controls.lastInteractionTime = Date.now() - AUTO_ROTATE_DELAY
+      }
+    }
+  )
+
   // Kontrolki
   const controls = {
     isDragging: false,
@@ -277,7 +286,13 @@
   }
 
   function handleHover(cam: THREE.Camera, scn: THREE.Scene) {
-    if (controls.isDragging || isHoverCheckScheduled) return
+    if (controls.isDragging) {
+      resetCityNodeHover(true)
+      setCityNodeHover(null, true)
+      return
+    }
+
+    if (isHoverCheckScheduled) return // Może wywołać potencjalne problemy ze stanem najechanych elementów przy dużych lagach
   
     isHoverCheckScheduled = true
     
@@ -438,7 +453,7 @@
 
   function updateCamera(cam: THREE.PerspectiveCamera) {
     const timeSinceInteraction = Date.now() - controls.lastInteractionTime
-    if (timeSinceInteraction > AUTO_ROTATE_DELAY) {
+    if (timeSinceInteraction > AUTO_ROTATE_DELAY && props.autoRotate) {
       controls.targetRotation.y += AUTO_ROTATE_SPEED
     }
 
