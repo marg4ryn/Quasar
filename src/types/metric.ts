@@ -170,6 +170,7 @@ export const allMetrics: MetricItem[] = [
       return details?.info?.commitsLastMonth ?? null
     },
     requiresApi: true,
+    description: 'metrics.commitsLastMonthInfo',
   },
   {
     type: 'commitsLastYear',
@@ -179,6 +180,7 @@ export const allMetrics: MetricItem[] = [
       return details?.info?.commitsLastYear ?? null
     },
     requiresApi: true,
+    description: 'metrics.commitsLastYearInfo',
   },
   {
     type: 'leadAuthor',
@@ -245,6 +247,7 @@ export const allMetrics: MetricItem[] = [
       return details?.staticAnalysis?.bugs ?? null
     },
     requiresApi: true,
+    description: 'metrics.bugsInfo',
   },
   {
     type: 'vulnerabilities',
@@ -254,6 +257,7 @@ export const allMetrics: MetricItem[] = [
       return details?.staticAnalysis?.vulnerabilities ?? null
     },
     requiresApi: true,
+    description: 'metrics.vulnerabilitiesInfo',
   },
   {
     type: 'codeSmells',

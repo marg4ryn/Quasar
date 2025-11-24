@@ -40,22 +40,22 @@
       'fileSize',
       'totalLines',
       'codeLines',
-      'commentLines',
       'blankLines',
+      'commentLines',
       'duplicatedLinesDensity',
-      'bugs',
-      'vulnerabilities',
-      'codeSmells',
-      'complexity',
       'totalCommits',
-      'firstCommitDate',
-      'lastCommitDate',
       'commitsLastMonth',
       'commitsLastYear',
+      'firstCommitDate',
+      'lastCommitDate',
       'activeAuthors',
       'leadAuthor',
       'knowledgeRisk',
       'knowledgeLoss',
+      'bugs',
+      'vulnerabilities',
+      'codeSmells',
+      'complexity',
     ] as MetricType[],
   })
 
@@ -103,6 +103,7 @@
 
   const leftPanelConfig = computed(() => ({
     labelKey: 'leftPanel.code-age.header',
+    infoKey: 'leftPanel.code-age.info',
     items: items.value,
   }))
 

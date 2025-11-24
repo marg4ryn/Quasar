@@ -40,22 +40,22 @@
       'fileSize',
       'totalLines',
       'codeLines',
-      'commentLines',
       'blankLines',
+      'commentLines',
       'duplicatedLinesDensity',
-      'bugs',
-      'vulnerabilities',
-      'codeSmells',
-      'complexity',
       'totalCommits',
-      'firstCommitDate',
-      'lastCommitDate',
       'commitsLastMonth',
       'commitsLastYear',
+      'firstCommitDate',
+      'lastCommitDate',
       'activeAuthors',
       'leadAuthor',
       'knowledgeRisk',
       'knowledgeLoss',
+      'bugs',
+      'vulnerabilities',
+      'codeSmells',
+      'complexity',
     ] as MetricType[],
   })
 
@@ -128,6 +128,6 @@
 
   .item-value {
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 </style>

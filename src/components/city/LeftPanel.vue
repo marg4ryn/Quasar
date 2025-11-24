@@ -3,17 +3,15 @@
     <div class="panel-header">
       <h2>{{ $t(props.labelKey) }}</h2>
 
-      <button v-if="props.infoKey" class="info-button" :title="$t(props.infoKey)">
-        <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
-          <path
-            d="M8 7V11M8 5V5.5"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-        </svg>
-      </button>
+      <div class="info-button">
+        <InfoTooltip
+          v-if="props.infoKey"
+          :text="$t(props.infoKey)"
+          position="bottom"
+          :width="350"
+          :icon-size="20"
+        />
+      </div>
     </div>
 
     <AppSearchBar
@@ -49,6 +47,7 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import AppSearchBar from '@/components/common/AppSearchBar.vue'
+  import InfoTooltip from '@/components/modals/InfoTooltip.vue'
 
   const props = withDefaults(
     defineProps<{
@@ -129,10 +128,10 @@
     .info-button {
       background: none;
       border: none;
-      color: var(--color-icon);
-      cursor: pointer;
       padding: 0.25rem;
       display: flex;
+      align-items: center;
+      justify-content: center;
       transition: color 0.3s ease;
 
       &:hover {

@@ -1,6 +1,12 @@
 <template>
   <Transition name="fade">
-    <div v-if="show" class="loading-overlay">
+    <div
+      v-if="show"
+      class="loading-overlay"
+      :style="{
+        background: props.blur ? 'rgba(0, 0, 0, 0.5)' : 'transparent',
+      }"
+    >
       <div class="loading-content">
         <div class="spinner">
           <div class="spinner-ring"></div>
@@ -38,6 +44,7 @@
 
   const props = defineProps<{
     label?: string
+    blur?: boolean
     show: boolean
     onCancel?: () => void
     showCancelButton?: boolean

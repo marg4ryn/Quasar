@@ -139,19 +139,19 @@
   "leftPanel": {
     "hotspots": {
       "header": "SUSPICIOUS FILES",
-      "info": "Files suspected of being system critical. Refactoring is recommended."
+      "info": "Files suspected of being system hotspots. Refactoring is recommended."
     },
     "code-age": {
       "header": "LATEST CHANGES",
+      "info": "Lists recently modified files and shows the number of days since they were last changed.",
       "days": "days"
     },
     "changeCoupling": {
       "header1": "FILES WITH COUPLING",
-      "info1": "Files that change frequently along with other files.",
+      "info1": "Files that are frequently modified together with others. This helps detect dependencies in the code.",
       "header2": "COUPLED FILES",
-      "info2": "Metrics: number of shared commits, percentage of all commits.",
-      "coupledFiles": "files",
-      "commits": "com"
+      "info2": "Files most frequently co-occurring in the same commits as the selected file.\nDisplayed values: number of shared commits and their share in the selected file's commits.",
+      "coupledFiles": "files"
     }
   },
 
@@ -164,7 +164,8 @@
     "confirm": "Confirm",
     "tryAgain": "Try Again",
     "loading": "Loading...",
-    "noFiles": "No files to display"
+    "noFiles": "No files to display",
+    "infoAria": "Informacja"
   },
 
   "metrics": {
@@ -182,20 +183,24 @@
     "firstCommitDate": "First Commit",
     "lastCommitDate": "Last Commit",
     "commitsLastMonth": "Commits (Last Month)",
+    "commitsLastMonthInfo": "Refers to the date the analysis was performed.",
     "commitsLastYear": "Commits (Last Year)",
+    "commitsLastYearInfo": "Refers to the date the analysis was performed.",
     "leadAuthor": "Lead Author",
     "leadAuthorInfo": "The person who wrote at least 60% of the file.",
     "activeAuthors": "Active Authors",
     "activeAuthorsInfo": "Persons who has made a change in the repository in the last 6 months.",
-    "knowledgeRisk": "Knowledge Risk",
+    "knowledgeRisk": "Knowledge Distribution",
     "knowledgeRiskInfo": "Category of knowledge dispersion about a file based on the number of its authors.",
     "knowledgeLoss": "Knowledge Loss",
     "knowledgeLossInfo": "Percentage of a file written by inactive authors.",
     "daysAgo": "{count} days ago",
     "bugs": "Bugs",
+    "bugsInfo": "Bugs Info.",
     "vulnerabilities": "Vulnerabilities",
+    "vulnerabilitiesInfo": "Vulnerabilities Info.",
     "codeSmells": "Code Smells",
-    "codeSmellsInfo": "Number of quality problems found",
+    "codeSmellsInfo": "Number of quality problems found.",
     "complexity": "Cyclomatic Complexity",
     "complexityInfo": "A measure of how many independent logical paths there are in the code, i.e. how difficult it is to test and maintain.",
     "duplicatedLinesDensity": "Duplicated Lines",
@@ -237,7 +242,7 @@
       "backendLabel": "Backend",
       "backend": "Java, Spring Boot, MongoDB",
       "frontendLabel": "Frontend",
-      "frontend": "TypeScript, Vue.js, Vite, SCSS",
+      "frontend": "TypeScript, Vue.js, SCSS",
       "visualizationsLabel": "Visualizations",
       "visualizations": "D3.js, Three.js",
       "analysisLabel": "Analysis",

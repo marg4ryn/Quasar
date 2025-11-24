@@ -26,9 +26,7 @@
         class="item-value"
         :style="{ color: getIntensityColorForCommits(item.percentage ?? 0) }"
       >
-        {{ item.sharedCommits }} {{ $t('leftPanel.changeCoupling.commits') }} ({{
-          item.percentage
-        }}%)
+        {{ item.sharedCommits }} ({{ item.percentage }}%)
       </span>
     </template>
   </CodeCityPageTemplate>
@@ -56,22 +54,22 @@
       'fileSize',
       'totalLines',
       'codeLines',
-      'commentLines',
       'blankLines',
+      'commentLines',
       'duplicatedLinesDensity',
-      'bugs',
-      'vulnerabilities',
-      'codeSmells',
-      'complexity',
       'totalCommits',
-      'firstCommitDate',
-      'lastCommitDate',
       'commitsLastMonth',
       'commitsLastYear',
+      'firstCommitDate',
+      'lastCommitDate',
       'activeAuthors',
       'leadAuthor',
       'knowledgeRisk',
       'knowledgeLoss',
+      'bugs',
+      'vulnerabilities',
+      'codeSmells',
+      'complexity',
     ] as MetricType[],
   })
 

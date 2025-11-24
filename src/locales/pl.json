@@ -139,19 +139,19 @@
   "leftPanel": {
     "hotspots": {
       "header": "PODEJRZANE PLIKI",
-      "info": "Pliki podejrzane o bycie punktami krytycznymi systemu. Zalecana jest ich refaktoryzacja."
+      "info": "Pliki podejrzane o bycie punktami krytycznymi systemu (hotspotami). Zalecana jest ich refaktoryzacja."
     },
     "code-age": {
       "header": "NAJNOWSZE ZMIANY",
+      "info": "Wyszczególnia ostatnio modyfikowane pliki i pokazuje liczbę dni, które minęły od ich ostatniej zmiany.",
       "days": "dni"
     },
     "changeCoupling": {
       "header1": "PLIKI Z POWIĄZANIAMI",
-      "info1": "Pliki, które często zmieniają się wraz z innymi plikami.",
+      "info1": "Pliki, które są często modyfikowane razem z innymi. Pomaga to wykrywać zależności w kodzie.",
       "header2": "POWIĄZANE PLIKI",
-      "info2": "Metryki: liczba wspólnych commitów, procent wszystkich commitów.",
-      "coupledFiles": "plików",
-      "commits": "com"
+      "info2": "Pliki najczęściej współwystępujące w tych samych commitach z wybranym plikiem.\nWyświetlane wartości: liczba wspólnych commitów i ich udział w commitach wybranego pliku.",
+      "coupledFiles": "plików"
     }
   },
 
@@ -170,20 +170,24 @@
     "firstCommitDate": "Pierwszy commit",
     "lastCommitDate": "Ostatni commit",
     "commitsLastMonth": "Commity (ostatni miesiąc)",
+    "commitsLastMonthInfo": "Odnosi się do daty wykonania analizy.",
     "commitsLastYear": "Commity (ostatni rok)",
+    "commitsLastYearInfo": "Odnosi się do daty wykonania analizy.",
     "leadAuthor": "Główny autor",
     "leadAuthorInfo": "Osoba, która napisała przynajmniej 60% pliku.",
     "activeAuthors": "Aktywni autorzy",
     "activeAuthorsInfo": "Osoby, które wprowadziły zmianę do repozytorium w ciągu ostatnich 6 miesięcy.",
-    "knowledgeRisk": "Ryzyko wiedzy",
-    "knowledgeRiskInfo": "Kategoria rozproszenia wiedzy o pliku na podstawie liczby jego autorów.",
+    "knowledgeRisk": "Rozkład wiedzy",
+    "knowledgeRiskInfo": "Kategoria rozproszenia wiedzy o pliku na podstawie liczby jego autorów:\n- POJEDYNCZY WŁAŚCICIEL\n- ZRÓWNOWAŻONY\n- ROZPROSZONY\n- OPUSZCZONY",
     "knowledgeLoss": "Utrata wiedzy",
     "knowledgeLossInfo": "Procent pliku napisany przez nieaktywnych autorów.",
     "daysAgo": "{count} dni temu",
     "bugs": "Błędy",
+    "bugsInfo": "Informacje o błędach.",
     "vulnerabilities": "Podatności",
+    "vulnerabilitiesInfo": "Informacje o podatnościach.",
     "codeSmells": "Problemy z jakością",
-    "codeSmellsInfo": "Liczba znalezonych problemów z jakością",
+    "codeSmellsInfo": "Liczba znalezionych problemów z jakością.",
     "complexity": "Złożoność cyklometryczna",
     "complexityInfo": "Miara określająca, ile niezależnych ścieżek logicznych występuje w kodzie, czyli jak trudny jest do testowania i utrzymania.",
     "duplicatedLinesDensity": "Linie powielone",
@@ -204,8 +208,9 @@
     "abort": "Przerwij",
     "confirm": "Potwierdź",
     "tryAgain": "Spróbuj ponownie",
-    "loading": "Wczytywanie...",
-    "noFiles": "Brak plików do wyświetlenia"
+    "loading": "Ładowanie...",
+    "noFiles": "Brak plików do wyświetlenia",
+    "infoAria": "Informacja"
   },
 
   "search": {
@@ -237,7 +242,7 @@
       "backendLabel": "Backend",
       "backend": "Java, Spring Boot, MongoDB",
       "frontendLabel": "Frontend",
-      "frontend": "TypeScript, Vue.js, Vite, SCSS",
+      "frontend": "TypeScript, Vue.js, SCSS",
       "visualizationsLabel": "Wizualizacje",
       "visualizations": "D3.js, Three.js",
       "analysisLabel": "Analiza",

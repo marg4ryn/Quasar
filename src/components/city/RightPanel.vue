@@ -41,6 +41,7 @@
         <span
           ><LoadingBar
             :show="isFileDetailsLoading"
+            :blur="false"
             :label="'common.loading'"
             :show-cancel-button="false"
         /></span>
@@ -52,19 +53,13 @@
 
       <div v-else-if="displayMetrics && displayMetrics.length" class="metrics-container">
         <div v-for="(metric, index) in displayMetrics" :key="index" class="metric-item">
-          <span class="metric-label"
-            >{{ $t(metric.label) }}:
-            <button v-if="metric.description" class="info-button" :title="$t(metric.description)">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
-                <path
-                  d="M8 7V11M8 5V5.5"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </button>
+          <span class="metric-label">
+            <InfoTooltip
+              v-if="metric.description"
+              :text="$t(metric.description)"
+              position="right"
+            />
+            {{ $t(metric.label) }}:
           </span>
           <span
             class="metric-value"
@@ -144,6 +139,7 @@
   import { useRestApi } from '@/composables/useRestApi'
   import SourceCodeButton from '@/components/city/SourceCodeButton.vue'
   import AppButton from '@/components/common/AppButton.vue'
+  import InfoTooltip from '@/components/modals/InfoTooltip.vue'
   import AppSearchBar from '@/components/common/AppSearchBar.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
@@ -255,7 +251,6 @@
     align-items: center;
     justify-content: center;
     flex: 1;
-    background-color: var(--color-bg-secondary);
     color: var(--color-text-secondary);
   }
 
