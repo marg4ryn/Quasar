@@ -30,7 +30,6 @@
 <script setup lang="ts">
   import { useUIStore } from '@/stores/uiStore'
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
-  import { useConnectionStore } from '@/stores/sseConnectorStore'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
   import { computed, ref } from 'vue'
@@ -63,7 +62,6 @@
 
   function handleNewAnalysis() {
     router.push('/welcome')
-    useConnectionStore().clearAll()
   }
 </script>
 

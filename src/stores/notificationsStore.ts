@@ -2,9 +2,13 @@ import { defineStore } from 'pinia'
 import { ref, watch, computed } from 'vue'
 import type { Notification } from '@/types'
 import { useToast } from '@/composables/useToast'
+import { useLogger } from '@/composables/useLogger'
 
 export const useNotificationsStore = defineStore('notifications', () => {
+  const log = useLogger('notificationsStore')
+
   const showPanel = ref(false)
+
   const notifications = ref<Notification[]>(
     JSON.parse(localStorage.getItem('notifications') || '[]')
   )
@@ -72,6 +76,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
 
   const clearAll = () => {
     notifications.value = []
+    log.info('All Notifications data cleared from cache')
   }
 
   watch(

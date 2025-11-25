@@ -1,11 +1,10 @@
 <template>
   <div class="code-city-page" @mousemove="handleMouseMove">
-    <div
-      v-if="hoveredItem && showToolbar"
-      class="hover-toolbar"
-      :style="{ left: mouseX + 'px', top: mouseY + 'px' }"
-    >
-      {{ hoveredItem.name }}
+    <div class="info-panel">
+      <div class="info-label">Wskazany obiekt:</div>
+      <div class="info-value">
+        {{ hoveredItem && showToolbar ? hoveredItem.name : '' }}
+      </div>
     </div>
 
     <TabNavigation class="tab-nav" :tabs="tabs" />
@@ -187,10 +186,7 @@
   }
 
   function handleCityNodeHover(path: string) {
-    //const start = performance.now()
     hoveredPath.value = path
-    //const end = performance.now()
-    //log.info(`lookup time: ${(end - start).toFixed(4)} ms, path: "${hoveredPath.value}"`)
     setCityNodeHoverByPath(path)
   }
 
@@ -244,17 +240,40 @@
     justify-content: center;
   }
 
-  .hover-toolbar {
-    position: fixed;
+  .info-panel {
+    position: absolute;
     top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
+    left: calc(2rem + 320px);
+    background: var(--color-bg-primary);
+    padding: 12px 16px;
+    border-radius: $radius-xl;
+    border: 1px solid var(--color-border);
     z-index: 1000;
     pointer-events: none;
+    min-width: 260px;
+    height: 60px;
+  }
+
+  .info-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .info-value {
+    font-size: 14px;
+    font-weight: 500;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  .info-value:not(:empty) {
+    font-style: normal;
+    opacity: 1;
   }
 
   .tab-nav {
@@ -268,8 +287,7 @@
   .search-bar-wrapper {
     position: absolute;
     top: 1rem;
-    left: 68%;
-    transform: translateX(-50%);
+    right: calc(2rem + 320px);
     z-index: 10;
   }
 

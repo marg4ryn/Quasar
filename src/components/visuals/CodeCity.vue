@@ -31,7 +31,7 @@
     PLATFORM_ZOOM_MULT,
     MIN_CAMERA_ROTATION_X,
     MAX_CAMERA_ROTATION_X,
-    HOVER_CHECK_INTERVAL
+    HOVER_CHECK_INTERVAL,
   } from '@/city/constants'
   import { toRaw } from 'vue'
   import { applyColorData, clearColorData } from '@/city/geometry'
@@ -293,9 +293,9 @@
     }
 
     if (isHoverCheckScheduled) return // Może wywołać potencjalne problemy ze stanem najechanych elementów przy dużych lagach
-  
+
     isHoverCheckScheduled = true
-    
+
     requestAnimationFrame(() => {
       const raycaster = getRaycaster()
       const mouse = getMouse()
@@ -326,7 +326,7 @@
         resetCityNodeHover(true)
         setCityNodeHover(newHoveredData, true)
       }
-      
+
       isHoverCheckScheduled = false
     })
   }

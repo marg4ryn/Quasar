@@ -86,8 +86,8 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, watch, onBeforeMount } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { ref, computed, watch } from 'vue'
+  import { useRouter, onBeforeRouteLeave } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
@@ -99,6 +99,7 @@
 
   const { t } = useI18n()
   const router = useRouter()
+  const api = useRestApi()
   const log = useLogger('WelcomePage')
   const newAnalysisStore = useNewAnalysisStore()
   const userSettingsStore = useUserSettingsStore()
@@ -118,9 +119,8 @@
   const fromDateError = ref('')
   const toDateError = ref('')
 
-  onBeforeMount(() => {
-    console.log('hey')
-    useRestApi().clearAll()
+  onBeforeRouteLeave((to, from, next) => {
+    api.clearAll().then(() => next())
   })
 
   const { isRunning, isCompleted, statusLabel, start, stop } = useSseConnector(

@@ -30,7 +30,7 @@
 <script setup lang="ts">
   import { useUIStore } from '@/stores/uiStore'
   import { RouterView } from 'vue-router'
-  import { computed, onBeforeUnmount } from 'vue'
+  import { computed, onBeforeMount } from 'vue'
   import { useUserSettingsStore } from './stores/userSettingsStore'
   import { useNotificationsStore } from './stores/notificationsStore'
   import { useToast } from '@/composables/useToast'
@@ -50,7 +50,7 @@
   const isNavBarVisible = computed(() => uiStore.isNavBarVisible)
   const isAppBarVisible = computed(() => uiStore.isAppBarVisible)
 
-  onBeforeUnmount(() => {
+  onBeforeMount(() => {
     notificationsStore.clearAll()
   })
 </script>
