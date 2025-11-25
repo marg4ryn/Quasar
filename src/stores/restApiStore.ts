@@ -11,17 +11,41 @@ import type {
 import { useLogger } from '@/composables/useLogger'
 
 const log = useLogger('apiStore')
-const STORAGE_KEY = 'api-store'
+const CACHE_NAME = 'api-store-v1'
 
-interface ApiStoreState {
-  structure: CityNode | null
-  fileMap: Array<[string, { path: string; name: string }]> | null
-  fileDetails: Record<string, FileDetailsResponse>
-  hotspotsDetails: HotspotsResponse | null
-  codeAgeDetails: CodeAgeResponse | null
-  fileCouplingDetails: FileCouplingResponse | null
-  loading: Record<string, boolean>
-  errors: Record<string, string | null>
+async function getCacheItem<T>(key: string): Promise<T | null> {
+  try {
+    const cache = await caches.open(CACHE_NAME)
+    const response = await cache.match(key)
+    if (response) {
+      return await response.json()
+    }
+    return null
+  } catch (error) {
+    log.error(`Failed to get ${key} from cache:`, error)
+    return null
+  }
+}
+
+async function setCacheItem<T>(key: string, value: T): Promise<void> {
+  try {
+    const cache = await caches.open(CACHE_NAME)
+    const response = new Response(JSON.stringify(value), {
+      headers: { 'Content-Type': 'application/json' },
+    })
+    await cache.put(key, response)
+  } catch (error) {
+    log.error(`Failed to set ${key} in cache:`, error)
+  }
+}
+
+async function deleteCacheItem(key: string): Promise<void> {
+  try {
+    const cache = await caches.open(CACHE_NAME)
+    await cache.delete(key)
+  } catch (error) {
+    log.error(`Failed to delete ${key} from cache:`, error)
+  }
 }
 
 export const useRestApiStore = defineStore('api', () => {
@@ -34,57 +58,107 @@ export const useRestApiStore = defineStore('api', () => {
   const loading = ref<Record<string, boolean>>({})
   const errors = ref<Record<string, string | null>>({})
 
-  function loadFromStorage() {
+  async function loadFromCache() {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        const data: ApiStoreState = JSON.parse(stored)
-        structure.value = data.structure || null
-        fileMap.value = data.fileMap ? new Map(data.fileMap) : new Map()
-        fileDetails.value = data.fileDetails || {}
-        hotspotsDetails.value = data.hotspotsDetails || null
-        codeAgeDetails.value = data.codeAgeDetails || null
-        fileCouplingDetails.value = data.fileCouplingDetails || null
-        loading.value = data.loading || {}
-        errors.value = data.errors || {}
-        log.info('Data loaded from localStorage')
-      }
-    } catch (error) {
-      log.error('Failed to load from localStorage:', error)
-    }
-  }
+      const [
+        cachedStructure,
+        cachedFileMap,
+        cachedFileDetailsList,
+        cachedHotspots,
+        cachedCodeAge,
+        cachedFileCoupling,
+      ] = await Promise.all([
+        getCacheItem<CityNode>('structure'),
+        getCacheItem<Array<[string, { path: string; name: string }]>>('fileMap'),
+        getCacheItem<FileDetailsResponse[]>('fileDetailsList'),
+        getCacheItem<HotspotsResponse>('hotspots'),
+        getCacheItem<CodeAgeResponse>('codeAge'),
+        getCacheItem<FileCouplingResponse>('fileCoupling'),
+      ])
 
-  function saveToStorage() {
-    try {
-      const data: ApiStoreState = {
-        structure: structure.value,
-        fileMap: fileMap.value.size > 0 ? Array.from(fileMap.value.entries()) : null,
-        fileDetails: fileDetails.value,
-        hotspotsDetails: hotspotsDetails.value,
-        codeAgeDetails: codeAgeDetails.value,
-        fileCouplingDetails: fileCouplingDetails.value,
-        loading: loading.value,
-        errors: errors.value,
+      structure.value = cachedStructure
+      fileMap.value = cachedFileMap ? new Map(cachedFileMap) : new Map()
+
+      if (cachedFileDetailsList) {
+        fileDetails.value = {}
+        for (const detail of cachedFileDetailsList) {
+          if (detail.info.path) {
+            fileDetails.value[detail.info.path] = detail
+          }
+        }
       }
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
-      log.info('Data saved to localStorage')
+
+      hotspotsDetails.value = cachedHotspots
+      codeAgeDetails.value = cachedCodeAge
+      fileCouplingDetails.value = cachedFileCoupling
+
+      log.info('Data loaded from Cache API')
     } catch (error) {
-      log.error('Failed to save to localStorage:', error)
+      log.error('Failed to load from cache:', error)
     }
   }
 
   watch(
-    [
-      structure,
-      fileMap,
-      fileDetails,
-      hotspotsDetails,
-      codeAgeDetails,
-      fileCouplingDetails,
-      loading,
-      errors,
-    ],
-    () => saveToStorage(),
+    structure,
+    (value) => {
+      if (value) {
+        setCacheItem('structure', value)
+      } else {
+        deleteCacheItem('structure')
+      }
+    },
+    { deep: true }
+  )
+
+  watch(
+    fileMap,
+    (value) => {
+      if (value.size > 0) {
+        setCacheItem('fileMap', Array.from(value.entries()))
+      } else {
+        deleteCacheItem('fileMap')
+      }
+    },
+    { deep: true }
+  )
+
+  watch(
+    fileDetails,
+    (value) => {
+      const detailsList = Object.values(value)
+      if (detailsList.length > 0) {
+        setCacheItem('fileDetailsList', detailsList)
+      } else {
+        deleteCacheItem('fileDetailsList')
+      }
+    },
+    { deep: true }
+  )
+
+  watch(
+    hotspotsDetails,
+    (value) => {
+      if (value) setCacheItem('hotspots', value)
+      else deleteCacheItem('hotspots')
+    },
+    { deep: true }
+  )
+
+  watch(
+    codeAgeDetails,
+    (value) => {
+      if (value) setCacheItem('codeAge', value)
+      else deleteCacheItem('codeAge')
+    },
+    { deep: true }
+  )
+
+  watch(
+    fileCouplingDetails,
+    (value) => {
+      if (value) setCacheItem('fileCoupling', value)
+      else deleteCacheItem('fileCoupling')
+    },
     { deep: true }
   )
 
@@ -155,7 +229,7 @@ export const useRestApiStore = defineStore('api', () => {
     }
   }
 
-  function clearAll() {
+  async function clearAll() {
     structure.value = null
     fileMap.value = new Map()
     fileDetails.value = {}
@@ -164,11 +238,16 @@ export const useRestApiStore = defineStore('api', () => {
     fileCouplingDetails.value = null
     loading.value = {}
     errors.value = {}
-    localStorage.removeItem(STORAGE_KEY)
-    log.info('All API data cleared')
+
+    try {
+      await caches.delete(CACHE_NAME)
+      log.info('All API data cleared from cache')
+    } catch (error) {
+      log.error('Failed to clear cache:', error)
+    }
   }
 
-  loadFromStorage()
+  loadFromCache()
 
   return {
     // State

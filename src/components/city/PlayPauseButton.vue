@@ -29,7 +29,7 @@
     width: 3.5rem;
     height: 3.5rem;
     background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid var(--color-border);
     border-radius: 50%;
     backdrop-filter: blur(4px);
     cursor: pointer;
@@ -39,7 +39,7 @@
     transition: all 0.3s ease;
 
     &:hover {
-      border-color: rgba(255, 255, 255, 0.5);
+      border-color: var(--color-border-hover);
       transform: scale(1.1);
     }
 

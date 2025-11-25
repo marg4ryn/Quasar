@@ -181,8 +181,7 @@ export const useConnectionStore = defineStore('connections', () => {
     }
   }
 
-  const clearStorage = () => {
-    localStorage.removeItem(STORAGE_KEY)
+  const clearAll = () => {
     analyses.value.clear()
   }
 
@@ -193,6 +192,6 @@ export const useConnectionStore = defineStore('connections', () => {
     initializeAnalysis,
     startAnalysis,
     stopAnalysis,
-    clearStorage,
+    clearAll,
   }
 })

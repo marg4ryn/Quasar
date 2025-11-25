@@ -56,6 +56,7 @@
       'codeLines',
       'blankLines',
       'commentLines',
+      'totalLinesAdded',
       'duplicatedLinesDensity',
       'totalCommits',
       'commitsLastMonth',

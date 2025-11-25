@@ -60,7 +60,6 @@ export interface FileListItem {
 
 export interface HotspotsDetails {
   path: string
-  name: string
   normalizedValue: number
 }
 

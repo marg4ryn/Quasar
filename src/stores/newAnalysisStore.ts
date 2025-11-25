@@ -2,9 +2,22 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 
 export const useNewAnalysisStore = defineStore('newAnalysis', () => {
-  const link = ref(localStorage.getItem('link') || '')
-  const fromDate = ref(localStorage.getItem('fromDate') || '')
-  const toDate = ref(localStorage.getItem('toDate') || '')
+  const stored = JSON.parse(localStorage.getItem('newAnalysis') || '{}')
+
+  const link = ref(stored.link || '')
+  const fromDate = ref(stored.fromDate || '')
+  const toDate = ref(stored.toDate || '')
+
+  watch([link, fromDate, toDate], () => {
+    localStorage.setItem(
+      'newAnalysis',
+      JSON.stringify({
+        link: link.value,
+        fromDate: fromDate.value,
+        toDate: toDate.value,
+      })
+    )
+  })
 
   function setLink(newLink: string) {
     link.value = newLink
@@ -17,18 +30,6 @@ export const useNewAnalysisStore = defineStore('newAnalysis', () => {
   function setToDate(to: string) {
     toDate.value = to
   }
-
-  watch(link, (value) => {
-    localStorage.setItem('link', value)
-  })
-
-  watch(fromDate, (value) => {
-    localStorage.setItem('fromDate', value)
-  })
-
-  watch(toDate, (value) => {
-    localStorage.setItem('toDate', value)
-  })
 
   return {
     link,

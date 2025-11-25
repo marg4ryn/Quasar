@@ -16,17 +16,9 @@
     </button>
 
     <Transition name="tooltip-fade">
-      <div
-        v-if="showTooltip"
-        class="tooltip"
-        :class="[`tooltip-${position}`, { 'tooltip-multiline': isMultiline }]"
-        role="tooltip"
-      >
+      <div v-if="showTooltip" class="tooltip" :class="`tooltip-${position}`" role="tooltip">
         <div class="tooltip-content">
-          <template v-for="(line, index) in lines" :key="index">
-            {{ line }}
-            <br v-if="index < lines.length - 1" />
-          </template>
+          {{ text }}
         </div>
         <div class="tooltip-arrow"></div>
       </div>
@@ -68,42 +60,6 @@
       return {
         showTooltip: false,
       }
-    },
-    computed: {
-      lines() {
-        const baseLines = this.text
-          .split(/\n+/)
-          .map((line) => line.trim())
-          .filter((line) => line)
-
-        if (!this.charsPerLine) {
-          return baseLines
-        }
-
-        return baseLines.flatMap((line) => {
-          if (line.length <= this.charsPerLine) return [line]
-
-          const words = line.split(' ')
-          const wrappedLines = []
-          let currentLine = ''
-
-          words.forEach((word) => {
-            if ((currentLine + ' ' + word).trim().length <= this.charsPerLine) {
-              currentLine += (currentLine ? ' ' : '') + word
-            } else {
-              if (currentLine) wrappedLines.push(currentLine)
-              currentLine = word
-            }
-          })
-
-          if (currentLine) wrappedLines.push(currentLine)
-          return wrappedLines
-        })
-      },
-
-      isMultiline() {
-        return this.lines.length > 1
-      },
     },
   }
 </script>
@@ -151,15 +107,13 @@
     pointer-events: none;
     width: v-bind('`${width}px`');
     white-space: normal;
+    overflow-wrap: break-word;
+    text-align: left;
   }
 
   .tooltip-content {
     position: relative;
     z-index: 1;
-  }
-
-  .tooltip-multiline {
-    text-align: left;
   }
 
   .tooltip-top {

@@ -143,7 +143,7 @@
     },
     "code-age": {
       "header": "NAJNOWSZE ZMIANY",
-      "info": "Wyszczególnia ostatnio modyfikowane pliki i pokazuje liczbę dni, które minęły od ich ostatniej zmiany.",
+      "info": "Wyszczególnia ostatnio zmodyfikowane pliki i pokazuje liczbę dni, które minęły od ich ostatniej zmiany względem daty kończącej analizowany okres.",
       "days": "dni"
     },
     "changeCoupling": {
@@ -170,26 +170,26 @@
     "firstCommitDate": "Pierwszy commit",
     "lastCommitDate": "Ostatni commit",
     "commitsLastMonth": "Commity (ostatni miesiąc)",
-    "commitsLastMonthInfo": "Odnosi się do daty wykonania analizy.",
     "commitsLastYear": "Commity (ostatni rok)",
-    "commitsLastYearInfo": "Odnosi się do daty wykonania analizy.",
     "leadAuthor": "Główny autor",
-    "leadAuthorInfo": "Osoba, która napisała przynajmniej 60% pliku.",
+    "leadAuthorInfo": "Autor największej łącznej liczby linii w historii pliku.",
+    "totalLinesAdded": "Linie historyczne",
+    "totalLinesAddedInfo": "Łączna liczba linii napisanych w historii pliku.",
     "activeAuthors": "Aktywni autorzy",
     "activeAuthorsInfo": "Osoby, które wprowadziły zmianę do repozytorium w ciągu ostatnich 6 miesięcy.",
     "knowledgeRisk": "Rozkład wiedzy",
-    "knowledgeRiskInfo": "Kategoria rozproszenia wiedzy o pliku na podstawie liczby jego autorów:\n- POJEDYNCZY WŁAŚCICIEL\n- ZRÓWNOWAŻONY\n- ROZPROSZONY\n- OPUSZCZONY",
+    "knowledgeRiskInfo": "Kategoria rozproszenia autorstwa pliku, określana na podstawie liczby i aktywności jego współautorów.",
     "knowledgeLoss": "Utrata wiedzy",
-    "knowledgeLossInfo": "Procent pliku napisany przez nieaktywnych autorów.",
+    "knowledgeLossInfo": "Procent łącznej historycznej liczby linii pliku pochodzących od nieaktywnych autorów.",
     "daysAgo": "{count} dni temu",
     "bugs": "Błędy",
-    "bugsInfo": "Informacje o błędach.",
+    "bugsInfo": "Potencjalne przyczyny awarii, np. możliwe wystąpienie Null Pointer Exception.",
     "vulnerabilities": "Podatności",
-    "vulnerabilitiesInfo": "Informacje o podatnościach.",
-    "codeSmells": "Problemy z jakością",
-    "codeSmellsInfo": "Liczba znalezionych problemów z jakością.",
+    "vulnerabilitiesInfo": "Wykryte podatności powiązane z kodem CVE.",
+    "codeSmells": "Brzydkie zapachy kodu",
+    "codeSmellsInfo": "Problemy utrudniające utrzymanie kodu, niewywołujące błędów kompilacji.",
     "complexity": "Złożoność cyklometryczna",
-    "complexityInfo": "Miara określająca, ile niezależnych ścieżek logicznych występuje w kodzie, czyli jak trudny jest do testowania i utrzymania.",
+    "complexityInfo": "Miara określająca, ile niezależnych ścieżek logicznych występuje w kodzie.",
     "duplicatedLinesDensity": "Linie powielone",
     "knowledgeRiskEnum": {
       "abandoned": "OPUSZCZONY",
@@ -197,7 +197,8 @@
       "balanced": "ZRÓWNOWAŻONY",
       "diffused": "ROZPROSZONY",
       "unknown": "NIEZNANY"
-    }
+    },
+    "dateInfo": "Stan na dzień kończący analizowany okres."
   },
 
   "common": {

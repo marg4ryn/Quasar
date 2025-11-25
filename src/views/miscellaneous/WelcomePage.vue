@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, watch, onMounted } from 'vue'
+  import { ref, computed, watch, onBeforeMount } from 'vue'
   import { useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
@@ -118,7 +118,8 @@
   const fromDateError = ref('')
   const toDateError = ref('')
 
-  onMounted(() => {
+  onBeforeMount(() => {
+    console.log('hey')
     useRestApi().clearAll()
   })
 
@@ -271,14 +272,14 @@
       newAnalysisStore.setFromDate(fromDate.value)
       newAnalysisStore.setToDate(toDate.value)
     } else {
-      newAnalysisStore.setFromDate(MIN_DATE)
-      newAnalysisStore.setToDate(MAX_DATE)
+      newAnalysisStore.setFromDate('')
+      newAnalysisStore.setToDate('')
     }
 
     start({
       repositoryUrl: link.value.trim(),
-      startDate: fromDate.value,
-      endDate: toDate.value,
+      startDate: newAnalysisStore.fromDate.value,
+      endDate: newAnalysisStore.toDate.value,
     })
   }
 

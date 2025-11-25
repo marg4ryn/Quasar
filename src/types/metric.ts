@@ -25,6 +25,7 @@ export type MetricType =
   | 'commitsLastMonth'
   | 'commitsLastYear'
   | 'leadAuthor'
+  | 'totalLinesAdded'
   | 'activeAuthors'
   | 'knowledgeRisk'
   | 'knowledgeLoss'
@@ -145,8 +146,7 @@ export const allMetrics: MetricItem[] = [
       const details = metrics?.fileDetails?.get(node.path)
       const date = details?.info?.firstCommitDate
       if (!date) return null
-      const daysAgo = Math.floor((Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24))
-      return `${date} (${t('metrics.daysAgo', { count: daysAgo })})`
+      return date
     },
     requiresApi: true,
   },
@@ -157,10 +157,10 @@ export const allMetrics: MetricItem[] = [
       const details = metrics?.fileDetails?.get(node.path)
       const date = details?.info?.lastCommitDate
       if (!date) return null
-      const daysAgo = Math.floor((Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24))
-      return `${date} (${t('metrics.daysAgo', { count: daysAgo })})`
+      return `${date} (${t('metrics.daysAgo', { count: details?.info?.codeAgeDays })})`
     },
     requiresApi: true,
+    description: 'metrics.dateInfo',
   },
   {
     type: 'commitsLastMonth',
@@ -170,7 +170,7 @@ export const allMetrics: MetricItem[] = [
       return details?.info?.commitsLastMonth ?? null
     },
     requiresApi: true,
-    description: 'metrics.commitsLastMonthInfo',
+    description: 'metrics.dateInfo',
   },
   {
     type: 'commitsLastYear',
@@ -180,7 +180,7 @@ export const allMetrics: MetricItem[] = [
       return details?.info?.commitsLastYear ?? null
     },
     requiresApi: true,
-    description: 'metrics.commitsLastYearInfo',
+    description: 'metrics.dateInfo',
   },
   {
     type: 'leadAuthor',
@@ -194,6 +194,16 @@ export const allMetrics: MetricItem[] = [
     },
     requiresApi: true,
     description: 'metrics.leadAuthorInfo',
+  },
+  {
+    type: 'totalLinesAdded',
+    label: 'metrics.totalLinesAdded',
+    getValue: (node: CityNode, metrics?: MetricsStore) => {
+      const details = metrics?.fileDetails?.get(node.path)
+      return details?.knowledge?.totalLinesAdded ?? null
+    },
+    requiresApi: true,
+    description: 'metrics.totalLinesAddedInfo',
   },
   {
     type: 'knowledgeRisk',

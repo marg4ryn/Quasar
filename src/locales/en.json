@@ -143,7 +143,7 @@
     },
     "code-age": {
       "header": "LATEST CHANGES",
-      "info": "Lists recently modified files and shows the number of days since they were last changed.",
+      "info": "Lists recently modified files and shows the number of days that have passed since they were last modified, relative to the end date of the analyzed period.",
       "days": "days"
     },
     "changeCoupling": {
@@ -183,26 +183,26 @@
     "firstCommitDate": "First Commit",
     "lastCommitDate": "Last Commit",
     "commitsLastMonth": "Commits (Last Month)",
-    "commitsLastMonthInfo": "Refers to the date the analysis was performed.",
     "commitsLastYear": "Commits (Last Year)",
-    "commitsLastYearInfo": "Refers to the date the analysis was performed.",
     "leadAuthor": "Lead Author",
-    "leadAuthorInfo": "The person who wrote at least 60% of the file.",
+    "leadAuthorInfo": "Author of the largest total number of lines in the history of a file.",
+    "totalLinesAdded": "Historical Lines",
+    "totalLinesAddedInfo": "Total number of lines written in the file history.",
     "activeAuthors": "Active Authors",
     "activeAuthorsInfo": "Persons who has made a change in the repository in the last 6 months.",
     "knowledgeRisk": "Knowledge Distribution",
-    "knowledgeRiskInfo": "Category of knowledge dispersion about a file based on the number of its authors.",
+    "knowledgeRiskInfo": "The authorship distribution category of a file, determined by the number and activity of its co-authors.",
     "knowledgeLoss": "Knowledge Loss",
-    "knowledgeLossInfo": "Percentage of a file written by inactive authors.",
+    "knowledgeLossInfo": "The percentage of the file's total historical lines that come from inactive authors.",
     "daysAgo": "{count} days ago",
     "bugs": "Bugs",
-    "bugsInfo": "Bugs Info.",
+    "bugsInfo": "Potential causes of failure, e.g. possible Null Pointer Exception.",
     "vulnerabilities": "Vulnerabilities",
-    "vulnerabilitiesInfo": "Vulnerabilities Info.",
+    "vulnerabilitiesInfo": "Detected vulnerabilities related to CVE code.",
     "codeSmells": "Code Smells",
-    "codeSmellsInfo": "Number of quality problems found.",
+    "codeSmellsInfo": "Problems that make the code difficult to maintain but do not cause compilation errors.",
     "complexity": "Cyclomatic Complexity",
-    "complexityInfo": "A measure of how many independent logical paths there are in the code, i.e. how difficult it is to test and maintain.",
+    "complexityInfo": "A measure of how many independent logical paths there are in the code.",
     "duplicatedLinesDensity": "Duplicated Lines",
     "knowledgeRiskEnum": {
       "abandoned": "ABANDONED",
@@ -210,7 +210,8 @@
       "balanced": "BALANCED",
       "diffused": "DIFFUSED",
       "unknown": "UNKNOWN"
-    }
+    },
+    "dateInfo": "Status as of the end of the analyzed period."
   },
 
   "search": {
