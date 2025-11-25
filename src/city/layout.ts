@@ -269,10 +269,9 @@ export function processNode(node: CityNode): ProcessedNodeData {
 
   // Jeśli to plik
   if (node.height !== undefined && node.width !== undefined) {
-    const width = node.width < 0.1 ? 0.1 * BUILDING_WIDTH_SCALE : node.width * BUILDING_WIDTH_SCALE
+    const width = (0.1 + node.width) * BUILDING_WIDTH_SCALE
     const depth = width
-    const height =
-      node.height < 0.1 ? 0.1 * BUILDING_HEIGHT_SCALE : node.height * BUILDING_HEIGHT_SCALE
+    const height = (0.1 + node.height) * BUILDING_HEIGHT_SCALE
 
     return {
       width,

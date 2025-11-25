@@ -1,6 +1,6 @@
 export const SPACING = 1.5
 export const BUILDING_HEIGHT_SCALE = 30
-export const BUILDING_WIDTH_SCALE = 10
+export const BUILDING_WIDTH_SCALE = 12
 export const PLATFORM_HEIGHT = 1
 export const AREA_BUFFER = 1.4
 export const CAMERA_DAMPING = 0.05
@@ -12,6 +12,7 @@ export const PLATFORM_ZOOM_MULT = 4
 export const MIN_CAMERA_ROTATION_X = 0
 export const MAX_CAMERA_ROTATION_X = Math.PI / 2 // 90 stopni
 export const HOVER_CHECK_INTERVAL = 2 // w klatkach
+export const EDGE_THICKNESS = 0.1
 
 export const COLORS = {
   building: 0xf0f0f0,
