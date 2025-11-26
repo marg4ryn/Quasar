@@ -36,35 +36,25 @@
       'fileSize',
       'totalLines',
       'codeLines',
-      'blankLines',
-      'commentLines',
-      'totalLinesAdded',
-      'duplicatedLinesDensity',
       'totalCommits',
-      'commitsLastMonth',
-      'commitsLastYear',
-      'firstCommitDate',
-      'lastCommitDate',
       'activeAuthors',
       'leadAuthor',
       'knowledgeRisk',
       'knowledgeLoss',
-      'bugs',
-      'vulnerabilities',
-      'codeSmells',
-      'complexity',
+      'firstCommitDate',
+      'lastCommitDate',
     ] as MetricType[],
   })
 
   const tabs = [
-    { id: 'developer-view', label: 'navbar.developer-view', route: '/developer-view' },
-    { id: 'team-view', label: 'navbar.team-view', route: '/team-view' },
-    { id: 'abandoned-code', label: 'navbar.abandoned-code', route: '/abandoned-code' },
+    { id: 'developers-list', label: 'navbar.developers-list', route: '/developers-list' },
+    { id: 'lead-developers', label: 'navbar.lead-developers', route: '/lead-developers' },
     {
-      id: 'responsibility-diffusion',
-      label: 'navbar.responsibility-diffusion',
-      route: '/responsibility-diffusion',
+      id: 'knowledge-risks',
+      label: 'navbar.knowledge-risks',
+      route: '/knowledge-risks',
     },
+    { id: 'abandoned-code', label: 'navbar.abandoned-code', route: '/abandoned-code' },
     {
       id: 'developer-relationships',
       label: 'navbar.developer-relationships',
@@ -73,16 +63,15 @@
   ]
 
   const colorPalette = [
-    '#00FF00',
-    '#32CD33',
-    '#0000FF',
-    '#00FFFF',
-    '#40E0D0',
-    '#BF1B1B',
-    '#FF6666',
-    '#FF8C42',
-    '#BF00FF',
-    '#FF33AA',
+    '#00FF00', // lime
+    '#40E0D0', // turquoise
+    '#FF6666', // red
+    '#BF00FF', // violet
+    '#32CD33', // emerald
+    '#00FFFF', // cyan
+    '#FF33AA', // pink
+    '#FF8C42', // orange
+    '#BF1B1B', // crimson
   ]
 
   function getRandomColor(index: number): string {
@@ -140,8 +129,8 @@
 
   const leftPanelConfig = computed(() => ({
     itemType: 'author' as const,
-    labelKey: 'leftPanel.developer-view.header',
-    infoKey: 'leftPanel.developer-view.info',
+    labelKey: 'leftPanel.lead-developers.header',
+    infoKey: 'leftPanel.lead-developers.info',
     items: items.value,
   }))
 </script>

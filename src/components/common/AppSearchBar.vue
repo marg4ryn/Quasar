@@ -299,7 +299,7 @@
 
     &.normal {
       width: 100%;
-      background-color: var(--color-bg-primary);
+      background-color: rgba(0, 0, 0, 0.25);
     }
 
     &.mini {

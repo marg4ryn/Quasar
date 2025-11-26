@@ -76,7 +76,7 @@ export const api = {
   },
 
   async fetchFileList(analysisId: string): Promise<FileListResponse> {
-    return request<FileListResponse>(`analysis/${analysisId}/files`)
+    return request<FileListResponse>(`analysis/${analysisId}/items`)
   },
 
   async fetchFileDetails(analysisId: string, filePath: string): Promise<FileDetailsResponse> {

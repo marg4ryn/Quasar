@@ -47,35 +47,25 @@
       'fileSize',
       'totalLines',
       'codeLines',
-      'blankLines',
-      'commentLines',
-      'totalLinesAdded',
-      'duplicatedLinesDensity',
       'totalCommits',
-      'commitsLastMonth',
-      'commitsLastYear',
-      'firstCommitDate',
-      'lastCommitDate',
       'activeAuthors',
       'leadAuthor',
       'knowledgeRisk',
       'knowledgeLoss',
-      'bugs',
-      'vulnerabilities',
-      'codeSmells',
-      'complexity',
+      'firstCommitDate',
+      'lastCommitDate',
     ] as MetricType[],
   })
 
   const tabs = [
-    { id: 'developer-view', label: 'navbar.developer-view', route: '/developer-view' },
-    { id: 'team-view', label: 'navbar.team-view', route: '/team-view' },
-    { id: 'abandoned-code', label: 'navbar.abandoned-code', route: '/abandoned-code' },
+    { id: 'developers-list', label: 'navbar.developers-list', route: '/developers-list' },
+    { id: 'lead-developers', label: 'navbar.lead-developers', route: '/lead-developers' },
     {
-      id: 'responsibility-diffusion',
-      label: 'navbar.responsibility-diffusion',
-      route: '/responsibility-diffusion',
+      id: 'knowledge-risks',
+      label: 'navbar.knowledge-risks',
+      route: '/knowledge-risks',
     },
+    { id: 'abandoned-code', label: 'navbar.abandoned-code', route: '/abandoned-code' },
     {
       id: 'developer-relationships',
       label: 'navbar.developer-relationships',
@@ -141,11 +131,12 @@
           return {
             path: item.name,
             name: item.name,
-            displayValue: item.filesAsLeadAuthor,
+            displayValue: item.existingFilesModified,
             isActive: item.isActive,
+            filesEdited: item.existingFilesModified,
           }
         })
-        .filter((item) => item.isActive === false)
+        .filter((item) => item.isActive === false && item.filesEdited !== 0)
         .sort((a, b) => b.displayValue - a.displayValue)
     })
 

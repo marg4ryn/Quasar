@@ -2,16 +2,16 @@
   "title": {
     "settings": "Ustawienia",
     "about": "O projekcie",
-    "change-coupling": "Powiązania plików",
-    "system-overview": "Przegląd repozytorium",
-    "technical-sprawl": "Rozszerzenia plików",
+    "files-coupling": "Powiązania plików",
+    "repository-overview": "Przegląd repozytorium",
+    "file-extensions": "Rozszerzenia plików",
     "hotspots": "Hotspoty",
     "code-age": "Wiek kodu",
-    "developer-view": "Główni deweloperzy",
-    "team-view": "Aktywność zespołu",
+    "lead-developers": "Główni deweloperzy",
+    "developers-list": "Lista deweloperów",
     "abandoned-code": "Martwy kod",
-    "responsibility-diffusion": "Rozproszenie własności",
-    "developer-relationships": "Relacje deweloperów"
+    "knowledge-risks": "Rozproszenie wiedzy",
+    "developer-relationships": "Powiązania deweloperów"
   },
 
   "appbar": {
@@ -25,16 +25,16 @@
   "navbar": {
     "summary": "Podsumowanie",
     "code-health": "Jakość kodu",
-    "change-coupling": "Powiązania plików",
+    "files-coupling": "Powiązania plików",
     "developers": "Deweloperzy",
-    "system-overview": "Przegląd repozytorium",
-    "technical-sprawl": "Rozszerzenia plików",
+    "repository-overview": "Przegląd repozytorium",
+    "file-extensions": "Rozszerzenia plików",
     "hotspots": "Hotspoty",
     "code-age": "Wiek kodu",
-    "developer-view": "Główni deweloperzy",
-    "team-view": "Aktywność zespołu",
+    "lead-developers": "Główni deweloperzy",
+    "developers-list": "Lista deweloperów",
     "abandoned-code": "Martwy kod",
-    "responsibility-diffusion": "Rozproszenie własności",
+    "knowledge-risks": "Rozproszenie wiedzy",
     "developer-relationships": "Powiązania deweloperów"
   },
 
@@ -148,25 +148,32 @@
       "info": "Wyszczególnia ostatnio zmodyfikowane pliki i pokazuje liczbę dni, które minęły od ich ostatniej zmiany względem daty kończącej analizowany okres.",
       "days": "dni"
     },
-    "changeCoupling": {
+    "filesCoupling": {
       "header1": "PLIKI Z POWIĄZANIAMI",
       "info1": "Pliki, które są często modyfikowane razem z innymi. Pomaga to wykrywać zależności w kodzie.",
       "header2": "POWIĄZANE PLIKI",
-      "info2": "Pliki najczęściej współwystępujące w tych samych commitach z wybranym plikiem.\nWyświetlane wartości: liczba wspólnych commitów i ich udział w commitach wybranego pliku."
+      "info2": "Pliki najczęściej współwystępujące w tych samych commitach z wybranym plikiem. Wyświetlane wartości: liczba wspólnych commitów i ich udział w commitach wybranego pliku."
     },
     "abandoned-code": {
       "header1": "PORZUCONE PLIKI",
       "info1": "Pliki, które były współtworzone przez nieaktywnych autorów.",
-      "header2": "NIEAKTYWNI DEWELOPERZY",
-      "info2": "Deweloperzy, którzy nie wprowadzili zmiany do repozytorium w ciągu ostatnich 6 miesięcy i liczba plików, których są głównym autorem."
+      "header2": "NIEAKTYWNI AUTORZY",
+      "info2": "Deweloperzy, którzy nie wprowadzili zmiany do repozytorium w ciągu ostatnich 6 miesięcy i liczba plików, których są współautorem."
     },
-    "responsibility-diffusion": {
-      "header1": "PLIKI BEZ WŁAŚCICIELA",
-      "info1": "Pliki, które nie mają jednego głównego autora.",
+    "knowledge-risks": {
+      "header1": "KATEGORIA PLIKU",
+      "info1": "Kategoria rozproszenia autorstwa pliku, określana na podstawie liczby i aktywności jego współautorów (OPU - opuszczony, POW - pojedynczy właściciel, ZRW - zrównoważony, ROZ - rozproszony, NZN - nieznany).",
       "header2": "AUTORZY PLIKU",
-      "info2": "Deweloperzy współtworzący plik oraz udział procentowy historycznych linii ich autorstwa."
+      "info2": "Deweloperzy współtworzący plik oraz udział procentowy historycznych linii ich autorstwa.",
+      "enum": {
+        "abandoned": "OPU",
+        "singleOwner": "POW",
+        "balanced": "ZRW",
+        "diffused": "ROZ",
+        "unknown": "NZN"
+      }
     },
-    "developer-view": {
+    "lead-developers": {
       "header": "GŁÓWNI DEWELOPERZY",
       "info": "Główni autorzy plików w repozytorium i liczba plików, których są głównym autorem."
     }
@@ -235,7 +242,7 @@
   },
 
   "search": {
-    "placeholder": "Szukaj plików...",
+    "placeholder": "Szukaj w repozytorium...",
     "noResults": "Nie znaleziono plików",
     "results": "{count} wyników",
     "moreResults": "więcej wyników"

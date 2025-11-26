@@ -125,7 +125,7 @@
 
   const { isRunning, isCompleted, statusLabel, start, stop } = useSseConnector(
     'download-repository',
-    '/system-overview',
+    '/repository-overview',
     'sse.analysis.repo-download'
   )
 
@@ -286,7 +286,7 @@
   watch(isCompleted, async (newValue) => {
     if (newValue) {
       resetNewAnalysisStore()
-      router.push('/system-overview')
+      router.push('/repository-overview')
     }
   })
 

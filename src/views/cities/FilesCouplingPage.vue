@@ -58,26 +58,22 @@
       'commentLines',
       'totalLinesAdded',
       'duplicatedLinesDensity',
-      'totalCommits',
-      'commitsLastMonth',
-      'commitsLastYear',
-      'firstCommitDate',
-      'lastCommitDate',
-      'activeAuthors',
-      'leadAuthor',
-      'knowledgeRisk',
-      'knowledgeLoss',
       'bugs',
       'vulnerabilities',
       'codeSmells',
       'complexity',
+      'totalCommits',
+      'activeAuthors',
+      'leadAuthor',
+      'firstCommitDate',
+      'lastCommitDate',
     ] as MetricType[],
   })
 
   const tabs = [
     { id: 'hotspots', label: 'navbar.hotspots', route: '/hotspots' },
     { id: 'code-age', label: 'navbar.code-age', route: '/code-age' },
-    { id: 'change-coupling', label: 'navbar.change-coupling', route: '/change-coupling' },
+    { id: 'files-coupling', label: 'navbar.files-coupling', route: '/files-coupling' },
   ]
 
   const colorData = computed(() => {
@@ -133,8 +129,8 @@
 
     if (!data || !Array.isArray(data) || !fileMap) {
       return {
-        labelKey: 'leftPanel.changeCoupling.header1',
-        infoKey: 'leftPanel.changeCoupling.info1',
+        labelKey: 'leftPanel.filesCoupling.header1',
+        infoKey: 'leftPanel.filesCoupling.info1',
         items: [],
       }
     }
@@ -152,8 +148,8 @@
       .sort((a, b) => b.coupledFilesCount - a.coupledFilesCount)
 
     return {
-      labelKey: 'leftPanel.changeCoupling.header1',
-      infoKey: 'leftPanel.changeCoupling.info1',
+      labelKey: 'leftPanel.filesCoupling.header1',
+      infoKey: 'leftPanel.filesCoupling.info1',
       items: filesWithCoupling,
     }
   })
@@ -165,8 +161,8 @@
 
     if (!data || !Array.isArray(data) || !fileMap || !selected) {
       return {
-        labelKey: 'leftPanel.changeCoupling.header2',
-        infoKey: 'leftPanel.changeCoupling.info2',
+        labelKey: 'leftPanel.filesCoupling.header2',
+        infoKey: 'leftPanel.filesCoupling.info2',
         items: [],
       }
     }
@@ -175,8 +171,8 @@
 
     if (!selectedFileDetails || selectedFileDetails.coupledFiles.length === 0) {
       return {
-        labelKey: 'leftPanel.changeCoupling.header2',
-        infoKey: 'leftPanel.changeCoupling.info2',
+        labelKey: 'leftPanel.filesCoupling.header2',
+        infoKey: 'leftPanel.filesCoupling.info2',
         items: [],
       }
     }
@@ -194,8 +190,8 @@
       .sort((a: { percentage: number }, b: { percentage: number }) => b.percentage - a.percentage)
 
     return {
-      labelKey: 'leftPanel.changeCoupling.header2',
-      infoKey: 'leftPanel.changeCoupling.info2',
+      labelKey: 'leftPanel.filesCoupling.header2',
+      infoKey: 'leftPanel.filesCoupling.info2',
       items: coupledItems,
     }
   })

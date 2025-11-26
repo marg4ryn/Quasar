@@ -1,10 +1,7 @@
 <template>
   <div class="code-city-page" @mousemove="handleMouseMove">
-    <div class="info-panel">
-      <div class="info-label">{{ $t('common.indicatedObject') }}:</div>
-      <div class="info-value">
-        {{ hoveredItem && showToolbar ? hoveredItem.name : '' }}
-      </div>
+    <div v-if="hoveredItem && showToolbar" class="hover-toolbar" :style="toolbarStyle">
+      {{ hoveredItem.name }}
     </div>
 
     <TabNavigation class="tab-nav" :tabs="tabs" />
@@ -158,6 +155,13 @@
   const mouseY = ref(0)
   const showToolbar = ref(true)
 
+  let rafId: number | null = null
+  let pendingMouseUpdate = false
+  let lastMouseX = 0
+  let lastMouseY = 0
+  let lastUpdate = 0
+  const throttleDelay = 50
+
   const selectedItem = computed(() => {
     const rootData = cityDataComputed.value
     if (!rootData) {
@@ -171,11 +175,14 @@
   })
 
   onMounted(async () => {
-    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mousemove', handleMouseMove, { passive: true })
   })
 
   onUnmounted(() => {
     window.removeEventListener('mousemove', handleMouseMove)
+    if (rafId) {
+      cancelAnimationFrame(rafId)
+    }
   })
 
   function findNodeByPath(path: string, root: CityNode): CityNode | null {
@@ -244,14 +251,30 @@
     selectCityNode(parentPath)
   }
 
+  const toolbarStyle = computed(() => ({
+    transform: `translate(${mouseX.value}px, ${mouseY.value}px)`,
+  }))
+
   function handleMouseMove(e: MouseEvent) {
-    mouseX.value = e.clientX + 10
-    mouseY.value = e.clientY + 10
+    lastMouseX = e.clientX + 10
+    lastMouseY = e.clientY + 10
+
     const target = e.target as HTMLElement
     const isOverPanel = target.closest(
       '.left-panel, .left-panels-container, .right-panel, .search-dropdown'
     )
     showToolbar.value = !isOverPanel
+
+    const now = Date.now()
+    if (!pendingMouseUpdate && now - lastUpdate >= throttleDelay) {
+      pendingMouseUpdate = true
+      lastUpdate = now
+      rafId = requestAnimationFrame(() => {
+        mouseX.value = lastMouseX
+        mouseY.value = lastMouseY
+        pendingMouseUpdate = false
+      })
+    }
   }
 
   defineExpose({
@@ -272,34 +295,17 @@
     justify-content: center;
   }
 
-  .info-panel {
-    position: absolute;
-    top: 1rem;
-    left: calc(2rem + 320px);
-    background: var(--color-bg-primary);
-    padding: 12px 16px;
-    border-radius: $radius-xl;
-    border: 1px solid var(--color-border);
-    z-index: 11;
+  .hover-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    z-index: 1000;
     pointer-events: none;
-    min-width: 260px;
-    height: 60px;
-  }
-
-  .info-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    opacity: 0.7;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .info-value {
-    font-size: 14px;
-    font-weight: 500;
-    opacity: 0.8;
+    will-change: transform;
   }
 
   .tab-nav {

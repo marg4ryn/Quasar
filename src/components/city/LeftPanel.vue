@@ -95,7 +95,7 @@
   const filteredItems = ref<typeof props.items>([])
 
   const displayItems = computed(() => {
-    return filteredItems.value
+    return filteredItems.value.slice(0, 100)
   })
 
   const searchPlaceholder = computed(() => {

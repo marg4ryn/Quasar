@@ -42,8 +42,8 @@
       label: t('navbar.summary'),
       icon: '/icons/loupe.png',
       submenu: [
-        { label: t('navbar.system-overview'), to: '/system-overview' },
-        { label: t('navbar.technical-sprawl'), to: '/technical-sprawl' },
+        { label: t('navbar.repository-overview'), to: '/repository-overview' },
+        { label: t('navbar.file-extensions'), to: '/file-extensions' },
       ],
     },
     {
@@ -52,17 +52,17 @@
       submenu: [
         { label: t('navbar.hotspots'), to: '/hotspots' },
         { label: t('navbar.code-age'), to: '/code-age' },
-        { label: t('navbar.change-coupling'), to: '/change-coupling' },
+        { label: t('navbar.files-coupling'), to: '/files-coupling' },
       ],
     },
     {
       label: t('navbar.developers'),
       icon: '/icons/group.png',
       submenu: [
-        { label: t('navbar.developer-view'), to: '/developer-view' },
-        { label: t('navbar.team-view'), to: '/team-view' },
+        { label: t('navbar.developers-list'), to: '/developers-list' },
+        { label: t('navbar.lead-developers'), to: '/lead-developers' },
+        { label: t('navbar.knowledge-risks'), to: '/knowledge-risks' },
         { label: t('navbar.abandoned-code'), to: '/abandoned-code' },
-        { label: t('navbar.responsibility-diffusion'), to: '/responsibility-diffusion' },
         { label: t('navbar.developer-relationships'), to: '/developer-relationships' },
       ],
     },

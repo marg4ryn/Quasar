@@ -5,18 +5,18 @@ import { useUIStore } from '@/stores/uiStore'
 const Welcome = () => import('@/views/miscellaneous/WelcomePage.vue')
 const Settings = () => import('@/views/miscellaneous/SettingsPage.vue')
 const About = () => import('@/views/miscellaneous/AboutPage.vue')
-const SystemOverview = () => import('@/views/miscellaneous/SystemOverviewPage.vue')
+const RepositoryOverview = () => import('@/views/miscellaneous/RepositoryOverviewPage.vue')
+const DevelopersList = () => import('@/views/miscellaneous/DevelopersListPage.vue')
 
 const DeveloperRelationships = () => import('@/views/relationships/DeveloperRelationshipsPage.vue')
 
-const TechnicalSprawl = () => import('@/views/cities/TechnicalSprawlPage.vue')
+const FileExtensions = () => import('@/views/cities/FileExtensionsPage.vue')
 const Hotspots = () => import('@/views/cities/HotspotsPage.vue')
 const CodeAge = () => import('@/views/cities/CodeAgePage.vue')
-const ChangeCoupling = () => import('@/views/cities/ChangeCouplingPage.vue')
-const DeveloperView = () => import('@/views/cities/DeveloperViewPage.vue')
-const TeamView = () => import('@/views/cities/TeamViewPage.vue')
+const FilesCoupling = () => import('@/views/cities/FilesCouplingPage.vue')
+const LeadDevelopers = () => import('@/views/cities/LeadDevelopersPage.vue')
 const AbandonedCode = () => import('@/views/cities/AbandonedCodePage.vue')
-const ResponsibilityDiffusion = () => import('@/views/cities/ResponsibilityDiffusionPage.vue')
+const KnowledgeRisks = () => import('@/views/cities/KnowledgeRisksPage.vue')
 
 export default function (): Router {
   const routes = [
@@ -48,25 +48,35 @@ export default function (): Router {
       component: About,
     },
     {
-      path: '/system-overview',
-      name: 'system-overview',
+      path: '/repository-overview',
+      name: 'repository-overview',
       meta: {
-        titleKey: 'title.system-overview',
+        titleKey: 'title.repository-overview',
         showNavBar: true,
         showAppBar: true,
       },
-      component: SystemOverview,
+      component: RepositoryOverview,
+    },
+    {
+      path: '/developers-list',
+      name: 'developers-list',
+      meta: {
+        titleKey: 'title.developers-list',
+        showNavBar: true,
+        showAppBar: true,
+      },
+      component: DevelopersList,
     },
 
     {
-      path: '/technical-sprawl',
-      name: 'technical-sprawl',
+      path: '/file-extensions',
+      name: 'file-extensions',
       meta: {
-        titleKey: 'title.technical-sprawl',
+        titleKey: 'title.file-extensions',
         showNavBar: true,
         showAppBar: true,
       },
-      component: TechnicalSprawl,
+      component: FileExtensions,
     },
     {
       path: '/hotspots',
@@ -89,34 +99,24 @@ export default function (): Router {
       component: CodeAge,
     },
     {
-      path: '/change-coupling',
-      name: 'change-coupling',
+      path: '/files-coupling',
+      name: 'files-coupling',
       meta: {
-        titleKey: 'title.change-coupling',
+        titleKey: 'title.files-coupling',
         showNavBar: true,
         showAppBar: true,
       },
-      component: ChangeCoupling,
+      component: FilesCoupling,
     },
     {
-      path: '/developer-view',
-      name: 'developer-view',
+      path: '/lead-developers',
+      name: 'lead-developers',
       meta: {
-        titleKey: 'title.developer-view',
+        titleKey: 'title.lead-developers',
         showNavBar: true,
         showAppBar: true,
       },
-      component: DeveloperView,
-    },
-    {
-      path: '/team-view',
-      name: 'team-view',
-      meta: {
-        titleKey: 'title.team-view',
-        showNavBar: true,
-        showAppBar: true,
-      },
-      component: TeamView,
+      component: LeadDevelopers,
     },
     {
       path: '/abandoned-code',
@@ -129,14 +129,14 @@ export default function (): Router {
       component: AbandonedCode,
     },
     {
-      path: '/responsibility-diffusion',
-      name: 'responsibility-diffusion',
+      path: '/knowledge-risks',
+      name: 'knowledge-risks',
       meta: {
-        titleKey: 'title.responsibility-diffusion',
+        titleKey: 'title.knowledge-risks',
         showNavBar: true,
         showAppBar: true,
       },
-      component: ResponsibilityDiffusion,
+      component: KnowledgeRisks,
     },
 
     {

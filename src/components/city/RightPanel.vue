@@ -35,8 +35,6 @@
     </div>
 
     <div v-if="selectedItem && selectedItem.type === 'file'" class="file-details">
-      <h3>{{ $t('rightPanel.fileMetrics') }}</h3>
-
       <div v-if="isDataLoading" class="metrics-loading">
         <span
           ><LoadingBar
@@ -51,29 +49,32 @@
         <span>{{ metricsError }}</span>
       </div>
 
-      <div v-else-if="displayMetrics && displayMetrics.length" class="metrics-container">
-        <div v-for="(metric, index) in displayMetrics" :key="index" class="metric-item">
-          <span class="metric-label">
-            <InfoTooltip
-              v-if="metric.description"
-              :text="$t(metric.description)"
-              position="right"
-            />
-            {{ $t(metric.label) }}:
-          </span>
-          <span
-            class="metric-value"
-            :class="{ 'metric-unavailable': isMetricUnavailable(metric) }"
-            :style="metric.getStyle ? metric.getStyle(selectedItem, metricsStoreAdapter) : {}"
-          >
-            {{ getMetricDisplayValue(metric) }}
-          </span>
+      <div v-else-if="displayMetrics && displayMetrics.length" class="file-details">
+        <h3>{{ $t('rightPanel.fileMetrics') }}</h3>
+        <div class="metrics-container">
+          <div v-for="(metric, index) in displayMetrics" :key="index" class="metric-item">
+            <span class="metric-label">
+              <InfoTooltip
+                v-if="metric.description"
+                :text="$t(metric.description)"
+                position="right"
+              />
+              {{ $t(metric.label) }}:
+            </span>
+            <span
+              class="metric-value"
+              :class="{ 'metric-unavailable': isMetricUnavailable(metric) }"
+              :style="metric.getStyle ? metric.getStyle(selectedItem, metricsStoreAdapter) : {}"
+            >
+              {{ getMetricDisplayValue(metric) }}
+            </span>
+          </div>
         </div>
-      </div>
 
-      <div class="action-buttons">
-        <AppButton :label="$t('rightPanel.xray')" variant="primary" @click="onXRay" />
-        <SourceCodeButton @click="onSourceCode" />
+        <div class="action-buttons">
+          <AppButton :label="$t('rightPanel.xray')" variant="primary" @click="onXRay" />
+          <SourceCodeButton @click="onSourceCode" />
+        </div>
       </div>
     </div>
 
@@ -232,7 +233,13 @@
   }
 
   function onXRay() {}
-  function onSourceCode() {}
+
+  function onSourceCode() {
+    if (props.selectedItem && currentFileDetails.value) {
+      const url = currentFileDetails.value.info.url
+      window.open(url, '_blank', 'noopener,noreferrer')
+    }
+  }
 </script>
 
 <style scoped lang="scss">

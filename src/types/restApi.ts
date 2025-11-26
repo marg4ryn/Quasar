@@ -9,6 +9,7 @@ export interface FileInfo {
   name: string
   type: string | null
   size: string
+  url: string
   totalLines: number | null
   codeLines: number | null
   commentLines: number | null

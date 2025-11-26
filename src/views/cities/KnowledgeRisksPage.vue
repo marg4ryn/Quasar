@@ -10,6 +10,9 @@
   >
     <template #leftPanelItem="{ item }">
       <span class="item-name">{{ item.name }}</span>
+      <span class="item-value" :style="{ color: getStatusColor(item.displayValue) }">
+        {{ getTranslatedStatus(item.displayValue) }}
+      </span>
     </template>
 
     <template #secondLeftPanelItem="{ item }">
@@ -21,6 +24,7 @@
 
 <script setup lang="ts">
   import { ref, computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRestApi } from '@/composables/useRestApi'
   import { MetricType, AuthorContribution } from '@/types'
   import type { KnowledgeLossDetails } from '@/types'
@@ -29,6 +33,7 @@
 
   const { knowledgeLossDetails, fileMap, fileDetails, isGeneralLoading } = useRestApi()
 
+  const { t } = useI18n()
   const detailsRef = knowledgeLossDetails()
   const fileMapRef = fileMap()
   const codeCityRef = ref<InstanceType<typeof CodeCityPageTemplate>>()
@@ -41,41 +46,53 @@
       'fileSize',
       'totalLines',
       'codeLines',
-      'blankLines',
-      'commentLines',
-      'totalLinesAdded',
-      'duplicatedLinesDensity',
       'totalCommits',
-      'commitsLastMonth',
-      'commitsLastYear',
-      'firstCommitDate',
-      'lastCommitDate',
       'activeAuthors',
       'leadAuthor',
       'knowledgeRisk',
       'knowledgeLoss',
-      'bugs',
-      'vulnerabilities',
-      'codeSmells',
-      'complexity',
+      'firstCommitDate',
+      'lastCommitDate',
     ] as MetricType[],
   })
 
   const tabs = [
-    { id: 'developer-view', label: 'navbar.developer-view', route: '/developer-view' },
-    { id: 'team-view', label: 'navbar.team-view', route: '/team-view' },
-    { id: 'abandoned-code', label: 'navbar.abandoned-code', route: '/abandoned-code' },
+    { id: 'developers-list', label: 'navbar.developers-list', route: '/developers-list' },
+    { id: 'lead-developers', label: 'navbar.lead-developers', route: '/lead-developers' },
     {
-      id: 'responsibility-diffusion',
-      label: 'navbar.responsibility-diffusion',
-      route: '/responsibility-diffusion',
+      id: 'knowledge-risks',
+      label: 'navbar.knowledge-risks',
+      route: '/knowledge-risks',
     },
+    { id: 'abandoned-code', label: 'navbar.abandoned-code', route: '/abandoned-code' },
     {
       id: 'developer-relationships',
       label: 'navbar.developer-relationships',
       route: '/developer-relationships',
     },
   ]
+
+  const statusColorMap: Record<string, string> = {
+    ABANDONED: '#000000',
+    SINGLE_OWNER: '#40E0D0',
+    BALANCED: '#32CD33',
+    DIFFUSED: '#BF1B1B',
+  }
+
+  const getTranslatedStatus = (status: string): string => {
+    const keyMap: Record<string, string> = {
+      ABANDONED: 'abandoned',
+      SINGLE_OWNER: 'singleOwner',
+      BALANCED: 'balanced',
+      DIFFUSED: 'diffused',
+    }
+    const key = keyMap[status] || 'unknown'
+    return t(`leftPanel.knowledge-risks.enum.${key}`)
+  }
+
+  const getStatusColor = (status: string): string => {
+    return statusColorMap[status] || '#F0F0F0'
+  }
 
   const colorData = computed(() => {
     const data = detailsRef.value
@@ -86,8 +103,8 @@
 
     return data.map((item: KnowledgeLossDetails) => ({
       path: item.path,
-      color: item.knowledgeRisk === 'DIFFUSED' ? 0xbf1b1b : 0xf0f0f0,
-      intensity: item.normalizedValue ?? 1,
+      color: getStatusColor(item.knowledgeRisk),
+      intensity: 1,
     }))
   })
 
@@ -106,16 +123,15 @@
           return {
             path: item.path,
             name: file?.name || item.path,
-            knowledgeRisk: item.knowledgeRisk,
+            displayValue: item.knowledgeRisk,
           }
         })
-        .filter((item) => item.knowledgeRisk === 'DIFFUSED')
         .sort((a, b) => a.name.localeCompare(b.name))
     })
 
     return {
-      labelKey: 'leftPanel.responsibility-diffusion.header1',
-      infoKey: 'leftPanel.responsibility-diffusion.info1',
+      labelKey: 'leftPanel.knowledge-risks.header1',
+      infoKey: 'leftPanel.knowledge-risks.info1',
       items: items.value,
     }
   })
@@ -126,8 +142,8 @@
     if (!selected) {
       return {
         itemType: 'author' as const,
-        labelKey: 'leftPanel.responsibility-diffusion.header2',
-        infoKey: 'leftPanel.responsibility-diffusion.info2',
+        labelKey: 'leftPanel.knowledge-risks.header2',
+        infoKey: 'leftPanel.knowledge-risks.info2',
         items: [],
       }
     }
@@ -137,8 +153,8 @@
     if (!details?.knowledge?.contributions) {
       return {
         itemType: 'author' as const,
-        labelKey: 'leftPanel.responsibility-diffusion.header2',
-        infoKey: 'leftPanel.responsibility-diffusion.info2',
+        labelKey: 'leftPanel.knowledge-risks.header2',
+        infoKey: 'leftPanel.knowledge-risks.info2',
         items: [],
       }
     }
@@ -153,8 +169,8 @@
 
     return {
       itemType: 'author' as const,
-      labelKey: 'leftPanel.responsibility-diffusion.header2',
-      infoKey: 'leftPanel.responsibility-diffusion.info2',
+      labelKey: 'leftPanel.knowledge-risks.header2',
+      infoKey: 'leftPanel.knowledge-risks.info2',
       items,
     }
   })

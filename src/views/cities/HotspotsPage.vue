@@ -44,26 +44,22 @@
       'commentLines',
       'totalLinesAdded',
       'duplicatedLinesDensity',
-      'totalCommits',
-      'commitsLastMonth',
-      'commitsLastYear',
-      'firstCommitDate',
-      'lastCommitDate',
-      'activeAuthors',
-      'leadAuthor',
-      'knowledgeRisk',
-      'knowledgeLoss',
       'bugs',
       'vulnerabilities',
       'codeSmells',
       'complexity',
+      'totalCommits',
+      'activeAuthors',
+      'leadAuthor',
+      'firstCommitDate',
+      'lastCommitDate',
     ] as MetricType[],
   })
 
   const tabs = [
     { id: 'hotspots', label: 'navbar.hotspots', route: '/hotspots' },
     { id: 'code-age', label: 'navbar.code-age', route: '/code-age' },
-    { id: 'change-coupling', label: 'navbar.change-coupling', route: '/change-coupling' },
+    { id: 'files-coupling', label: 'navbar.files-coupling', route: '/files-coupling' },
   ]
 
   const colorData = computed(() => {
