@@ -31,11 +31,11 @@
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const { knowledgeLossDetails, fileMap, fileDetails, isGeneralLoading } = useRestApi()
+  const { knowledgeLossDetails, itemsMap, fileDetails, isGeneralLoading } = useRestApi()
 
   const { t } = useI18n()
   const detailsRef = knowledgeLossDetails()
-  const fileMapRef = fileMap()
+  const itemsMapRef = itemsMap()
   const codeCityRef = ref<InstanceType<typeof CodeCityPageTemplate>>()
 
   const rightPanelConfig = ref({
@@ -73,10 +73,10 @@
   ]
 
   const statusColorMap: Record<string, string> = {
-    ABANDONED: '#000000',
-    SINGLE_OWNER: '#40E0D0',
+    ABANDONED: '#777777',
+    SINGLE_OWNER: '#00bfff',
     BALANCED: '#32CD33',
-    DIFFUSED: '#BF1B1B',
+    DIFFUSED: '#ff4444',
   }
 
   const getTranslatedStatus = (status: string): string => {
@@ -111,15 +111,15 @@
   const leftPanelConfig = computed(() => {
     const items = computed(() => {
       const data = detailsRef.value
-      const fileMap = fileMapRef.value
+      const itemsMap = itemsMapRef.value
 
-      if (!data || !Array.isArray(data) || !fileMap) {
+      if (!data || !Array.isArray(data) || !itemsMap) {
         return []
       }
 
       return data
         .map((item: KnowledgeLossDetails) => {
-          const file = fileMap.get(item.path)
+          const file = itemsMap.get(item.path)
           return {
             path: item.path,
             name: file?.name || item.path,

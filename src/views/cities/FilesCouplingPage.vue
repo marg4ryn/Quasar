@@ -35,15 +35,17 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { useRestApi } from '@/composables/useRestApi'
+  import { useRestApiStore } from '@/stores/restApiStore'
   import { MetricType } from '@/types'
   import type { FileCouplingDetails, CoupledFile } from '@/types'
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const { fileCouplingDetails, fileMap, isGeneralLoading } = useRestApi()
+  const { fileCouplingDetails, itemsMap, isGeneralLoading } = useRestApi()
 
   const detailsRef = fileCouplingDetails()
-  const fileMapRef = fileMap()
+  const itemsMapRef = itemsMap()
+  const restApiStore = useRestApiStore()
   const codeCityRef = ref<InstanceType<typeof CodeCityPageTemplate>>()
 
   const rightPanelConfig = ref({
@@ -84,50 +86,53 @@
       return []
     }
 
-    if (selected) {
+    if (selected && restApiStore.getItemByPath(selected)?.type === 'file') {
       const selectedFileDetails = data.find((item: FileCouplingDetails) => item.path === selected)
 
       const activePaths = new Map<string, number>()
 
       if (selectedFileDetails) {
         selectedFileDetails.coupledFiles.forEach((coupled: CoupledFile) => {
-          activePaths.set(coupled.path, coupled.percentage / 100)
+          activePaths.set(coupled.path, coupled.percentage)
         })
       }
 
       return data.map((item: FileCouplingDetails) => {
-        const intensity = activePaths.get(item.path)
-        const isActive = intensity !== undefined
+        const percentage = activePaths.get(item.path)
+        const isActive = percentage !== undefined
         const isSelected = item.path === selected
 
         if (isSelected) {
           return {
             path: item.path,
-            color: 0xe6b400,
-            intensity: 0.35,
+            color: 0xffd700,
+            intensity: 1,
           }
         }
 
         return {
           path: item.path,
-          color: isActive ? 0xbf1b1b : 0xf0f0f0,
-          intensity: isActive ? intensity : 1,
+          color: isActive ? getIntensityColorForCommits(percentage) : 0xf0f0f0,
+          intensity: 1,
         }
       })
     }
 
     return data.map((item: FileCouplingDetails) => ({
       path: item.path,
-      color: item.coupledFiles.length > 0 ? 0xbf1b1b : 0xf0f0f0,
+      color:
+        item.coupledFiles.length > 0
+          ? getIntensityColorForFiles(item.coupledFiles.length)
+          : 0xf0f0f0,
       intensity: 1,
     }))
   })
 
   const leftPanelConfig = computed(() => {
     const data = detailsRef.value
-    const fileMap = fileMapRef.value
+    const itemsMap = itemsMapRef.value
 
-    if (!data || !Array.isArray(data) || !fileMap) {
+    if (!data || !Array.isArray(data) || !itemsMap) {
       return {
         labelKey: 'leftPanel.filesCoupling.header1',
         infoKey: 'leftPanel.filesCoupling.info1',
@@ -138,7 +143,7 @@
     const filesWithCoupling = data
       .filter((item: FileCouplingDetails) => item.coupledFiles.length > 0)
       .map((item: FileCouplingDetails) => {
-        const file = fileMap.get(item.path)
+        const file = itemsMap.get(item.path)
         return {
           path: item.path,
           name: file?.name || item.path,
@@ -156,10 +161,10 @@
 
   const secondLeftPanelConfig = computed(() => {
     const data = detailsRef.value
-    const fileMap = fileMapRef.value
+    const itemsMap = itemsMapRef.value
     const selected = codeCityRef.value?.selectedPath
 
-    if (!data || !Array.isArray(data) || !fileMap || !selected) {
+    if (!data || !Array.isArray(data) || !itemsMap || !selected) {
       return {
         labelKey: 'leftPanel.filesCoupling.header2',
         infoKey: 'leftPanel.filesCoupling.info2',
@@ -179,7 +184,7 @@
 
     const coupledItems = selectedFileDetails.coupledFiles
       .map((coupled: CoupledFile) => {
-        const file = fileMap.get(coupled.path)
+        const file = itemsMap.get(coupled.path)
         return {
           path: coupled.path,
           name: file?.name || coupled.path,
@@ -196,20 +201,37 @@
     }
   })
 
+  function getGradientColor(value: number): string {
+    const normalizedValue = Math.min(1, Math.max(0, value))
+
+    const startR = 0xff,
+      startG = 0xee,
+      startB = 0x44
+    const endR = 0xbf,
+      endG = 0x1b,
+      endB = 0x1b
+
+    const r = Math.round(startR + (endR - startR) * normalizedValue)
+    const g = Math.round(startG + (endG - startG) * normalizedValue)
+    const b = Math.round(startB + (endB - startB) * normalizedValue)
+
+    const rHex = r.toString(16).padStart(2, '0')
+    const gHex = g.toString(16).padStart(2, '0')
+    const bHex = b.toString(16).padStart(2, '0')
+
+    return `#${rHex}${gHex}${bHex}`
+  }
+
   function getIntensityColorForFiles(files: number): string {
-    if (files >= 5) return '#ff4444'
-    if (files >= 4) return '#ff8844'
-    if (files >= 3) return '#ffaa44'
-    if (files >= 2) return '#ffcc44'
-    return '#ffee44'
+    const maxFiles = 5
+    const value = Math.min(files, maxFiles) / maxFiles
+    return getGradientColor(value)
   }
 
   function getIntensityColorForCommits(percentage: number): string {
-    if (percentage >= 60) return '#ff4444'
-    if (percentage >= 45) return '#ff8844'
-    if (percentage >= 30) return '#ffaa44'
-    if (percentage >= 15) return '#ffcc44'
-    return '#ffee44'
+    const maxPercentage = 80
+    const value = Math.min(percentage, maxPercentage) / maxPercentage
+    return getGradientColor(value)
   }
 </script>
 

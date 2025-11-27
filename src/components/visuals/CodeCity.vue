@@ -136,7 +136,14 @@
 
     // Ustaw kolor selected
     const mesh = instanceData.mesh as THREE.InstancedMesh
-    mesh.setColorAt(instanceData.instanceIndex, new THREE.Color(COLORS.selected))
+
+    const originalColor = new THREE.Color(COLORS.building)
+    const selectedColor = new THREE.Color(COLORS.selected)
+
+    const resultColor = new THREE.Color()
+    resultColor.lerpColors(originalColor, selectedColor, 3)
+
+    mesh.setColorAt(instanceData.instanceIndex, resultColor)
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
 
     // Pobierz pozycję instancji
@@ -205,7 +212,15 @@
     // Podświetl nowy obiekt (jeśli nie jest selected)
     if (hoveredObject.value && hoveredObject.value !== selectedObject.value) {
       const mesh = hoveredObject.value.mesh as THREE.InstancedMesh
-      mesh.setColorAt(hoveredObject.value.instanceIndex, new THREE.Color(COLORS.hover))
+
+      const originalColor = new THREE.Color(COLORS.building)
+      const hoverColor = new THREE.Color(COLORS.hover)
+
+      const resultColor = new THREE.Color()
+      resultColor.lerpColors(originalColor, hoverColor, 3)
+
+      mesh.setColorAt(hoveredObject.value.instanceIndex, resultColor)
+
       if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
 
       if (returnEmit) {

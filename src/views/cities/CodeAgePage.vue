@@ -27,10 +27,10 @@
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const { codeAgeDetails, fileMap, isGeneralLoading } = useRestApi()
+  const { codeAgeDetails, itemsMap, isGeneralLoading } = useRestApi()
 
   const detailsRef = codeAgeDetails()
-  const fileMapRef = fileMap()
+  const itemsMapRef = itemsMap()
 
   const rightPanelConfig = ref({
     metricTypes: [
@@ -66,22 +66,22 @@
     return data.map((item: CodeAgeDetails) => ({
       path: item.path,
       color:
-        item.normalizedValue !== null && item.normalizedValue !== undefined ? 0x00a3ff : 0xf0f0f0,
+        item.normalizedValue !== null && item.normalizedValue !== undefined ? 0x00bfff : 0xf0f0f0,
       intensity: item.normalizedValue ?? 1,
     }))
   })
 
   const items = computed(() => {
     const data = detailsRef.value
-    const fileMap = fileMapRef.value
+    const itemsMap = itemsMapRef.value
 
-    if (!data || !Array.isArray(data) || !fileMap) {
+    if (!data || !Array.isArray(data) || !itemsMap) {
       return []
     }
 
     return data
       .map((item: CodeAgeDetails) => {
-        const file = fileMap.get(item.path)
+        const file = itemsMap.get(item.path)
         return {
           path: item.path,
           name: file?.name || item.path,
@@ -99,12 +99,17 @@
   }))
 
   function getIntensityColor(normalizedValue: number): string {
-    const percent = normalizedValue * 100
-    if (percent >= 80) return '#00A3FF'
-    if (percent >= 60) return '#33B8FF'
-    if (percent >= 40) return '#66CCFF'
-    if (percent >= 20) return '#99DFFF'
-    return '#CCEFFF'
+    const value = Math.min(1, Math.max(0, normalizedValue))
+
+    const r = Math.round(255 * (1 - value * (255 / 255)))
+    const g = Math.round(255 * (1 - value * (64 / 255)))
+    const b = 255
+
+    const rHex = r.toString(16).padStart(2, '0')
+    const gHex = g.toString(16).padStart(2, '0')
+    const bHex = b.toString(16).padStart(2, '0')
+
+    return `#${rHex}${gHex}${bHex}`
   }
 </script>
 

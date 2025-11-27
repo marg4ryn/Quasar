@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import type {
   CityNode,
-  FileListResponse,
+  ItemsListItem,
+  ItemsListResponse,
   FileDetailsResponse,
   HotspotsResponse,
   CodeAgeResponse,
@@ -53,7 +54,7 @@ async function deleteCacheItem(key: string): Promise<void> {
 
 export const useRestApiStore = defineStore('api', () => {
   const structure = ref<CityNode | null>(null)
-  const fileMap = ref<Map<string, { path: string; name: string }>>(new Map())
+  const itemsMap = ref<Map<string, ItemsListItem>>(new Map())
   const fileDetails = ref<Record<string, FileDetailsResponse>>({})
   const hotspotsDetails = ref<HotspotsResponse | null>(null)
   const codeAgeDetails = ref<CodeAgeResponse | null>(null)
@@ -68,7 +69,7 @@ export const useRestApiStore = defineStore('api', () => {
     try {
       const [
         cachedStructure,
-        cachedFileMap,
+        cachedItemsMap,
         cachedFileDetailsList,
         cachedHotspots,
         cachedCodeAge,
@@ -78,7 +79,7 @@ export const useRestApiStore = defineStore('api', () => {
         cachedLeadAuthors,
       ] = await Promise.all([
         getCacheItem<CityNode>('structure'),
-        getCacheItem<Array<[string, { path: string; name: string }]>>('fileMap'),
+        getCacheItem<Array<[string, ItemsListItem]>>('itemsMap'),
         getCacheItem<FileDetailsResponse[]>('fileDetailsList'),
         getCacheItem<HotspotsResponse>('hotspots'),
         getCacheItem<CodeAgeResponse>('codeAge'),
@@ -89,7 +90,7 @@ export const useRestApiStore = defineStore('api', () => {
       ])
 
       structure.value = cachedStructure
-      fileMap.value = cachedFileMap ? new Map(cachedFileMap) : new Map()
+      itemsMap.value = cachedItemsMap ? new Map(cachedItemsMap) : new Map()
 
       if (cachedFileDetailsList) {
         fileDetails.value = {}
@@ -126,12 +127,12 @@ export const useRestApiStore = defineStore('api', () => {
   )
 
   watch(
-    fileMap,
+    itemsMap,
     (value) => {
       if (value.size > 0) {
-        setCacheItem('fileMap', Array.from(value.entries()))
+        setCacheItem('itemsMap', Array.from(value.entries()))
       } else {
-        deleteCacheItem('fileMap')
+        deleteCacheItem('itemsMap')
       }
     },
     { deep: true }
@@ -208,20 +209,20 @@ export const useRestApiStore = defineStore('api', () => {
     structure.value = data
   }
 
-  function setFileMap(data: FileListResponse) {
-    fileMap.value = new Map(data.map((file) => [file.path, file]))
+  function setItemsMap(data: ItemsListResponse) {
+    itemsMap.value = new Map(data.map((item) => [item.path, item]))
   }
 
-  function getFileByPath(path: string): { path: string; name: string } | undefined {
-    return fileMap.value.get(path)
+  function getItemByPath(path: string): ItemsListItem | undefined {
+    return itemsMap.value.get(path)
   }
 
-  function hasFile(path: string): boolean {
-    return fileMap.value.has(path)
+  function hasItem(path: string): boolean {
+    return itemsMap.value.has(path)
   }
 
-  function getAllFiles(): Array<{ path: string; name: string }> {
-    return Array.from(fileMap.value.values())
+  function getAllItems(): ItemsListItem[] {
+    return Array.from(itemsMap.value.values())
   }
 
   function setFileDetails(path: string, data: FileDetailsResponse) {
@@ -297,7 +298,7 @@ export const useRestApiStore = defineStore('api', () => {
 
   async function clearAll() {
     structure.value = null
-    fileMap.value = new Map()
+    itemsMap.value = new Map()
     fileDetails.value = {}
     hotspotsDetails.value = null
     codeAgeDetails.value = null
@@ -321,7 +322,7 @@ export const useRestApiStore = defineStore('api', () => {
   return {
     // State
     structure,
-    fileMap,
+    itemsMap,
     fileDetails,
     hotspotsDetails,
     codeAgeDetails,
@@ -334,7 +335,7 @@ export const useRestApiStore = defineStore('api', () => {
 
     // Setters
     setStructure,
-    setFileMap,
+    setItemsMap,
     setFileDetails,
     setHotspotsDetails,
     setCodeAgeDetails,
@@ -344,9 +345,9 @@ export const useRestApiStore = defineStore('api', () => {
     setLeadAuthorsDetails,
 
     // Getters
-    getFileByPath,
-    hasFile,
-    getAllFiles,
+    getItemByPath,
+    hasItem,
+    getAllItems,
     getHotspotsDetails,
     getCodeAgeDetails,
     getFileCouplingDetails,

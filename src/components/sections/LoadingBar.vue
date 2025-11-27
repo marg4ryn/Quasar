@@ -128,6 +128,7 @@
     margin: 0;
     font-weight: 500;
     letter-spacing: 0.5px;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
   }
 
   .fade-enter-active,

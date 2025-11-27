@@ -56,13 +56,30 @@
           @mouseenter="handleItemHover(item, index)"
           @mouseleave="handleItemLeave()"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="item-icon">
+          <svg
+            v-if="item?.type === 'file'"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            class="item-icon"
+          >
             <path d="M3 1H9L13 5V15H3V1Z" />
             <path d="M9 1V5H13" stroke="currentColor" stroke-width="1.5" fill="none" />
           </svg>
+          <svg
+            v-else
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            class="item-icon"
+          >
+            <path d="M2 3H9L11 6H18V17H2V3Z" />
+          </svg>
           <div class="item-content">
             <span class="item-name" v-html="highlightMatch(item.name)"></span>
-            <span class="item-path">{{ item.path }}</span>
+            <span v-if="item?.type === 'file'" class="item-path">{{ item.path }}</span>
           </div>
         </div>
         <div v-if="filteredItems.length > maxResults" class="dropdown-more">
@@ -84,7 +101,7 @@
 
 <script setup lang="ts">
   import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
-  import type { FileListItem } from '@/types/restApi'
+  import type { ItemsListItem } from '@/types'
 
   const props = withDefaults(
     defineProps<{
@@ -103,8 +120,8 @@
 
   const emit = defineEmits<{
     (e: 'filtered', items: any[]): void
-    (e: 'select', item: FileListItem): void
-    (e: 'hover', item: FileListItem): void
+    (e: 'select', item: ItemsListItem): void
+    (e: 'hover', item: ItemsListItem): void
     (e: 'hoverLeave'): void
   }>()
 
@@ -162,7 +179,7 @@
     }, 200)
   }
 
-  function handleItemClick(item: FileListItem) {
+  function handleItemClick(item: ItemsListItem) {
     handleItemLeave()
     emit('select', item)
     searchQuery.value = ''
@@ -170,7 +187,7 @@
     inputRef.value?.blur()
   }
 
-  function handleItemHover(item: FileListItem, index: number) {
+  function handleItemHover(item: ItemsListItem, index: number) {
     selectedIndex.value = index
     emit('hover', item)
   }
@@ -182,28 +199,7 @@
   function handleKeydown(e: KeyboardEvent) {
     if (!showDropdown.value) return
 
-    const maxIndex = Math.min(filteredItems.value.length, props.maxResults) - 1
-
     switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        selectedIndex.value = Math.min(selectedIndex.value + 1, maxIndex)
-        if (selectedIndex.value >= 0) {
-          emit('hover', filteredItems.value[selectedIndex.value])
-        }
-        break
-
-      case 'ArrowUp':
-        e.preventDefault()
-        if (selectedIndex.value > 0) {
-          selectedIndex.value--
-          emit('hover', filteredItems.value[selectedIndex.value])
-        } else {
-          selectedIndex.value = -1
-          emit('hoverLeave')
-        }
-        break
-
       case 'Enter':
         e.preventDefault()
         if (selectedIndex.value >= 0 && filteredItems.value[selectedIndex.value]) {
@@ -464,6 +460,8 @@
         min-width: 0;
         display: flex;
         flex-direction: column;
+        justify-content: center;
+        height: 38px;
         gap: 0.25rem;
 
         .item-name {

@@ -52,9 +52,10 @@ export interface FileDetails {
   staticAnalysis: StaticAnalysis | null
 }
 
-export interface FileListItem {
+export interface ItemsListItem {
   path: string
   name: string
+  type: string
 }
 
 export interface HotspotsDetails {
@@ -105,7 +106,7 @@ export interface LeadAuthorsDetails {
   leadAuthor: string
 }
 
-export type FileListResponse = FileListItem[]
+export type ItemsListResponse = ItemsListItem[]
 export type FileDetailsResponse = FileDetails
 export type HotspotsResponse = HotspotsDetails
 export type CodeAgeResponse = CodeAgeDetails

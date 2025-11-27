@@ -97,7 +97,7 @@
   import { useLogger } from '@/composables/useLogger'
   import { useCodeCityController } from '@/composables/useCodeCityController'
   import { useRestApi } from '@/composables/useRestApi'
-  import { MetricType, CityNode, FileListItem } from '@/types'
+  import { MetricType, CityNode, ItemsListItem } from '@/types'
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
 
   import TabNavigation from '@/components/city/TabNavigation.vue'
@@ -139,9 +139,9 @@
   })
 
   const { selectCityNode, setCityNodeHoverByPath } = useCodeCityController()
-  const { structure, fileMap } = useRestApi()
+  const { structure, itemsMap } = useRestApi()
 
-  const filesComputed = fileMap()
+  const filesComputed = itemsMap()
   const cityDataComputed = structure()
 
   const log = useLogger('CodeCityPageTemplate')
@@ -233,11 +233,11 @@
     hoveredAuthor.value = ''
   }
 
-  function handleSearchSelect(item: FileListItem) {
+  function handleSearchSelect(item: ItemsListItem) {
     handleCityNodeSelect(item.path)
   }
 
-  function handleSearchHover(item: FileListItem) {
+  function handleSearchHover(item: ItemsListItem) {
     handleCityNodeHover(item.path)
   }
 

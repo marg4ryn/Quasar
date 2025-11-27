@@ -67,24 +67,24 @@ export function useRestApi() {
     return structureComputed
   }
 
-  function fileMap() {
-    if (!store.fileMap || store.fileMap.size === 0) {
+  function itemsMap() {
+    if (!store.itemsMap || store.itemsMap.size === 0) {
       const analysisId = getAnalysisId()
       if (analysisId) {
         handleFetch(
           async () => {
-            const data = await api.fetchFileList(analysisId)
-            store.setFileMap(data)
+            const data = await api.fetchItemsList(analysisId)
+            store.setItemsMap(data)
           },
-          'fileList',
-          'File list fetched successfully'
+          'itemsMap',
+          'Items map fetched successfully'
         )
       }
     } else {
-      log.info('Returning cached file map')
+      log.info('Returning cached items map')
     }
 
-    return computed(() => store.fileMap)
+    return computed(() => store.itemsMap)
   }
 
   function fileDetails(filePath: string) {
@@ -246,7 +246,7 @@ export function useRestApi() {
 
   return {
     structure,
-    fileMap,
+    itemsMap,
     fileDetails,
     hotspotsDetails,
     codeAgeDetails,

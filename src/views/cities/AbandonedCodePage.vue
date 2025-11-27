@@ -33,11 +33,12 @@
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const { knowledgeLossDetails, authorsStatisticsDetails, fileMap, isGeneralLoading } = useRestApi()
+  const { knowledgeLossDetails, authorsStatisticsDetails, itemsMap, isGeneralLoading } =
+    useRestApi()
 
   const detailsRef = knowledgeLossDetails()
   const authorsDetails = authorsStatisticsDetails()
-  const fileMapRef = fileMap()
+  const itemsMapRef = itemsMap()
 
   const rightPanelConfig = ref({
     metricTypes: [
@@ -83,7 +84,7 @@
     return data.map((item: KnowledgeLossDetails) => ({
       path: item.path,
       color:
-        item.normalizedValue !== null && item.normalizedValue !== undefined ? 0xbf1b1b : 0xf0f0f0,
+        item.normalizedValue !== null && item.normalizedValue !== undefined ? 0x696969 : 0xf0f0f0,
       intensity: item.normalizedValue ?? 1,
     }))
   })
@@ -91,15 +92,15 @@
   const leftPanelConfig = computed(() => {
     const items = computed(() => {
       const data = detailsRef.value
-      const fileMap = fileMapRef.value
+      const itemsMap = itemsMapRef.value
 
-      if (!data || !Array.isArray(data) || !fileMap) {
+      if (!data || !Array.isArray(data) || !itemsMap) {
         return []
       }
 
       return data
         .map((item: KnowledgeLossDetails) => {
-          const file = fileMap.get(item.path)
+          const file = itemsMap.get(item.path)
           return {
             path: item.path,
             name: file?.name || item.path,
@@ -149,12 +150,15 @@
   })
 
   function getIntensityColor(normalizedValue: number): string {
-    const percent = normalizedValue * 100
-    if (percent >= 80) return '#ff4444'
-    if (percent >= 60) return '#ff8844'
-    if (percent >= 40) return '#ffaa44'
-    if (percent >= 20) return '#ffcc44'
-    return '#ffee44'
+    const value = Math.min(1, Math.max(0, normalizedValue))
+
+    const start = 255
+    const end = 105
+
+    const channel = Math.round(start + (end - start) * value)
+    const hex = channel.toString(16).padStart(2, '0')
+
+    return `#${hex}${hex}${hex}`
   }
 </script>
 

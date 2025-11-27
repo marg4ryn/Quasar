@@ -18,7 +18,7 @@ export const COLORS = {
   building: 0xf0f0f0,
   platform: 0xf0f0f0,
   emissiveColor: 0x666666,
-  hover: 0xefff00,
-  selected: 0xe6b400,
+  hover: 0xffff00,
+  selected: 0xffd700,
   edge: 0x000000,
 } as const

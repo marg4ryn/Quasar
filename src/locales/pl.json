@@ -156,7 +156,7 @@
     },
     "abandoned-code": {
       "header1": "PORZUCONE PLIKI",
-      "info1": "Pliki, które były współtworzone przez nieaktywnych autorów.",
+      "info1": "Pliki, które były współtworzone przez nieaktywnych autorów oraz procent ich porzucenia.",
       "header2": "NIEAKTYWNI AUTORZY",
       "info2": "Deweloperzy, którzy nie wprowadzili zmiany do repozytorium w ciągu ostatnich 6 miesięcy i liczba plików, których są współautorem."
     },
@@ -243,7 +243,7 @@
 
   "search": {
     "placeholder": "Szukaj w repozytorium...",
-    "noResults": "Nie znaleziono plików",
+    "noResults": "Brak dopasowań",
     "results": "{count} wyników",
     "moreResults": "więcej wyników"
   },

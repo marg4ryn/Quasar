@@ -27,10 +27,10 @@
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const { hotspotsDetails, fileMap, isGeneralLoading } = useRestApi()
+  const { hotspotsDetails, itemsMap, isGeneralLoading } = useRestApi()
 
   const detailsRef = hotspotsDetails()
-  const fileMapRef = fileMap()
+  const itemsMapRef = itemsMap()
 
   const rightPanelConfig = ref({
     metricTypes: [
@@ -79,15 +79,15 @@
 
   const items = computed(() => {
     const data = detailsRef.value
-    const fileMap = fileMapRef.value
+    const itemsMap = itemsMapRef.value
 
-    if (!data || !Array.isArray(data) || !fileMap) {
+    if (!data || !Array.isArray(data) || !itemsMap) {
       return []
     }
 
     return data
       .map((item: HotspotsDetails) => {
-        const file = fileMap.get(item.path)
+        const file = itemsMap.get(item.path)
         return {
           path: item.path,
           name: file?.name || item.path,
@@ -105,12 +105,10 @@
   }))
 
   function getIntensityColor(normalizedValue: number): string {
-    const percent = normalizedValue * 100
-    if (percent >= 80) return '#ff4444'
-    if (percent >= 60) return '#ff8844'
-    if (percent >= 40) return '#ffaa44'
-    if (percent >= 20) return '#ffcc44'
-    return '#ffee44'
+    const value = Math.min(1, Math.max(0, normalizedValue))
+    const gb = Math.round(255 * (1 - value))
+    const gbHex = gb.toString(16).padStart(2, '0')
+    return `#ff${gbHex}${gbHex}`
   }
 </script>
 

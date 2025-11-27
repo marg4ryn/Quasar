@@ -1,7 +1,7 @@
 import type {
   ApiError,
   CityNode,
-  FileListResponse,
+  ItemsListResponse,
   FileDetailsResponse,
   HotspotsResponse,
   CodeAgeResponse,
@@ -75,8 +75,8 @@ export const api = {
     return request<CityNode>(`analysis/${analysisId}/structure`)
   },
 
-  async fetchFileList(analysisId: string): Promise<FileListResponse> {
-    return request<FileListResponse>(`analysis/${analysisId}/items`)
+  async fetchItemsList(analysisId: string): Promise<ItemsListResponse> {
+    return request<ItemsListResponse>(`analysis/${analysisId}/items`)
   },
 
   async fetchFileDetails(analysisId: string, filePath: string): Promise<FileDetailsResponse> {

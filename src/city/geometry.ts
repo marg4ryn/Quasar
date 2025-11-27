@@ -80,57 +80,53 @@ export function collectEdges(geometry: THREE.BoxGeometry, x: number, y: number, 
 
 export function createMergedEdges(): THREE.InstancedMesh {
   const edgeData: Array<{ start: THREE.Vector3; end: THREE.Vector3 }> = []
-  
+
   edgesToMerge.forEach((edge) => {
     const vertex = new THREE.Vector3()
     for (let i = 0; i < edge.positions.length; i += 6) {
       vertex.set(edge.positions[i], edge.positions[i + 1], edge.positions[i + 2])
       vertex.applyMatrix4(edge.matrix)
       const start = vertex.clone()
-      
+
       vertex.set(edge.positions[i + 3], edge.positions[i + 4], edge.positions[i + 5])
       vertex.applyMatrix4(edge.matrix)
       const end = vertex.clone()
-      
+
       edgeData.push({ start, end })
     }
   })
 
   const geometry = new THREE.CylinderGeometry(EDGE_THICKNESS, EDGE_THICKNESS, 1, 4, 1)
   geometry.rotateX(Math.PI / 2)
-  
+
   const material = new THREE.MeshBasicMaterial({
     color: COLORS.edge,
   })
-  
+
   const instancedMesh = new THREE.InstancedMesh(geometry, material, edgeData.length)
-  
+
   // Transformacje dla każdej instancji
   const matrix = new THREE.Matrix4()
   const quaternion = new THREE.Quaternion()
   const axis = new THREE.Vector3(0, 0, 1)
-  
+
   edgeData.forEach(({ start, end }, index) => {
     const direction = new THREE.Vector3().subVectors(end, start)
     const length = direction.length()
     const midpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5)
-    
+
     direction.normalize()
     quaternion.setFromUnitVectors(axis, direction)
-    
-    matrix.compose(
-      midpoint,
-      quaternion,
-      new THREE.Vector3(1, 1, length)
-    )
-    
+
+    matrix.compose(midpoint, quaternion, new THREE.Vector3(1, 1, length))
+
     instancedMesh.setMatrixAt(index, matrix)
   })
-  
+
   instancedMesh.instanceMatrix.needsUpdate = true
-  
+
   edgesToMerge.length = 0
-  
+
   return instancedMesh
 }
 

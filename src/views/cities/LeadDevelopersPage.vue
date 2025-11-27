@@ -63,15 +63,15 @@
   ]
 
   const colorPalette = [
-    '#00FF00', // lime
-    '#40E0D0', // turquoise
-    '#FF6666', // red
-    '#BF00FF', // violet
     '#32CD33', // emerald
-    '#00FFFF', // cyan
-    '#FF33AA', // pink
-    '#FF8C42', // orange
+    '#00BFFF', // sky blue
     '#BF1B1B', // crimson
+    '#FFC50F', // honey yellow
+    '#00FF7F', // spring green
+    '#1E90FF', // dodger blue
+    '#BF00FF', // violet
+    '#FF8C42', // orange
+    '#40E0D0', // turquoise
   ]
 
   function getRandomColor(index: number): string {
@@ -121,7 +121,10 @@
       .map((author: AuthorsStatisticsDetails) => ({
         name: author.name,
         filesCount: author.filesAsLeadAuthor,
-        color: authorColorMap.value.get(author.name) || '#CCCCCC',
+        color:
+          author.filesAsLeadAuthor !== 0
+            ? authorColorMap.value.get(author.name) || '#CCCCCC'
+            : '#f0f0f0',
       }))
       .filter((item) => item.filesCount !== 0)
       .sort((a, b) => b.filesCount - a.filesCount)
