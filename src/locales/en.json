@@ -131,7 +131,7 @@
     "xray": "X-Ray",
     "sourceCode": "Source Code",
     "directoryContents": "DIRECTORY CONTENTS",
-    "searchPlaceholder": "Search files...",
+    "searchPlaceholder": "Search the directory...",
     "items": "items",
     "noSelection": "Select a file or directory to view details"
   },
@@ -139,6 +139,7 @@
   "leftPanel": {
     "searchFilesPlaceholder": "Search files...",
     "searchAuthorsPlaceholder": "Search for authors...",
+    "searchItemsPlaceholder": "Search for value...",
     "hotspots": {
       "header": "SUSPICIOUS FILES",
       "info": "Files suspected of being system hotspots. Refactoring is recommended."
@@ -166,16 +167,20 @@
       "header2": "FILE AUTHORS",
       "info2": "Developers contributing to the file and the percentage of historical lines they contributed.",
       "enum": {
-        "abandoned": "ABD",
-        "singleOwner": "SOW",
-        "balanced": "BAL",
-        "diffused": "DIF",
-        "unknown": "UNK"
+        "abandoned": "ABANDONED",
+        "singleOwner": "SINGLE OWNER",
+        "balanced": "BALANCED",
+        "diffused": "DIFFUSED",
+        "unknown": "UNKNOWN"
       }
     },
     "lead-developers": {
       "header": "LEAD DEVELOPERS",
       "info": "The lead authors of files in the repository and the number of files for which they are the primary author."
+    },
+    "file-extensions": {
+      "header": "FILE EXTENSIONS",
+      "info": "File types present in the repository (some extensions are omitted during analysis)."
     }
   },
 
@@ -190,6 +195,7 @@
     "loading": "Loading...",
     "noFiles": "No files to display",
     "noAuthors": "No authors to display",
+    "noItems": "No items to display",
     "infoAria": "Informacja",
     "indicatedObject": "Indicated object",
     "files": "files"

@@ -131,7 +131,7 @@
     "xray": "X-Ray",
     "sourceCode": "Kod źródłowy",
     "directoryContents": "ZAWARTOŚĆ KATALOGU",
-    "searchPlaceholder": "Szukaj plików...",
+    "searchPlaceholder": "Szukaj w katalogu...",
     "items": "elementów",
     "noSelection": "Wybierz plik lub katalog, aby zobaczyć szczegóły"
   },
@@ -139,6 +139,7 @@
   "leftPanel": {
     "searchFilesPlaceholder": "Szukaj plików...",
     "searchAuthorsPlaceholder": "Szukaj autorów...",
+    "searchItemsPlaceholder": "Szukaj wartości...",
     "hotspots": {
       "header": "PODEJRZANE PLIKI",
       "info": "Pliki podejrzane o bycie punktami krytycznymi systemu (hotspotami). Zalecana jest ich refaktoryzacja."
@@ -162,20 +163,24 @@
     },
     "knowledge-risks": {
       "header1": "KATEGORIA PLIKU",
-      "info1": "Kategoria rozproszenia autorstwa pliku, określana na podstawie liczby i aktywności jego współautorów (OPU - opuszczony, POW - pojedynczy właściciel, ZRW - zrównoważony, ROZ - rozproszony, NZN - nieznany).",
+      "info1": "Kategoria rozproszenia autorstwa pliku, określana na podstawie liczby i aktywności jego współautorów.",
       "header2": "AUTORZY PLIKU",
       "info2": "Deweloperzy współtworzący plik oraz udział procentowy historycznych linii ich autorstwa.",
       "enum": {
-        "abandoned": "OPU",
-        "singleOwner": "POW",
-        "balanced": "ZRW",
-        "diffused": "ROZ",
-        "unknown": "NZN"
+        "abandoned": "OPUSZCZONY",
+        "singleOwner": "POJEDYNCZY WŁAŚCICIEL",
+        "balanced": "ZRÓWNOWAŻONY",
+        "diffused": "ROZPROSZONY",
+        "unknown": "NIEZNANY"
       }
     },
     "lead-developers": {
       "header": "GŁÓWNI DEWELOPERZY",
       "info": "Główni autorzy plików w repozytorium i liczba plików, których są głównym autorem."
+    },
+    "file-extensions": {
+      "header": "ROZSZERZENIA PLIKÓW",
+      "info": "Typy plików obecne w repozytorium (część rozszerzeń jest pomijana podczas analizy)."
     }
   },
 
@@ -190,6 +195,7 @@
     "loading": "Ładowanie...",
     "noFiles": "Brak plików do wyświetlenia",
     "noAuthors": "Brak autorów do wyświetlenia",
+    "noItems": "Brak elementów do wyświetlenia",
     "infoAria": "Informacja",
     "indicatedObject": "Wskazany obiekt",
     "files": "plików"

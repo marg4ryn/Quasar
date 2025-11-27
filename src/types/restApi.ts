@@ -106,6 +106,11 @@ export interface LeadAuthorsDetails {
   leadAuthor: string
 }
 
+export interface FilesExtensionsDetails {
+  path: string
+  type: string
+}
+
 export type ItemsListResponse = ItemsListItem[]
 export type FileDetailsResponse = FileDetails
 export type HotspotsResponse = HotspotsDetails
@@ -114,3 +119,4 @@ export type FileCouplingResponse = FileCouplingDetails
 export type KnowledgeLossResponse = KnowledgeLossDetails
 export type AuthorsStatisticsResponse = AuthorsStatisticsDetails
 export type LeadAuthorsResponse = LeadAuthorsDetails
+export type FilesExtensionsResponse = FilesExtensionsDetails
