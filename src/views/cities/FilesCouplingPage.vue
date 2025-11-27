@@ -13,7 +13,7 @@
       <span
         v-if="item.coupledFilesCount !== undefined"
         class="item-value"
-        :style="{ color: getIntensityColorForFiles(item.coupledFilesCount ?? 0) }"
+        :style="{ color: numberToHexColor(getIntensityColorForFiles(item.coupledFilesCount ?? 0)) }"
       >
         {{ item.coupledFilesCount }} {{ $t('common.files') }}
       </span>
@@ -24,7 +24,7 @@
       <span
         v-if="item.percentage !== undefined"
         class="item-value"
-        :style="{ color: getIntensityColorForCommits(item.percentage ?? 0) }"
+        :style="{ color: numberToHexColor(getIntensityColorForCommits(item.percentage ?? 0)) }"
       >
         {{ item.sharedCommits }} ({{ item.percentage }}%)
       </span>
@@ -77,6 +77,10 @@
     { id: 'code-age', label: 'navbar.code-age', route: '/code-age' },
     { id: 'files-coupling', label: 'navbar.files-coupling', route: '/files-coupling' },
   ]
+
+  function numberToHexColor(color: number): string {
+    return `#${color.toString(16).padStart(6, '0')}`
+  }
 
   const colorData = computed(() => {
     const data = detailsRef.value
@@ -201,7 +205,7 @@
     }
   })
 
-  function getGradientColor(value: number): string {
+  function getGradientColor(value: number): number {
     const normalizedValue = Math.min(1, Math.max(0, value))
 
     const startR = 0xff,
@@ -215,20 +219,16 @@
     const g = Math.round(startG + (endG - startG) * normalizedValue)
     const b = Math.round(startB + (endB - startB) * normalizedValue)
 
-    const rHex = r.toString(16).padStart(2, '0')
-    const gHex = g.toString(16).padStart(2, '0')
-    const bHex = b.toString(16).padStart(2, '0')
-
-    return `#${rHex}${gHex}${bHex}`
+    return (r << 16) | (g << 8) | b
   }
 
-  function getIntensityColorForFiles(files: number): string {
+  function getIntensityColorForFiles(files: number): number {
     const maxFiles = 5
     const value = Math.min(files, maxFiles) / maxFiles
     return getGradientColor(value)
   }
 
-  function getIntensityColorForCommits(percentage: number): string {
+  function getIntensityColorForCommits(percentage: number): number {
     const maxPercentage = 80
     const value = Math.min(percentage, maxPercentage) / maxPercentage
     return getGradientColor(value)

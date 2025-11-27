@@ -9,15 +9,17 @@
     :rightPanelConfig="rightPanelConfig"
   >
     <template #leftPanelItem="{ item }">
-      <span class="item-name">{{ item.name }}</span>
-      <span class="item-value" :style="{ color: getStatusColor(item.displayValue) }">
-        {{ getTranslatedStatus(item.displayValue) }}
-      </span>
+      <span class="item-name" :style="{ color: numberToHexColor(getStatusColor(item.name)) }">{{
+        getTranslatedStatus(item.name)
+      }}</span>
+      <span class="item-value"> {{ item.filesCount }} {{ $t('common.files') }} </span>
     </template>
 
     <template #secondLeftPanelItem="{ item }">
       <span class="item-name">{{ item.name }}</span>
-      <span class="item-value"> {{ item.displayValue }}</span>
+      <span class="item-value" :style="{ color: getOwnershipColor(item.displayValue) }">
+        {{ item.displayValue }}%</span
+      >
     </template>
   </CodeCityPageTemplate>
 </template>
@@ -26,16 +28,16 @@
   import { ref, computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRestApi } from '@/composables/useRestApi'
-  import { MetricType, AuthorContribution } from '@/types'
-  import type { KnowledgeLossDetails } from '@/types'
+  import { useRestApiStore } from '@/stores/restApiStore'
+  import { MetricType, KnowledgeLossDetails, AuthorContribution } from '@/types'
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const { knowledgeLossDetails, itemsMap, fileDetails, isGeneralLoading } = useRestApi()
+  const { knowledgeLossDetails, fileDetails, isGeneralLoading } = useRestApi()
 
   const { t } = useI18n()
+  const restApiStore = useRestApiStore()
   const detailsRef = knowledgeLossDetails()
-  const itemsMapRef = itemsMap()
   const codeCityRef = ref<InstanceType<typeof CodeCityPageTemplate>>()
 
   const rightPanelConfig = ref({
@@ -72,11 +74,15 @@
     },
   ]
 
-  const statusColorMap: Record<string, string> = {
-    ABANDONED: '#777777',
-    SINGLE_OWNER: '#00bfff',
-    BALANCED: '#32CD33',
-    DIFFUSED: '#ff4444',
+  const statusColorMap: Record<string, number> = {
+    ABANDONED: 0x777777,
+    SINGLE_OWNER: 0x00bfff,
+    BALANCED: 0x32cd33,
+    DIFFUSED: 0xff4444,
+  }
+
+  function numberToHexColor(color: number): string {
+    return `#${color.toString(16).padStart(6, '0')}`
   }
 
   const getTranslatedStatus = (status: string): string => {
@@ -90,9 +96,25 @@
     return t(`leftPanel.knowledge-risks.enum.${key}`)
   }
 
-  const getStatusColor = (status: string): string => {
-    return statusColorMap[status] || '#F0F0F0'
+  const getStatusColor = (status: string): number => {
+    return statusColorMap[status] || 0xf0f0f0
   }
+
+  const risksCounts = computed(() => {
+    const data = detailsRef.value
+    const counts = new Map<string, number>()
+
+    if (!data || !Array.isArray(data)) {
+      return counts
+    }
+
+    data.forEach((item: KnowledgeLossDetails) => {
+      const currentCount = counts.get(item.knowledgeRisk) || 0
+      counts.set(item.knowledgeRisk, currentCount + 1)
+    })
+
+    return counts
+  })
 
   const colorData = computed(() => {
     const data = detailsRef.value
@@ -111,25 +133,22 @@
   const leftPanelConfig = computed(() => {
     const items = computed(() => {
       const data = detailsRef.value
-      const itemsMap = itemsMapRef.value
 
-      if (!data || !Array.isArray(data) || !itemsMap) {
+      if (!data || !Array.isArray(data)) {
         return []
       }
 
-      return data
-        .map((item: KnowledgeLossDetails) => {
-          const file = itemsMap.get(item.path)
-          return {
-            path: item.path,
-            name: file?.name || item.path,
-            displayValue: item.knowledgeRisk,
-          }
-        })
-        .sort((a, b) => a.name.localeCompare(b.name))
+      return Array.from(risksCounts.value.entries())
+        .map(([risk, count]) => ({
+          name: risk,
+          filesCount: count,
+          color: getStatusColor(risk) || 0xf0f0f0,
+        }))
+        .sort((a, b) => b.filesCount - a.filesCount)
     })
 
     return {
+      itemType: 'default' as const,
       labelKey: 'leftPanel.knowledge-risks.header1',
       infoKey: 'leftPanel.knowledge-risks.info1',
       items: items.value,
@@ -139,7 +158,7 @@
   const secondLeftPanelConfig = computed(() => {
     const selected = codeCityRef.value?.selectedPath
 
-    if (!selected) {
+    if (!selected || restApiStore.getItemByPath(selected)?.type === 'dir') {
       return {
         itemType: 'author' as const,
         labelKey: 'leftPanel.knowledge-risks.header2',
@@ -163,7 +182,7 @@
       .map((author: AuthorContribution) => ({
         path: author.name,
         name: author.name,
-        displayValue: `${author.percentage.toFixed(1)}%`,
+        displayValue: author.percentage.toFixed(1),
       }))
       .sort((a, b) => parseFloat(b.displayValue) - parseFloat(a.displayValue))
 
@@ -174,6 +193,14 @@
       items,
     }
   })
+
+  function getOwnershipColor(percent: number): string {
+    if (percent < 20) return '#064e3b'
+    if (percent < 40) return '#0f6f4a'
+    if (percent < 60) return '#0fa15c'
+    if (percent < 80) return '#07c86d'
+    return '#00f47a'
+  }
 </script>
 
 <style scoped lang="scss">
@@ -186,7 +213,7 @@
   }
 
   .item-value {
-    font-weight: 600;
+    font-weight: 400;
     font-size: 0.9rem;
   }
 </style>

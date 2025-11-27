@@ -14,34 +14,47 @@
       </div>
     </div>
 
-    <AppSearchBar
-      class="search-bar-wrapper"
-      type="mini"
-      :placeholder="$t(searchPlaceholder)"
-      :items="props.items || []"
-      @filtered="handleFiltered"
-    />
+    <div
+      v-if="props.itemType === 'author' && props.allowLoading && isFileDetailsLoading"
+      class="metrics-loading"
+    >
+      <LoadingBar
+        :show="true"
+        :blur="false"
+        :label="'common.loading'"
+        :show-cancel-button="false"
+      />
+    </div>
+    <div v-else class="panel-content">
+      <AppSearchBar
+        class="search-bar-wrapper"
+        type="mini"
+        :placeholder="$t(searchPlaceholder)"
+        :items="props.items || []"
+        @filtered="handleFiltered"
+      />
 
-    <div class="item-list">
-      <div v-if="displayItems.length === 0" class="empty-state">
-        <p class="empty-message">{{ $t(emptyMessage) }}</p>
-      </div>
+      <div class="item-list">
+        <div v-if="displayItems.length === 0" class="empty-state">
+          <p class="empty-message">{{ $t(emptyMessage) }}</p>
+        </div>
 
-      <div
-        v-for="item in displayItems"
-        :key="itemKey(item)"
-        class="file-item"
-        :class="{
-          active: isItemActive(item),
-          'disable-interactions': props.itemType === 'author',
-        }"
-        @click="handleItemClick(item)"
-        @mouseenter="handleItemHover(item)"
-        @mouseleave="handleItemCancelHover()"
-      >
-        <slot name="item" :item="item">
-          <span class="item-name">{{ itemLabel(item) }}</span>
-        </slot>
+        <div
+          v-for="item in displayItems"
+          :key="itemKey(item)"
+          class="file-item"
+          :class="{
+            active: isItemActive(item),
+            'disable-interactions': props.itemType === 'author' || props.itemType === 'default',
+          }"
+          @click="handleItemClick(item)"
+          @mouseenter="handleItemHover(item)"
+          @mouseleave="handleItemCancelHover()"
+        >
+          <slot name="item" :item="item">
+            <span class="item-name">{{ itemLabel(item) }}</span>
+          </slot>
+        </div>
       </div>
     </div>
   </aside>
@@ -49,27 +62,33 @@
 
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
+  import { useRestApi } from '@/composables/useRestApi'
   import AppSearchBar from '@/components/common/AppSearchBar.vue'
   import InfoTooltip from '@/components/modals/InfoTooltip.vue'
+  import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  type ItemType = 'file' | 'author'
+  type ItemType = 'file' | 'author' | 'default'
 
   interface BaseItem {
     [key: string]: any
   }
 
-  interface FileItem extends BaseItem {
+  export interface FileItem extends BaseItem {
     path: string
     name: string
   }
 
-  interface AuthorItem extends BaseItem {
+  export interface AuthorItem extends BaseItem {
+    name: string
+  }
+
+  export interface DefaultItem extends BaseItem {
     name: string
   }
 
   const props = withDefaults(
     defineProps<{
-      items: Array<FileItem | AuthorItem>
+      items: Array<FileItem | AuthorItem | DefaultItem>
       labelKey: string
       infoKey?: string
       itemType?: ItemType
@@ -84,13 +103,16 @@
       handleAuthorHover?: (name: string) => void
       handleAuthorCancelHover?: () => void
       maxHeight?: string
+      allowLoading?: boolean
     }>(),
     {
       maxHeight: '100%',
       itemType: 'file',
+      allowLoading: true,
     }
   )
 
+  const { isFileDetailsLoading } = useRestApi()
   const maxHeight = computed(() => props.maxHeight)
   const filteredItems = ref<typeof props.items>([])
 
@@ -99,13 +121,21 @@
   })
 
   const searchPlaceholder = computed(() => {
-    return props.itemType === 'author'
-      ? 'leftPanel.searchAuthorsPlaceholder'
-      : 'leftPanel.searchFilesPlaceholder'
+    if (props.itemType === 'author') {
+      return 'leftPanel.searchAuthorsPlaceholder'
+    } else if (props.itemType === 'default') {
+      return 'leftPanel.searchItemsPlaceholder'
+    }
+    return 'leftPanel.searchFilesPlaceholder'
   })
 
   const emptyMessage = computed(() => {
-    return props.itemType === 'author' ? 'common.noAuthors' : 'common.noFiles'
+    if (props.itemType === 'author') {
+      return 'common.noAuthors'
+    } else if (props.itemType === 'default') {
+      return 'common.noItems'
+    }
+    return 'common.noFiles'
   })
 
   watch(
@@ -120,18 +150,21 @@
     filteredItems.value = filtered
   }
 
-  function itemKey(item: FileItem | AuthorItem): string {
-    if (props.itemType === 'author') {
-      return (item as AuthorItem).name
+  function itemKey(item: FileItem | AuthorItem | DefaultItem): string {
+    if (props.itemType === 'author' || props.itemType === 'default') {
+      return (item as AuthorItem | DefaultItem).name
     }
     return (item as FileItem).path
   }
 
-  function itemLabel(item: FileItem | AuthorItem): string {
+  function itemLabel(item: FileItem | AuthorItem | DefaultItem): string {
     return item.name
   }
 
-  function isItemActive(item: FileItem | AuthorItem): boolean {
+  function isItemActive(item: FileItem | AuthorItem | DefaultItem): boolean {
+    if (props.itemType === 'default') {
+      return false
+    }
     if (props.itemType === 'author') {
       const authorItem = item as AuthorItem
       return props.selectedAuthor === authorItem.name || props.hoveredAuthor === authorItem.name
@@ -140,7 +173,10 @@
     return props.selectedPath === fileItem.path || props.hoveredPath === fileItem.path
   }
 
-  function handleItemClick(item: FileItem | AuthorItem): void {
+  function handleItemClick(item: FileItem | AuthorItem | DefaultItem): void {
+    if (props.itemType === 'default') {
+      return
+    }
     if (props.itemType === 'author') {
       props.handleAuthorSelect?.((item as AuthorItem).name)
     } else {
@@ -148,7 +184,10 @@
     }
   }
 
-  function handleItemHover(item: FileItem | AuthorItem): void {
+  function handleItemHover(item: FileItem | AuthorItem | DefaultItem): void {
+    if (props.itemType === 'default') {
+      return
+    }
     if (props.itemType === 'author') {
       props.handleAuthorHover?.((item as AuthorItem).name)
     } else {
@@ -157,6 +196,9 @@
   }
 
   function handleItemCancelHover(): void {
+    if (props.itemType === 'default') {
+      return
+    }
     if (props.itemType === 'author') {
       props.handleAuthorCancelHover?.()
     } else {
@@ -179,8 +221,26 @@
     box-shadow: $shadow-lg;
   }
 
+  .panel-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0; // Important for proper scrolling
+  }
+
   .search-bar-wrapper {
     margin-bottom: $spacing-lg;
+    flex-shrink: 0; // Prevent search bar from shrinking
+  }
+
+  .metrics-loading {
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: var(--color-text-secondary);
   }
 
   .panel-header {
@@ -190,6 +250,7 @@
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0; // Prevent header from shrinking
 
     h2 {
       font-size: 0.75rem;
@@ -222,6 +283,7 @@
     gap: 0.5rem;
     overflow-y: auto;
     flex: 1;
+    min-height: 0; // Important for proper scrolling
     @include scrollbar;
   }
 

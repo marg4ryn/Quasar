@@ -145,6 +145,7 @@
       itemType: 'author' as const,
       labelKey: 'leftPanel.abandoned-code.header2',
       infoKey: 'leftPanel.abandoned-code.info2',
+      allowLoading: false,
       items: items.value,
     }
   })

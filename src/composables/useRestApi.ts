@@ -234,6 +234,27 @@ export function useRestApi() {
     return computed(() => store.leadAuthorsDetails)
   }
 
+  function filesExtensionsDetails() {
+    if (store.filesExtensionsDetails) {
+      log.info('Returning cached files extensions details')
+      return computed(() => store.filesExtensionsDetails)
+    }
+
+    const analysisId = getAnalysisId()
+    if (analysisId) {
+      handleFetch(
+        async () => {
+          const data = await api.fetchFilesExtensionsDetails(analysisId)
+          store.setFilesExtensionsDetails(data)
+        },
+        'filesExtensionsDetails',
+        'Files extensions details fetched successfully'
+      )
+    }
+
+    return computed(() => store.filesExtensionsDetails)
+  }
+
   const loadingValue = computed(() => store.loading)
 
   const isFileDetailsLoading = computed(() => Boolean(loadingValue.value['fileDetails']))
@@ -254,6 +275,7 @@ export function useRestApi() {
     knowledgeLossDetails,
     authorsStatisticsDetails,
     leadAuthorsDetails,
+    filesExtensionsDetails,
 
     isFileDetailsLoading,
     isGeneralLoading,

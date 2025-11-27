@@ -79,7 +79,7 @@
           </svg>
           <div class="item-content">
             <span class="item-name" v-html="highlightMatch(item.name)"></span>
-            <span v-if="item?.type === 'file'" class="item-path">{{ item.path }}</span>
+            <span class="item-path">{{ item.path }}</span>
           </div>
         </div>
         <div v-if="filteredItems.length > maxResults" class="dropdown-more">
@@ -460,8 +460,6 @@
         min-width: 0;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        height: 38px;
         gap: 0.25rem;
 
         .item-name {

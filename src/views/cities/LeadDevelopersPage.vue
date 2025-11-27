@@ -1,16 +1,24 @@
 <template>
   <LoadingBar :show="isGeneralLoading" :label="'common.loading'" :show-cancel-button="false" />
   <CodeCityPageTemplate
+    ref="codeCityRef"
     :tabs="tabs"
     :colorData="colorData"
     :leftPanelConfig="leftPanelConfig"
+    :secondLeftPanelConfig="secondLeftPanelConfig"
     :rightPanelConfig="rightPanelConfig"
   >
     <template #leftPanelItem="{ item }">
+      <span class="item-name" :style="{ color: numberToHexColor(item.color) }">{{
+        item.name
+      }}</span>
+      <span class="item-value"> {{ item.filesCount }} {{ $t('common.files') }} </span>
+    </template>
+    <template #secondLeftPanelItem="{ item }">
       <span class="item-name">{{ item.name }}</span>
-      <span class="item-value" :style="{ color: item.color }">
-        {{ item.filesCount }} {{ $t('common.files') }}
-      </span>
+      <span class="item-value" :style="{ color: getOwnershipColor(item.displayValue) }">
+        {{ item.displayValue }}%</span
+      >
     </template>
   </CodeCityPageTemplate>
 </template>
@@ -18,15 +26,23 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { useRestApi } from '@/composables/useRestApi'
-  import { MetricType } from '@/types'
-  import type { AuthorsStatisticsDetails, LeadAuthorsDetails } from '@/types'
+  import { useRestApiStore } from '@/stores/restApiStore'
+  import type {
+    MetricType,
+    AuthorsStatisticsDetails,
+    LeadAuthorsDetails,
+    AuthorContribution,
+  } from '@/types'
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const { authorsStatisticsDetails, leadAuthorsDetails, isGeneralLoading } = useRestApi()
+  const { authorsStatisticsDetails, leadAuthorsDetails, fileDetails, isGeneralLoading } =
+    useRestApi()
 
+  const restApiStore = useRestApiStore()
   const authorsRef = authorsStatisticsDetails()
   const detailsRef = leadAuthorsDetails()
+  const codeCityRef = ref<InstanceType<typeof CodeCityPageTemplate>>()
 
   const rightPanelConfig = ref({
     metricTypes: [
@@ -63,24 +79,28 @@
   ]
 
   const colorPalette = [
-    '#32CD33', // emerald
-    '#00BFFF', // sky blue
-    '#BF1B1B', // crimson
-    '#FFC50F', // honey yellow
-    '#00FF7F', // spring green
-    '#1E90FF', // dodger blue
-    '#BF00FF', // violet
-    '#FF8C42', // orange
-    '#40E0D0', // turquoise
+    0x32cd33, // emerald
+    0x00bfff, // sky blue
+    0xbf1b1b, // crimson
+    0xffc50f, // honey yellow
+    0x00ff7f, // spring green
+    0x1e90ff, // dodger blue
+    0xbf00ff, // violet
+    0xff8c42, // orange
+    0x40e0d0, // turquoise
   ]
 
-  function getRandomColor(index: number): string {
+  function numberToHexColor(color: number): string {
+    return `#${color.toString(16).padStart(6, '0')}`
+  }
+
+  function getRandomColor(index: number): number {
     return colorPalette[index % colorPalette.length]
   }
 
   const authorColorMap = computed(() => {
     const data = authorsRef.value
-    const map = new Map<string, string>()
+    const map = new Map<string, number>()
 
     if (!data || !Array.isArray(data)) {
       return map
@@ -101,7 +121,7 @@
     }
 
     return data.map((item: LeadAuthorsDetails) => {
-      const authorColor = authorColorMap.value.get(item.leadAuthor) || '#f0f0f0'
+      const authorColor = authorColorMap.value.get(item.leadAuthor) || 0xf0f0f0
       return {
         path: item.path,
         color: authorColor,
@@ -123,8 +143,8 @@
         filesCount: author.filesAsLeadAuthor,
         color:
           author.filesAsLeadAuthor !== 0
-            ? authorColorMap.value.get(author.name) || '#CCCCCC'
-            : '#f0f0f0',
+            ? authorColorMap.value.get(author.name) || 0xf0f0f0
+            : 0xf0f0f0,
       }))
       .filter((item) => item.filesCount !== 0)
       .sort((a, b) => b.filesCount - a.filesCount)
@@ -134,8 +154,56 @@
     itemType: 'author' as const,
     labelKey: 'leftPanel.lead-developers.header',
     infoKey: 'leftPanel.lead-developers.info',
+    allowLoading: false,
     items: items.value,
   }))
+
+  const secondLeftPanelConfig = computed(() => {
+    const selected = codeCityRef.value?.selectedPath
+
+    if (!selected || restApiStore.getItemByPath(selected)?.type === 'dir') {
+      return {
+        itemType: 'author' as const,
+        labelKey: 'leftPanel.knowledge-risks.header2',
+        infoKey: 'leftPanel.knowledge-risks.info2',
+        items: [],
+      }
+    }
+
+    const details = fileDetails(selected).value
+
+    if (!details?.knowledge?.contributions) {
+      return {
+        itemType: 'author' as const,
+        labelKey: 'leftPanel.knowledge-risks.header2',
+        infoKey: 'leftPanel.knowledge-risks.info2',
+        items: [],
+      }
+    }
+
+    const items = details.knowledge.contributions
+      .map((author: AuthorContribution) => ({
+        path: author.name,
+        name: author.name,
+        displayValue: author.percentage.toFixed(1),
+      }))
+      .sort((a, b) => parseFloat(b.displayValue) - parseFloat(a.displayValue))
+
+    return {
+      itemType: 'author' as const,
+      labelKey: 'leftPanel.knowledge-risks.header2',
+      infoKey: 'leftPanel.knowledge-risks.info2',
+      items,
+    }
+  })
+
+  function getOwnershipColor(percent: number): string {
+    if (percent < 20) return '#064e3b'
+    if (percent < 40) return '#0f6f4a'
+    if (percent < 60) return '#0fa15c'
+    if (percent < 80) return '#07c86d'
+    return '#00f47a'
+  }
 </script>
 
 <style scoped lang="scss">
@@ -148,7 +216,7 @@
   }
 
   .item-value {
-    font-weight: 600;
+    font-weight: 400;
     font-size: 0.9rem;
     white-space: nowrap;
   }

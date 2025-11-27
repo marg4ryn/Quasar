@@ -25,6 +25,7 @@
         :labelKey="leftPanelConfig.labelKey"
         :infoKey="leftPanelConfig.infoKey"
         :items="leftPanelConfig.items"
+        :allow-loading="leftPanelConfig.allowLoading"
         :selectedPath="selectedPath"
         :hoveredPath="hoveredPath"
         :handleFileSelect="handleCityNodeSelect"
@@ -48,6 +49,7 @@
         :labelKey="secondLeftPanelConfig.labelKey"
         :infoKey="secondLeftPanelConfig.infoKey"
         :items="secondLeftPanelConfig.items"
+        :allow-loading="secondLeftPanelConfig.allowLoading"
         :selectedPath="selectedPath"
         :hoveredPath="hoveredPath"
         :handleFileSelect="handleCityNodeSelect"
@@ -94,6 +96,7 @@
 
 <script setup lang="ts">
   import { ref, computed, onMounted, onUnmounted } from 'vue'
+  import { FileItem, AuthorItem, DefaultItem } from '@/components/city/LeftPanel.vue'
   import { useLogger } from '@/composables/useLogger'
   import { useCodeCityController } from '@/composables/useCodeCityController'
   import { useRestApi } from '@/composables/useRestApi'
@@ -107,17 +110,14 @@
   import CodeCity from '@/components/visuals/CodeCity.vue'
   import PlayPauseButton from '@/components/city/PlayPauseButton.vue'
 
-  type ItemType = 'file' | 'author'
+  type ItemType = 'file' | 'author' | 'default'
 
   interface LeftPanelConfig {
     labelKey: string
     infoKey?: string
     itemType?: ItemType
-    items: Array<{
-      path?: string
-      name: string
-      [key: string]: any
-    }>
+    allowLoading?: boolean
+    items: Array<FileItem | AuthorItem | DefaultItem>
   }
 
   interface RightPanelConfig {
@@ -126,7 +126,7 @@
 
   interface Props {
     tabs: Array<{ id: string; label: string; route: string }>
-    colorData: any[]
+    colorData: Array<{ path: string; color: number; intensity: number }>
     leftPanelConfig?: LeftPanelConfig
     secondLeftPanelConfig?: LeftPanelConfig
     rightPanelConfig?: RightPanelConfig
