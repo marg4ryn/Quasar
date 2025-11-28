@@ -51,7 +51,6 @@
   const props = defineProps<Props>()
 
   const emit = defineEmits<{
-    authorClick: [name: string | null]
     authorHover: [name: string | null]
   }>()
 
