@@ -88,6 +88,22 @@
       .append('g')
       .attr('transform', `translate(${width / 2}, ${height / 2})`)
 
+    svgGroup
+      .append('defs')
+      .append('filter')
+      .attr('id', 'blur')
+      .append('feGaussianBlur')
+      .attr('stdDeviation', 20)
+
+    svgGroup
+      .append('circle')
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', outerRadius + 10)
+      .attr('fill', 'rgba(0, 0, 0, 0.5)')
+      .attr('filter', 'url(#blur)')
+      .attr('class', 'background-circle')
+
     const authors = props.data.map((d) => d.name)
     const authors_count = authors.length
     const matrix: number[][] = Array(authors_count)
@@ -200,6 +216,7 @@
       .style('fill', (d) => colors[d.index % colors.length])
       .style('font-weight', 'bold')
       .style('pointer-events', 'none')
+      .style('text-shadow', '0 0 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)')
 
     // Połączenia (Ribbons)
     const ribbon = d3.ribbon().radius(innerRadius)
