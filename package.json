@@ -15,7 +15,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "d3": "^7.9.0",
+    "date-fns": "^4.1.0",
     "pinia": "^3.0.3",
     "three": "^0.128.0",
     "vue": "^3.5.22",
