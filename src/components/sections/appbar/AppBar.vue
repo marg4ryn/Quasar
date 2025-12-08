@@ -14,7 +14,10 @@
       </button>
 
       <div class="app-bar__center">
-        <span class="app-label"> {{ repoName }} {{ fromDate }} {{ toDate }} </span>
+        <span class="repo-label" v-if="repoName && startDate && endDate">
+          {{ repoName }}: {{ startDate ? formatDate(startDate) : '' }} -
+          {{ endDate ? formatDate(endDate) : '' }}
+        </span>
       </div>
     </template>
   </header>
@@ -30,20 +33,25 @@
 <script setup lang="ts">
   import { useUIStore } from '@/stores/uiStore'
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
+  import { useRestApi } from '@/composables/useRestApi'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
   import { computed, ref } from 'vue'
   import ModalBox from '@/components/modals/ModalBox.vue'
 
+  const { repositoryDetails } = useRestApi()
   const { t } = useI18n()
+
+  const detailsRef = repositoryDetails()
   const router = useRouter()
   const uiStore = useUIStore()
   const isAppBarVisible = computed(() => uiStore.isAppBarVisible)
   const userSettingsStore = useUserSettingsStore()
-  const repoName = ref('')
-  const fromDate = ref('')
-  const toDate = ref('')
   const showDialog = ref(false)
+
+  const repoName = computed(() => detailsRef.value?.info.repositoryName)
+  const startDate = computed(() => detailsRef.value?.info.analysisRangeStartDate)
+  const endDate = computed(() => detailsRef.value?.info.analysisRangeEndDate)
 
   const logoSrc = computed(() => {
     switch (userSettingsStore.selectedColor) {
@@ -62,6 +70,23 @@
 
   function handleNewAnalysis() {
     router.push('/welcome')
+  }
+
+  const formatDate = (date: Date | string) => {
+    const userSettings = useUserSettingsStore()
+    let lang = ''
+
+    if (userSettings.selectedLanguage === 'system') {
+      lang = navigator.language.startsWith('pl') ? 'pl' : 'en'
+    } else {
+      lang = userSettings.selectedLanguage
+    }
+
+    return new Date(date).toLocaleDateString(lang, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
   }
 </script>
 
@@ -124,6 +149,13 @@
       &__2 {
         color: var(--color-text-primary);
       }
+    }
+
+    .repo-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-tertiary);
+      letter-spacing: 0.3px;
     }
   }
 </style>

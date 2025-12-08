@@ -4,13 +4,18 @@
   <div class="page-wrapper">
     <TabNavigation class="tab-nav" :tabs="tabs" />
     <div class="diagram-wrapper">
-      <ChordDiagram :data="items" @authorHover="handleAuthorHover" />
+      <ChordDiagram
+        v-if="items.length > 0"
+        :key="items.length"
+        :data="items"
+        @authorHover="handleAuthorHover"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, watch } from 'vue'
   import { useRestApi } from '@/composables/useRestApi'
   import { useLogger } from '@/composables/useLogger'
 
@@ -23,6 +28,14 @@
   const log = useLogger('DeveloperRelationshipsPage')
 
   const detailsRef = authorCouplingDetails()
+
+  watch(
+    detailsRef,
+    (newVal) => {
+      log.info('Data changed:', newVal)
+    },
+    { deep: true }
+  )
 
   const tabs = [
     { id: 'developers-list', label: 'navbar.developers-list', route: '/developers-list' },

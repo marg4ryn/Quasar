@@ -245,13 +245,13 @@
   function handleResize() {
     createChordDiagram()
   }
-
   watch(
-    () => props.data,
+    () => [props.data?.length ?? 0, ...(props.data?.map((d) => d.name) ?? [])],
     () => {
+      console.log('changed')
       createChordDiagram()
     },
-    { deep: true }
+    { immediate: false }
   )
 
   onMounted(() => {

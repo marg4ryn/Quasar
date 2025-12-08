@@ -272,7 +272,7 @@
     "vulnerabilitiesInfo": "Wykryte podatności powiązane z kodem CVE.",
     "codeSmells": "Brzydkie zapachy kodu",
     "codeSmellsInfo": "Problemy utrudniające utrzymanie kodu, niewywołujące błędów kompilacji.",
-    "complexity": "Złożoność cyklometryczna",
+    "complexity": "Złożoność cyklomatyczna",
     "complexityInfo": "Miara określająca, ile niezależnych ścieżek logicznych występuje w kodzie.",
     "duplicatedLinesDensity": "Linie powielone",
     "knowledgeRiskEnum": {

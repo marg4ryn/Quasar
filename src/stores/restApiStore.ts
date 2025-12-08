@@ -13,6 +13,7 @@ import {
   type LeadAuthorsResponse,
   type FilesExtensionsResponse,
   type AuthorCouplingResponse,
+  type RepositoryResponse,
 } from '@/types'
 import { useLogger } from '@/composables/useLogger'
 
@@ -66,6 +67,7 @@ export const useRestApiStore = defineStore('api', () => {
   const leadAuthorsDetails = ref<LeadAuthorsResponse | null>(null)
   const filesExtensionsDetails = ref<FilesExtensionsResponse | null>(null)
   const authorCouplingDetails = ref<AuthorCouplingResponse | null>(null)
+  const repositoryDetails = ref<RepositoryResponse | null>(null)
   const loading = ref<Record<string, boolean>>({})
   const errors = ref<Record<string, string | null>>({})
 
@@ -83,6 +85,7 @@ export const useRestApiStore = defineStore('api', () => {
         cachedLeadAuthors,
         cachedFilesExtensions,
         cachedAuthorCoupling,
+        cachedRepositoryDetails,
       ] = await Promise.all([
         getCacheItem<CityNode>('structure'),
         getCacheItem<Array<[string, ItemsListItem]>>('itemsMap'),
@@ -95,6 +98,7 @@ export const useRestApiStore = defineStore('api', () => {
         getCacheItem<LeadAuthorsResponse>('leadAuthors'),
         getCacheItem<FilesExtensionsResponse>('filesExtensions'),
         getCacheItem<AuthorCouplingResponse>('authorCoupling'),
+        getCacheItem<RepositoryResponse>('repositoryDetails'),
       ])
 
       structure.value = cachedStructure
@@ -117,6 +121,7 @@ export const useRestApiStore = defineStore('api', () => {
       leadAuthorsDetails.value = cachedLeadAuthors
       filesExtensionsDetails.value = cachedFilesExtensions
       authorCouplingDetails.value = cachedAuthorCoupling
+      repositoryDetails.value = cachedRepositoryDetails
 
       log.info('Data loaded from Cache API')
     } catch (error) {
@@ -233,6 +238,15 @@ export const useRestApiStore = defineStore('api', () => {
     { deep: true }
   )
 
+  watch(
+    repositoryDetails,
+    (value) => {
+      if (value) setCacheItem('repositoryDetails', value)
+      else deleteCacheItem('repositoryDetails')
+    },
+    { deep: true }
+  )
+
   function setStructure(data: CityNode) {
     structure.value = data
   }
@@ -289,6 +303,10 @@ export const useRestApiStore = defineStore('api', () => {
     authorCouplingDetails.value = data
   }
 
+  function setRepositoryDetails(data: RepositoryResponse) {
+    repositoryDetails.value = data
+  }
+
   function getHotspotsDetails(): HotspotsResponse | null {
     return hotspotsDetails.value
   }
@@ -325,6 +343,10 @@ export const useRestApiStore = defineStore('api', () => {
     return authorCouplingDetails.value
   }
 
+  function getRepositoryDetails(): RepositoryResponse | null {
+    return repositoryDetails.value
+  }
+
   function hasFileDetails(path: string): boolean {
     return path in fileDetails.value
   }
@@ -352,6 +374,7 @@ export const useRestApiStore = defineStore('api', () => {
     leadAuthorsDetails.value = null
     filesExtensionsDetails.value = null
     authorCouplingDetails.value = null
+    repositoryDetails.value = null
     loading.value = {}
     errors.value = {}
 
@@ -378,6 +401,7 @@ export const useRestApiStore = defineStore('api', () => {
     leadAuthorsDetails,
     filesExtensionsDetails,
     authorCouplingDetails,
+    repositoryDetails,
     loading,
     errors,
 
@@ -393,6 +417,7 @@ export const useRestApiStore = defineStore('api', () => {
     setLeadAuthorsDetails,
     setFilesExtensionsDetails,
     setAuthorCouplingDetails,
+    setRepositoryDetails,
 
     // Getters
     getItemByPath,
@@ -407,6 +432,7 @@ export const useRestApiStore = defineStore('api', () => {
     getLeadAuthorsDetails,
     getFilesExtensionsDetails,
     getAuthorCouplingDetails,
+    getRepositoryDetails,
     hasFileDetails,
 
     // State management

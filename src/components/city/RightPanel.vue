@@ -386,12 +386,6 @@
       word-break: break-all;
     }
 
-    .metric-label {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
     .info-button {
       background: none;
       border: none;
