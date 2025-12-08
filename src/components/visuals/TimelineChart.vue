@@ -74,7 +74,7 @@
     pointRadius: 0,
     pointHoverRadius: 6,
     pointBorderWidth: 2,
-    maxTicksLimit: 8,
+    maxTicksLimit: 5,
     tooltipPadding: 12,
     pointBorder: '#fafafa',
     grid: 'rgba(156, 163, 175, 0.1)',
@@ -226,7 +226,7 @@
               time: {
                 unit: 'day',
                 displayFormats: {
-                  day: 'MMM dd',
+                  day: 'MMM dd yyyy',
                   month: 'MMM yyyy'
                 },
                 parser: 'yyyy-MM-dd',
