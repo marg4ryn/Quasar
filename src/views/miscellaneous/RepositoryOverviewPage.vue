@@ -81,7 +81,7 @@
           <div class="card-header">
             <h3 class="card-title">{{ t('repositoryOverview.commitTrends.title') }}</h3>
           </div>
-          <TimelineChart :data="commitData" tooltipDesc="Commits" />
+          <TimelineChart v-if="commitData" :data="commitData" tooltipDesc="Commits" />
         </div>
 
         <!-- Code Changes Card -->
@@ -89,7 +89,7 @@
           <div class="card-header">
             <h3 class="card-title">{{ t('repositoryOverview.codeChanges.title') }}</h3>
           </div>
-          <CodeChurnChart :data="churnData" />
+          <CodeChurnChart v-if="churnData" :data="churnData" />
         </div>
 
         <!-- Top Authors Card -->
@@ -98,7 +98,7 @@
             <h3 class="card-title">{{ t('repositoryOverview.topAuthors.title') }}</h3>
           </div>
           <div class="card-content">
-            <div v-if="authorData.length === 0" class="no-data">
+            <div v-if="!authorData?.length" class="no-data">
               {{ t('repositoryOverview.topAuthors.placeholder') }}
             </div>
             <div v-else class="authors-list">
@@ -131,7 +131,7 @@
           <div class="card-header">
             <h3 class="card-title">{{ t('repositoryOverview.developerCountTrends.title') }}</h3>
           </div>
-          <TimelineChart :data="authorsData" tooltipDesc="Commits" />
+          <TimelineChart v-if="authorsData" :data="authorsData" tooltipDesc="Commits" />
         </div>
 
         <!-- Analysis Statistics Card -->
@@ -327,10 +327,9 @@
 
   const authorData = computed(() => {
     const data = authorsRef.value
-    const authors: Array<{ name: string; filesCount: number; commits: number }> = []
 
     if (!data || !Array.isArray(data)) {
-      return authors
+      return null
     }
 
     return data
@@ -342,6 +341,31 @@
       .sort((a, b) => b.filesCount - a.filesCount)
       .slice(0, 5)
   })
+
+  const commitData = computed<ChartData[] | null>(
+    () =>
+      trendsRef.value?.map((item) => ({
+        date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
+        value: item.commits,
+      })) ?? null
+  )
+
+  const authorsData = computed<ChartData[] | null>(
+    () =>
+      trendsRef.value?.map((item) => ({
+        date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
+        value: item.uniqueAuthors,
+      })) ?? null
+  )
+
+  const churnData = computed<ChurnData[] | null>(
+    () =>
+      trendsRef.value?.map((item) => ({
+        date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
+        linesAdded: item.linesAdded,
+        linesDeleted: item.linesDeleted,
+      })) ?? null
+  )
 
   const formatDate = (date: Date | string) => {
     const userSettings = useUserSettingsStore()
@@ -380,31 +404,6 @@
       hour12: false,
     })
   }
-
-  const commitData = computed<ChartData[]>(
-    () =>
-      trendsRef.value?.map((item) => ({
-        date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
-        value: item.commits,
-      })) ?? []
-  )
-
-  const authorsData = computed<ChartData[]>(
-    () =>
-      trendsRef.value?.map((item) => ({
-        date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
-        value: item.uniqueAuthors,
-      })) ?? []
-  )
-
-  const churnData = computed<ChurnData[]>(
-    () =>
-      trendsRef.value?.map((item) => ({
-        date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
-        linesAdded: item.linesAdded,
-        linesDeleted: item.linesDeleted,
-      })) ?? []
-  )
 </script>
 
 <style scoped lang="scss">
@@ -449,10 +448,6 @@
     flex-direction: column;
     box-shadow: $shadow-lg;
     transition: transform 0.2s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-    }
 
     &[data-cols='1'] {
       grid-column: span 1;

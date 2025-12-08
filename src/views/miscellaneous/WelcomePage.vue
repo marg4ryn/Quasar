@@ -107,7 +107,7 @@
   const REPO_URL_PATTERN =
     /^(?:https:\/\/)?(?:git(?:hub|lab))\.com\/(?:[^/]+)\/(?:(?!\.git$)[^/]+?)(?:\.git)*$/
 
-  const MIN_DATE = '2005-01-01'
+  const MIN_DATE = '2000-01-01'
   const today = new Date().toISOString().split('T')[0]
   const MAX_DATE = today
   const link = ref(newAnalysisStore.link || '')
