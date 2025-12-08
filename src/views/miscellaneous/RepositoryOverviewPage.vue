@@ -362,7 +362,7 @@
       .slice(0, 5)
   })
 
-  const commitData = computed<ChartData[] | null>(
+  const commitData = computed<ChartDataPoint[] | null>(
     () =>
       trendsRef.value?.map((item) => ({
         date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
@@ -370,7 +370,7 @@
       })) ?? null
   )
 
-  const authorsData = computed<ChartData[] | null>(
+  const authorsData = computed<ChartDataPoint[] | null>(
     () =>
       trendsRef.value?.map((item) => ({
         date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
