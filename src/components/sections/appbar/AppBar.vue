@@ -14,7 +14,11 @@
       </button>
 
       <div class="app-bar__center">
-        <span class="repo-label" v-if="repoName && startDate && endDate">
+        <span
+          class="repo-label"
+          :style="{ fontFamily: 'var(--font-family-monospace)' }"
+          v-if="repoName && startDate && endDate"
+        >
           {{ repoName }}: {{ startDate ? formatDate(startDate) : '' }} -
           {{ endDate ? formatDate(endDate) : '' }}
         </span>

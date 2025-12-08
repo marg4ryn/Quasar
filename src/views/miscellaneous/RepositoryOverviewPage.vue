@@ -10,157 +10,244 @@
         <!-- Repository Info Card -->
         <div class="stats-card" data-cols="1">
           <div class="card-header">
-            <h3 class="card-title">Repository Info</h3>
+            <h3 class="card-title">{{ t('repositoryOverview.repositoryInfo.title') }}</h3>
           </div>
+
           <div class="card-content">
             <div class="metric-item">
-              <span class="metric-label">Repository</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.repositoryInfo.repository')
+              }}</span>
               <span class="metric-value">{{ detailsRef.info.repositoryName }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Owner</span>
+              <span class="metric-label">{{ t('repositoryOverview.repositoryInfo.owner') }}</span>
               <span class="metric-value">{{ detailsRef.info.repositoryOwner }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Platform</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.repositoryInfo.platform')
+              }}</span>
               <span class="metric-value">{{ detailsRef.info.repositoryPlatform }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">URL</span>
-              <span class="metric-value" :style="{ fontFamily: 'var(--font-family-monospace)' }">{{
-                detailsRef.info.repositoryUrl
-              }}</span>
+              <span class="metric-label">{{ t('repositoryOverview.repositoryInfo.url') }}</span>
+              <span class="metric-value" :style="{ fontFamily: 'var(--font-family-monospace)' }">
+                {{ detailsRef.info.repositoryUrl }}
+              </span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Analysis Range Start Date</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.repositoryInfo.analysisRangeStartDate')
+              }}</span>
               <span class="metric-value">{{
                 formatDate(detailsRef.info.analysisRangeStartDate)
               }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Analysis Range End Date</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.repositoryInfo.analysisRangeEndDate')
+              }}</span>
               <span class="metric-value">{{
                 formatDate(detailsRef.info.analysisRangeEndDate)
               }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Analysis finished at</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.repositoryInfo.analysisFinishedAt')
+              }}</span>
               <span class="metric-value">{{
                 formatDateTime(detailsRef.info.analysisFinishedAt)
               }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Analysis Time</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.repositoryInfo.analysisTime')
+              }}</span>
               <span class="metric-value">{{ detailsRef.info.analysisTimeInSeconds }} s</span>
             </div>
           </div>
         </div>
 
-        <!-- Commits Card -->
+        <!-- Commit Trends Card -->
         <div class="stats-card" data-cols="1">
           <div class="card-header">
-            <h3 class="card-title">Commits</h3>
+            <h3 class="card-title">{{ t('repositoryOverview.commitTrends.title') }}</h3>
           </div>
           <TimelineChart :data="commitData" tooltipDesc="Commits" />
         </div>
 
-        <!-- Churn Diagram Card -->
+        <!-- Code Changes Card -->
         <div class="stats-card" data-cols="2">
           <div class="card-header">
-            <h3 class="card-title">Lines</h3>
+            <h3 class="card-title">{{ t('repositoryOverview.codeChanges.title') }}</h3>
           </div>
           <CodeChurnChart :data="churnData" />
         </div>
 
-        <!-- Authors Card -->
+        <!-- Top Authors Card -->
         <div class="stats-card" data-cols="1">
           <div class="card-header">
-            <h3 class="card-title">Authors</h3>
+            <h3 class="card-title">{{ t('repositoryOverview.topAuthors.title') }}</h3>
           </div>
-          <div class="card-content"></div>
+          <div class="card-content">
+            <div v-if="authorData.length === 0" class="no-data">
+              {{ t('repositoryOverview.topAuthors.placeholder') }}
+            </div>
+            <div v-else class="authors-list">
+              <div v-for="(author, index) in authorData" :key="author.name" class="author-item">
+                <div class="author-rank">{{ index + 1 }}</div>
+                <div class="author-info">
+                  <div class="author-name">{{ author.name }}</div>
+                  <div class="author-stats">
+                    <span class="stat">
+                      <span class="stat-label"
+                        >{{ t('repositoryOverview.topAuthors.files') }}:</span
+                      >
+                      <span class="stat-value">{{ author.filesCount }}</span>
+                    </span>
+                    <span class="stat">
+                      <span class="stat-label"
+                        >{{ t('repositoryOverview.topAuthors.commits') }}:</span
+                      >
+                      <span class="stat-value">{{ author.commits }}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Authors Diagram Card -->
+        <!-- Developer Count Trends Card -->
         <div class="stats-card" data-cols="1">
           <div class="card-header">
-            <h3 class="card-title">Authors</h3>
+            <h3 class="card-title">{{ t('repositoryOverview.developerCountTrends.title') }}</h3>
           </div>
           <TimelineChart :data="authorsData" tooltipDesc="Commits" />
         </div>
 
-        <!-- Statistics Card -->
-        <div class="stats-card" data-cols="2">
+        <!-- Analysis Statistics Card -->
+        <div class="stats-card" data-cols="1">
           <div class="card-header">
-            <h3 class="card-title">Statistics</h3>
+            <h3 class="card-title">
+              {{ t('repositoryOverview.analysisStatistics.title') }}
+            </h3>
           </div>
+
           <div class="card-content">
             <div class="metric-item">
-              <span class="metric-label">Authors</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.analysisStatistics.authors')
+              }}</span>
               <span class="metric-value">{{ detailsRef.statistics.authors }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Active Authors</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.analysisStatistics.activeAuthors')
+              }}</span>
               <span class="metric-value">{{ detailsRef.statistics.activeAuthors }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Commits</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.analysisStatistics.commits')
+              }}</span>
               <span class="metric-value">{{ detailsRef.statistics.commits }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Files</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.analysisStatistics.files')
+              }}</span>
               <span class="metric-value">{{ detailsRef.statistics.files }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Code Lines</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.analysisStatistics.codeLines')
+              }}</span>
               <span class="metric-value">{{
                 detailsRef.statistics.codeLines.toLocaleString()
               }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Comment Lines</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.analysisStatistics.commentLines')
+              }}</span>
               <span class="metric-value">{{
                 detailsRef.statistics.commentLines.toLocaleString()
               }}</span>
             </div>
+
             <div class="metric-item">
-              <span class="metric-label">Blank Lines</span>
+              <span class="metric-label">{{
+                t('repositoryOverview.analysisStatistics.blankLines')
+              }}</span>
               <span class="metric-value">{{
                 detailsRef.statistics.blankLines.toLocaleString()
               }}</span>
             </div>
-            <div class="metric-item">
-              <span class="metric-label">Bugs</span>
-              <span class="metric-value">
-                {{ detailsRef.staticAnalysis.bugs }}
-              </span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-label">Vulnerabilities</span>
-              <span class="metric-value">
-                {{ detailsRef.staticAnalysis.vulnerabilities }}
-              </span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-label">Code Smells</span>
-              <span class="metric-value">{{ detailsRef.staticAnalysis.codeSmells }}</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-label">Complexity</span>
-              <span class="metric-value">{{ detailsRef.staticAnalysis.complexity }}</span>
-            </div>
-            <div class="metric-item">
-              <span class="metric-label">Duplicated Lines</span>
-              <span class="metric-value"
-                >{{ detailsRef.staticAnalysis.duplicatedLinesDensity }}%</span
-              >
-            </div>
           </div>
         </div>
 
-        <!-- File Types Card -->
+        <!-- Static Analysis Card -->
         <div class="stats-card" data-cols="1">
           <div class="card-header">
-            <h3 class="card-title">File Types</h3>
+            <h3 class="card-title">
+              {{ t('repositoryOverview.staticAnalysis.title') }}
+            </h3>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-label">{{ t('repositoryOverview.staticAnalysis.bugs') }}</span>
+            <span class="metric-value">{{ detailsRef.staticAnalysis.bugs }}</span>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-label">{{
+              t('repositoryOverview.staticAnalysis.vulnerabilities')
+            }}</span>
+            <span class="metric-value">{{ detailsRef.staticAnalysis.vulnerabilities }}</span>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-label">{{
+              t('repositoryOverview.staticAnalysis.codeSmells')
+            }}</span>
+            <span class="metric-value">{{ detailsRef.staticAnalysis.codeSmells }}</span>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-label">{{
+              t('repositoryOverview.staticAnalysis.complexity')
+            }}</span>
+            <span class="metric-value">{{ detailsRef.staticAnalysis.complexity }}</span>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-label">{{
+              t('repositoryOverview.staticAnalysis.duplicatedLines')
+            }}</span>
+            <span class="metric-value">
+              {{ detailsRef.staticAnalysis.duplicatedLinesDensity }}%
+            </span>
+          </div>
+        </div>
+
+        <!-- File Extensions Card -->
+        <div class="stats-card" data-cols="1">
+          <div class="card-header">
+            <h3 class="card-title">{{ t('repositoryOverview.fileExtensions.title') }}</h3>
           </div>
           <div class="card-content">
             <div
@@ -170,21 +257,36 @@
             >
               <div class="file-type-header">
                 <span class="file-type-name">{{ fileType.fileType }}</span>
-                <span class="file-type-count">{{ fileType.files }} files</span>
+                <span class="file-type-count"
+                  >{{ fileType.files }} {{ t('repositoryOverview.fileExtensions.files') }}</span
+                >
               </div>
               <div class="file-type-details">
-                <span>{{ fileType.codeLines.toLocaleString() }} code</span>
-                <span>{{ fileType.commentLines.toLocaleString() }} comments</span>
-                <span>{{ fileType.blankLines.toLocaleString() }} blank</span>
+                <span>{{ t('repositoryOverview.fileExtensions.lines') }}: </span>
+                <span
+                  >{{ fileType.codeLines.toLocaleString() }}
+                  {{ t('repositoryOverview.fileExtensions.code') }}</span
+                >
+                <span
+                  >{{ fileType.commentLines.toLocaleString() }}
+                  {{ t('repositoryOverview.fileExtensions.comments') }}</span
+                >
+                <span
+                  >{{ fileType.blankLines.toLocaleString() }}
+                  {{ t('repositoryOverview.fileExtensions.blank') }}</span
+                >
               </div>
             </div>
           </div>
         </div>
 
-        <!-- X-Ray Card -->
+        <!-- X-Ray Analyses Card -->
         <div class="stats-card" data-cols="1">
           <div class="card-header">
-            <h3 class="card-title">X-Ray</h3>
+            <h3 class="card-title">{{ t('repositoryOverview.xrayAnalyses.title') }}</h3>
+          </div>
+          <div class="no-data">
+            <span>{{ t('repositoryOverview.xrayAnalyses.placeholder') }}</span>
           </div>
         </div>
       </div>
@@ -198,16 +300,21 @@
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
   import { ChartData } from '@/components/visuals/TimelineChart.vue'
   import { ChurnData } from '@/components/visuals/CodeChurnChart.vue'
+  import { useI18n } from 'vue-i18n'
+  import type { AuthorsStatisticsDetails } from '@/types'
 
   import TimelineChart from '@/components/visuals/TimelineChart.vue'
   import CodeChurnChart from '@/components/visuals/CodeChurnChart.vue'
   import TabNavigation from '@/components/city/TabNavigation.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const { repositoryDetails, analysisTrendsDetails, isGeneralLoading } = useRestApi()
+  const { t } = useI18n()
+  const { repositoryDetails, authorsStatisticsDetails, analysisTrendsDetails, isGeneralLoading } =
+    useRestApi()
 
   const detailsRef = repositoryDetails()
   const trendsRef = analysisTrendsDetails()
+  const authorsRef = authorsStatisticsDetails()
 
   const tabs = [
     {
@@ -217,6 +324,24 @@
     },
     { id: 'file-extensions', label: 'navbar.file-extensions', route: '/file-extensions' },
   ]
+
+  const authorData = computed(() => {
+    const data = authorsRef.value
+    const authors: Array<{ name: string; filesCount: number; commits: number }> = []
+
+    if (!data || !Array.isArray(data)) {
+      return authors
+    }
+
+    return data
+      .map((author: AuthorsStatisticsDetails) => ({
+        name: author.name,
+        filesCount: author.filesAsLeadAuthor,
+        commits: author.commits,
+      }))
+      .sort((a, b) => b.filesCount - a.filesCount)
+      .slice(0, 5)
+  })
 
   const formatDate = (date: Date | string) => {
     const userSettings = useUserSettingsStore()
@@ -393,9 +518,13 @@
   }
 
   .file-type-item {
-    padding: $spacing-md;
-    background: var(--color-bg-secondary, rgba(0, 0, 0, 0.02));
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--color-item-bg);
     border-radius: 8px;
+    border: 1px solid $color-none;
+    font-size: $font-size-sm;
+    padding: $spacing-md;
     margin-bottom: $spacing-sm;
     flex-shrink: 0;
 
@@ -426,6 +555,86 @@
     gap: $spacing-lg;
     font-size: 12px;
     color: var(--color-text-secondary);
+  }
+
+  .no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-weight: $font-weight-light;
+    color: var(--color-text-muted);
+  }
+
+  .authors-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  .author-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--color-item-bg);
+    border-radius: 8px;
+    border: 1px solid $color-none;
+    font-size: $font-size-sm;
+    padding: $spacing-md;
+    margin-bottom: $spacing-sm;
+    flex-shrink: 0;
+  }
+
+  .author-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .author-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+  }
+
+  .author-name {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 120px;
+  }
+
+  .author-stats {
+    display: flex;
+    gap: $spacing-lg;
+    font-size: 13px;
+  }
+
+  .stat {
+    display: flex;
+    gap: $spacing-xs;
+    white-space: nowrap;
+  }
+
+  .stat-label {
+    color: var(--color-text-secondary);
+  }
+
+  .stat-value {
+    color: var(--color-text-primary);
+    font-weight: 500;
   }
 
   @media (max-width: 1024px) {

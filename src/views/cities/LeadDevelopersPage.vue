@@ -27,7 +27,6 @@
 
   const authorsRef = authorsStatisticsDetails()
   const detailsRef = leadAuthorsDetails()
-  const codeCityRef = ref<InstanceType<typeof CodeCityPageTemplate>>()
 
   const rightPanelConfig = ref({
     metricTypes: [

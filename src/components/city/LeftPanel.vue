@@ -250,7 +250,7 @@
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--color-border);
-    flex-shrink: 0; // Prevent header from shrinking
+    flex-shrink: 0;
 
     h2 {
       font-size: 0.75rem;
@@ -283,7 +283,7 @@
     gap: 0.5rem;
     overflow-y: auto;
     flex: 1;
-    min-height: 0; // Important for proper scrolling
+    min-height: 0;
     @include scrollbar;
   }
 

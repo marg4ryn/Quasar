@@ -184,6 +184,66 @@
     }
   },
 
+  "repositoryOverview": {
+    "repositoryInfo": {
+      "title": "Analysis Parameters",
+      "repository": "Repository",
+      "owner": "Owner",
+      "platform": "Platform",
+      "url": "URL",
+      "analysisRangeStartDate": "Analysis Range Start Date",
+      "analysisRangeEndDate": "Analysis Range End Date",
+      "analysisFinishedAt": "Analysis finished at",
+      "analysisTime": "Analysis Time"
+    },
+    "commitTrends": {
+      "title": "Commit Trends"
+    },
+    "codeChanges": {
+      "title": "Code Changes"
+    },
+    "topAuthors": {
+      "title": "Top Authors",
+      "placeholder": "No author data",
+      "commits": "Commits",
+      "files": "Files"
+    },
+    "developerCountTrends": {
+      "title": "Developer Count Trends"
+    },
+
+    "analysisStatistics": {
+      "title": "Behavioral Analysis",
+      "authors": "Authors",
+      "activeAuthors": "Active Authors",
+      "commits": "Commits",
+      "files": "Files",
+      "codeLines": "Code Lines",
+      "commentLines": "Comment Lines"
+    },
+    "staticAnalysis": {
+      "title": "Static Code Analysis",
+      "duplicatedLines": "Duplicated Lines",
+      "bugs": "Bugs",
+      "vulnerabilities": "Vulnerabilities",
+      "codeSmells": "Code Smells",
+      "complexity": "Cyclomatic Complexity",
+      "blankLines": "Blank Lines"
+    },
+    "fileExtensions": {
+      "title": "File Extensions",
+      "files": "files",
+      "lines": "Lines",
+      "code": "code",
+      "comments": "comments",
+      "blank": "blank"
+    },
+    "xrayAnalyses": {
+      "title": "X-Ray Analyses Performed",
+      "placeholder": "No analysis was performed"
+    }
+  },
+
   "table": {
     "headers": {
       "author": "Author",

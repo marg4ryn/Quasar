@@ -184,6 +184,65 @@
     }
   },
 
+  "repositoryOverview": {
+    "repositoryInfo": {
+      "title": "Parametry analizy",
+      "repository": "Repozytorium",
+      "owner": "Właściciel",
+      "platform": "Platforma",
+      "url": "URL",
+      "analysisRangeStartDate": "Początek zakresu analizy",
+      "analysisRangeEndDate": "Koniec zakresu analizy",
+      "analysisFinishedAt": "Analiza zakończona o",
+      "analysisTime": "Czas analizy"
+    },
+    "commitTrends": {
+      "title": "Trendy zmian"
+    },
+    "codeChanges": {
+      "title": "Zmiany w kodzie"
+    },
+    "topAuthors": {
+      "title": "Najważniejsi autorzy",
+      "placeholder": "Brak danych o autorach",
+      "commits": "Commity",
+      "files": "Pliki"
+    },
+    "developerCountTrends": {
+      "title": "Trendy liczby deweloperów"
+    },
+    "analysisStatistics": {
+      "title": "Analiza behawioralna",
+      "authors": "Autorzy",
+      "activeAuthors": "Aktywni autorzy",
+      "commits": "Commity",
+      "files": "Pliki",
+      "codeLines": "Linie kodu",
+      "commentLines": "Linie komentarzy",
+      "blankLines": "Linie puste"
+    },
+    "staticAnalysis": {
+      "title": "Analiza statyczna",
+      "bugs": "Błędy",
+      "vulnerabilities": "Podatności",
+      "codeSmells": "Brzydkie zapachy kodu",
+      "complexity": "Złożoność cyklomatyczna",
+      "duplicatedLines": "Linie powielone"
+    },
+    "fileExtensions": {
+      "title": "Rozszerzenia plików",
+      "files": "pliki",
+      "lines": "Linie",
+      "code": "kod",
+      "comments": "komentarze",
+      "blank": "puste"
+    },
+    "xrayAnalyses": {
+      "title": "Przeprowadzone analizy X-Ray",
+      "placeholder": "Nie przeprowadzono żadnej analizy"
+    }
+  },
+
   "table": {
     "headers": {
       "author": "Autor",
