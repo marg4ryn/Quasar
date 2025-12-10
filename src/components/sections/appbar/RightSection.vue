@@ -34,21 +34,25 @@
       </svg>
     </RouterLink>
 
-    <button
-      class="icon-btn"
-      :title="t('appbar.user-profile')"
-      :aria-label="t('appbar.user-profile')"
-      @click="openProfile"
-    >
-      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-        <path
-          d="M463 448.2C440.9 409.8 399.4 384 352 384L288 384C240.6 384 199.1 409.8 177 448.2C212.2 487.4 263.2 512 320 512C376.8 512 427.8 487.3 463 448.2zM64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320zM320 336C359.8 336 392 303.8 392 264C392 224.2 359.8 192 320 192C280.2 192 248 224.2 248 264C248 303.8 280.2 336 320 336z"
-          fill="currentColor"
-        />
-      </svg>
-    </button>
+    <div ref="userBtnRef" class="user-wrapper">
+      <button
+        class="icon-btn"
+        :class="{ active: showUserPanel }"
+        :title="t('appbar.user-profile')"
+        :aria-label="t('appbar.user-profile')"
+        @click="toggleUserPanel"
+      >
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+          <path
+            d="M463 448.2C440.9 409.8 399.4 384 352 384L288 384C240.6 384 199.1 409.8 177 448.2C212.2 487.4 263.2 512 320 512C376.8 512 427.8 487.3 463 448.2zM64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320zM320 336C359.8 336 392 303.8 392 264C392 224.2 359.8 192 320 192C280.2 192 248 224.2 248 264C248 303.8 280.2 336 320 336z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
 
     <NotificationsPanel ref="notificationsPanelRef" />
+    <UserPanel ref="userPanelRef" v-model:show-panel="showUserPanel" />
   </div>
 </template>
 
@@ -58,27 +62,49 @@
   import { RouterLink } from 'vue-router'
   import { ref, onMounted, onUnmounted } from 'vue'
   import NotificationsPanel from '@/components/sections/NotificationsPanel.vue'
+  import UserPanel from '@/components/sections/UserPanel.vue'
 
   const { t } = useI18n()
   const notificationsStore = useNotificationsStore()
   const notificationBtnRef = ref<HTMLElement | null>(null)
   const notificationsPanelRef = ref<InstanceType<typeof NotificationsPanel> | null>(null)
+  const userBtnRef = ref<HTMLElement | null>(null)
+  const userPanelRef = ref<InstanceType<typeof UserPanel> | null>(null)
+  const showUserPanel = ref(false)
 
   function openNotifications() {
     notificationsStore.togglePanel()
+    showUserPanel.value = false
   }
 
-  function openProfile() {}
+  function toggleUserPanel() {
+    showUserPanel.value = !showUserPanel.value
+    if (showUserPanel.value) {
+      notificationsStore.closePanel()
+    }
+  }
 
   function handleClickOutside(event: MouseEvent) {
-    if (!notificationsStore.showPanel) return
-
     const target = event.target as Node
-    const btn = notificationBtnRef.value
-    const panel = notificationsPanelRef.value?.panelElement
 
-    if (btn && !btn.contains(target) && panel && !panel.contains(target)) {
-      notificationsStore.closePanel()
+    // Handle notifications panel
+    if (notificationsStore.showPanel) {
+      const notifBtn = notificationBtnRef.value
+      const notifPanel = notificationsPanelRef.value?.panelElement
+
+      if (notifBtn && !notifBtn.contains(target) && notifPanel && !notifPanel.contains(target)) {
+        notificationsStore.closePanel()
+      }
+    }
+
+    // Handle user panel
+    if (showUserPanel.value) {
+      const userBtn = userBtnRef.value
+      const userPanel = userPanelRef.value?.panelElement
+
+      if (userBtn && !userBtn.contains(target) && userPanel && !userPanel.contains(target)) {
+        showUserPanel.value = false
+      }
     }
   }
 
@@ -102,7 +128,8 @@
     z-index: 1001;
   }
 
-  .notification-wrapper {
+  .notification-wrapper,
+  .user-wrapper {
     position: relative;
   }
 

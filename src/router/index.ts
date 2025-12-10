@@ -5,6 +5,10 @@ import { useUIStore } from '@/stores/uiStore'
 const Welcome = () => import('@/views/miscellaneous/WelcomePage.vue')
 const Settings = () => import('@/views/miscellaneous/SettingsPage.vue')
 const About = () => import('@/views/miscellaneous/AboutPage.vue')
+const Login = () => import('@/views/miscellaneous/LoginPage.vue')
+const Register = () => import('@/views/miscellaneous/RegisterPage.vue')
+const LoginSuccess = () => import('@/views/miscellaneous/LoginSuccessPage.vue')
+const AnalysisHistory = () => import('@/views/miscellaneous/AnalysisHistoryPage.vue')
 const RepositoryOverview = () => import('@/views/miscellaneous/RepositoryOverviewPage.vue')
 const DevelopersList = () => import('@/views/miscellaneous/DevelopersListPage.vue')
 
@@ -46,6 +50,42 @@ export default function (): Router {
         showNavBar: false,
       },
       component: About,
+    },
+    {
+      path: '/login',
+      name: 'login',
+      meta: {
+        titleKey: 'title.login',
+        showNavBar: false,
+      },
+      component: Login,
+    },
+    {
+      path: '/register',
+      name: 'register',
+      meta: {
+        titleKey: 'title.register',
+        showNavBar: false,
+      },
+      component: Register,
+    },
+    {
+      path: '/login/success',
+      name: 'login-success',
+      meta: {
+        titleKey: 'title.login',
+        showNavBar: false,
+      },
+      component: LoginSuccess,
+    },
+    {
+      path: '/analysis-history',
+      name: 'analysis-history',
+      meta: {
+        titleKey: 'title.analysis-history',
+        showNavBar: false,
+      },
+      component: AnalysisHistory,
     },
     {
       path: '/repository-overview',

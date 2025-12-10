@@ -2,6 +2,9 @@
   "title": {
     "settings": "Settings",
     "about": "About",
+    "login": "Login",
+    "register": "Register",
+    "analysis-history": "Analysis History",
     "files-coupling": "Files Coupling",
     "repository-overview": "Repository Overview",
     "file-extensions": "File Extensions",
@@ -74,6 +77,41 @@
     "notifications": {
       "header": "Notifications"
     }
+  },
+
+  "auth": {
+    "title": "Account",
+    "analysisHistory": "Analysis History",
+    "logout": "Log Out",
+    "login": "Log In",
+    "register": "Sign Up",
+    "unlockMessage": "Log in to unlock access to full features",
+    "loginTitle": "Welcome Back",
+    "loginSubtitle": "Log in to your HotSpotter account",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "loginButton": "Log In",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign Up",
+    "loginError": "Failed to log in. Please check your credentials.",
+    "registerTitle": "Create Account",
+    "registerSubtitle": "Sign up to get started with HotSpotter",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "passwordCreatePlaceholder": "Create a password",
+    "passwordHint": "Must be at least 6 characters",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "registerButton": "Sign Up",
+    "haveAccount": "Already have an account?",
+    "errorPasswordsMismatch": "Passwords do not match",
+    "errorPasswordTooShort": "Password must be at least 6 characters long",
+    "errorRegisterFailed": "Failed to create account. Please try again.",
+    "or": "or",
+    "continueWithGoogle": "Continue with Google",
+    "googleLoginError": "Could not log in via Google"
   },
 
   "welcomePage": {

@@ -20,7 +20,7 @@ const log = useLogger('restApi')
 const API_BASE_URL = import.meta.env.VITE_API_URL
 const API_TIMEOUT = Number(import.meta.env.VITE_API_TIMEOUT)
 
-async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+export async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT)
 
@@ -29,6 +29,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
+      credentials: 'include',
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',

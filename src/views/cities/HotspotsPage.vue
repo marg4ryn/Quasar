@@ -1,7 +1,6 @@
 <template>
   <LoadingBar :show="isGeneralLoading" :label="'common.loading'" :show-cancel-button="false" />
   <CodeCityPageTemplate
-    ref="codeCityRef"
     :tabs="tabs"
     :colorData="colorData"
     :leftPanelConfig="leftPanelConfig"
@@ -31,7 +30,6 @@
 
   const detailsRef = hotspotsDetails()
   const itemsMapRef = itemsMap()
-  const codeCityRef = ref<InstanceType<typeof CodeCityPageTemplate>>()
 
   const rightPanelConfig = ref({
     metricTypes: [

@@ -2,6 +2,9 @@
   "title": {
     "settings": "Ustawienia",
     "about": "O projekcie",
+    "login": "Logowanie",
+    "register": "Rejestracja",
+    "analysis-history": "Historia analiz",
     "files-coupling": "Powiązania plików",
     "repository-overview": "Przegląd repozytorium",
     "file-extensions": "Rozszerzenia plików",
@@ -74,6 +77,41 @@
     "notifications": {
       "header": "Powiadomienia"
     }
+  },
+
+  "auth": {
+    "title": "Konto",
+    "analysisHistory": "Historia analiz",
+    "logout": "Wyloguj",
+    "login": "Zaloguj",
+    "register": "Zarejestruj",
+    "unlockMessage": "Zaloguj się, aby odblokować dostęp do pełni możliwości",
+    "loginTitle": "Witamy ponownie",
+    "loginSubtitle": "Zaloguj się do swojego konta HotSpotter",
+    "email": "Email",
+    "emailPlaceholder": "Wpisz swój email",
+    "password": "Hasło",
+    "passwordPlaceholder": "Wpisz swoje hasło",
+    "loginButton": "Zaloguj się",
+    "noAccount": "Nie masz konta?",
+    "signUp": "Zarejestruj się",
+    "loginError": "Nie udało się zalogować. Sprawdź swoje dane logowania.",
+    "registerTitle": "Utwórz konto",
+    "registerSubtitle": "Zarejestruj się, aby rozpocząć korzystanie z HotSpotter",
+    "fullName": "Imię i nazwisko",
+    "fullNamePlaceholder": "Wpisz swoje imię i nazwisko",
+    "passwordCreatePlaceholder": "Utwórz hasło",
+    "passwordHint": "Hasło musi mieć co najmniej 6 znaków",
+    "confirmPassword": "Potwierdź hasło",
+    "confirmPasswordPlaceholder": "Potwierdź swoje hasło",
+    "registerButton": "Zarejestruj się",
+    "haveAccount": "Masz już konto?",
+    "errorPasswordsMismatch": "Hasła nie są takie same",
+    "errorPasswordTooShort": "Hasło musi mieć co najmniej 6 znaków",
+    "errorRegisterFailed": "Nie udało się utworzyć konta. Spróbuj ponownie.",
+    "or": "lub",
+    "continueWithGoogle": "Kontynuuj z Google",
+    "googleLoginError": "Nie udało się zalogować przez Google"
   },
 
   "welcomePage": {
