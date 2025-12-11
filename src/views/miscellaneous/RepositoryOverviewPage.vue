@@ -372,38 +372,63 @@
       .slice(0, 5)
   })
 
-  const commitData = computed<ChartDataPoint[] | null>(
-    () =>
-      trendsRef.value?.map((item) => ({
-        date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
-        value: item.commits,
-      })) ?? null
-  )
+  const commitData = computed<ChartDataPoint[] | null>(() => {
+    if (!trendsRef.value) return null
 
-  const uniqueAuthorsData = computed<ChartDataPoint[] | null>(
-    () =>
-      trendsRef.value?.map((item) => ({
-        date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
-        value: item.uniqueAuthors,
-      })) ?? null
-  )
+    const rawData = trendsRef.value.map((item) => ({
+      date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
+      value: item.commits,
+    }))
 
-  const activeAuthorsData = computed<ChartDataPoint[] | null>(
-    () =>
-      trendsRef.value?.map((item) => ({
-        date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
-        value: item.activeAuthors,
-      })) ?? null
-  )
+    return mergeSameDayData(rawData, 'date', (existing, incoming) => ({
+      date: existing.date,
+      value: existing.value + incoming.value,
+    }))
+  })
 
-  const churnData = computed<ChurnData[] | null>(
-    () =>
-      trendsRef.value?.map((item) => ({
-        date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
-        linesAdded: item.linesAdded,
-        linesDeleted: item.linesDeleted,
-      })) ?? null
-  )
+  const uniqueAuthorsData = computed<ChartDataPoint[] | null>(() => {
+    if (!trendsRef.value) return null
+
+    const rawData = trendsRef.value.map((item) => ({
+      date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
+      value: item.uniqueAuthors,
+    }))
+
+    return mergeSameDayData(rawData, 'date', (existing, incoming) => ({
+      date: existing.date,
+      value: Math.max(existing.value, incoming.value),
+    }))
+  })
+
+  const activeAuthorsData = computed<ChartDataPoint[] | null>(() => {
+    if (!trendsRef.value) return null
+
+    const rawData = trendsRef.value.map((item) => ({
+      date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
+      value: item.activeAuthors,
+    }))
+
+    return mergeSameDayData(rawData, 'date', (existing, incoming) => ({
+      date: existing.date,
+      value: Math.max(existing.value, incoming.value),
+    }))
+  })
+
+  const churnData = computed<ChurnData[] | null>(() => {
+    if (!trendsRef.value) return null
+
+    const rawData = trendsRef.value.map((item) => ({
+      date: item.date instanceof Date ? item.date.toISOString().slice(0, 10) : item.date,
+      linesAdded: item.linesAdded,
+      linesDeleted: item.linesDeleted,
+    }))
+
+    return mergeSameDayData(rawData, 'date', (existing, incoming) => ({
+      date: existing.date,
+      linesAdded: existing.linesAdded + incoming.linesAdded,
+      linesDeleted: existing.linesDeleted + incoming.linesDeleted,
+    }))
+  })
 
   const formatDate = (date: Date | string) => {
     const userSettings = useUserSettingsStore()
@@ -441,6 +466,27 @@
       second: '2-digit',
       hour12: false,
     })
+  }
+
+  function mergeSameDayData<T extends Record<string, any>>(
+    data: T[],
+    dateKey: keyof T,
+    mergeStrategy: (existing: T, incoming: T) => T
+  ): T[] {
+    const grouped = new Map<string, T>()
+
+    data.forEach((point) => {
+      const date = String(point[dateKey])
+      const existing = grouped.get(date)
+
+      if (existing === undefined) {
+        grouped.set(date, point)
+      } else {
+        grouped.set(date, mergeStrategy(existing, point))
+      }
+    })
+
+    return Array.from(grouped.values())
   }
 </script>
 

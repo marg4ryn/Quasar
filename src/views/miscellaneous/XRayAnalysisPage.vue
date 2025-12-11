@@ -293,33 +293,48 @@
   const churnData = computed<ChurnData[] | null>(() => {
     if (!details.value?.commits) return null
 
-    return details.value?.commits.map((commit) => ({
+    const rawData = details.value?.commits.map((commit) => ({
       date: commit.date,
       linesAdded: commit.linesAdded,
       linesDeleted: commit.linesDeleted,
+    }))
+
+    return mergeSameDayData(rawData, 'date', (existing, incoming) => ({
+      date: existing.date,
+      linesAdded: existing.linesAdded + incoming.linesAdded,
+      linesDeleted: existing.linesDeleted + incoming.linesDeleted,
     }))
   })
 
   const complexityData = computed<ChartDataPoint[] | null>(() => {
     if (!details.value?.commits) return null
 
-    return (
+    const rawData =
       details.value?.versionsStatistics.map((version) => ({
         date: version.date,
         value: version.complexity,
       })) ?? null
-    )
+    return rawData
+      ? mergeSameDayData(rawData, 'date', (existing, incoming) =>
+          existing.value > incoming.value ? existing : incoming
+        )
+      : null
   })
 
   const codeLinesData = computed<ChartDataPoint[] | null>(() => {
     if (!details.value?.commits) return null
 
-    return (
+    const rawData =
       details.value?.versionsStatistics.map((version) => ({
         date: version.date,
         value: version.codeLines,
       })) ?? null
-    )
+
+    return rawData
+      ? mergeSameDayData(rawData, 'date', (existing, incoming) =>
+          existing.value > incoming.value ? existing : incoming
+        )
+      : null
   })
 
   const formatDate = (date: Date | string) => {
@@ -337,6 +352,27 @@
       month: 'long',
       day: 'numeric',
     })
+  }
+
+  function mergeSameDayData<T extends Record<string, any>>(
+    data: T[],
+    dateKey: keyof T,
+    mergeStrategy: (existing: T, incoming: T) => T
+  ): T[] {
+    const grouped = new Map<string, T>()
+
+    data.forEach((point) => {
+      const date = String(point[dateKey])
+      const existing = grouped.get(date)
+
+      if (existing === undefined) {
+        grouped.set(date, point)
+      } else {
+        grouped.set(date, mergeStrategy(existing, point))
+      }
+    })
+
+    return Array.from(grouped.values())
   }
 </script>
 
