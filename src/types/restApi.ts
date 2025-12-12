@@ -207,6 +207,25 @@ export interface XRayDetails {
   versions: number
 }
 
+interface AnalysisHistoryItem {
+  id: string
+  repositoryUrl: string
+  startedAt: string
+  startDate: string
+  endDate: string
+  status: 'COMPLETED' | 'FAILED' | 'IN_PROGRESS'
+}
+
+interface PageResponse<T> {
+  content: T[]
+  totalPages: number
+  totalElements: number
+  number: number,
+  size?: number,
+  first?: boolean,
+  last?: boolean
+}
+
 export type ItemsListResponse = ItemsListItem[]
 export type FileDetailsResponse = FileDetails
 export type HotspotsResponse = HotspotsDetails
@@ -220,3 +239,5 @@ export type AuthorCouplingResponse = AuthorData
 export type RepositoryResponse = RepositoryDetails
 export type AnalysisTrendsResponse = AnalysisTrendsDetails[]
 export type XRayResponse = XRayDetails
+export type AnalysisHistoryResponseItem = AnalysisHistoryItem
+export type AnalysisHistoryResponse = PageResponse<AnalysisHistoryItem>
