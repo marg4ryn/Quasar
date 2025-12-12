@@ -297,7 +297,12 @@
       "added": "Added",
       "deleted": "Deleted",
       "lastCommit": "Last commit",
-      "status": "Status"
+      "status": "Status",
+      "repository": "Repository",
+      "results": "Results",
+      "startedAt": "Started at",
+      "startDate": "Start Date",
+      "endDate": "End Date"
     },
     "status": {
       "active": "Active",
@@ -316,8 +321,15 @@
       "filesAsLead": "Files as lead author",
       "lineBalance": "Line balance"
     },
+    "buttons": {
+      "viewResults": "View Results",
+      "next": "Next",
+      "previous": "Previous"
+    },
 
-    "noData": "No author data"
+    "noData": "No author data",
+    "noAnalysisHistory": "No analysis history available",
+    "pageInfo": "Page {current} of {total}"
   },
 
   "dates": {

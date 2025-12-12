@@ -297,7 +297,12 @@
       "added": "Dodane",
       "deleted": "Usunięte",
       "lastCommit": "Ostatni commit",
-      "status": "Status"
+      "status": "Status",
+      "repository": "Repozytorium",
+      "results": "Wyniki",
+      "startedAt": "Rozpoczęto",
+      "startDate": "Zakres od",
+      "endDate": "Zakres do"
     },
     "status": {
       "active": "Aktywny",
@@ -316,7 +321,14 @@
       "filesAsLead": "Pliki jako główny autor",
       "lineBalance": "Bilans linii"
     },
-    "noData": "Brak danych o autorach"
+    "buttons": {
+      "viewResults": "Zobacz wyniki",
+      "next": "Następny",
+      "previous": "Poprzedni"
+    },
+    "noData": "Brak danych o autorach",
+    "noAnalysisHistory": "Brak historii analiz.",
+    "pageInfo": "Strona {current} z {total}"
   },
 
   "dates": {
