@@ -14,7 +14,7 @@
   import { useLogger } from '@/composables/useLogger'
 
   // Stałe
-  const DIAGRAM_SIZE = 0.35
+  const DIAGRAM_SIZE = 0.25
 
   const ARC_TRANSPARENCY_NORMAL = 1.0
   const ARC_TRANSPARENCY_DISABLED = 0.1
