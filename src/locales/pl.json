@@ -410,7 +410,7 @@
     "commitsHistory": "Historia commitów",
     "trends": "Trendy złożoności",
     "versionStats": "Statystyki wersji",
-    "methods": "Metody",
+    "method": "Metody",
     "numberOfVersions": "Liczba wersji pliku",
 
     "commits": {
@@ -438,6 +438,21 @@
     "charts": {
       "complexityTooltip": "Złożoność",
       "codeLinesTooltip": "Linie"
+    },
+
+    "currentAuthors": "Aktualni autorzy",
+    "methodsStatistics": "Statystyki metod",
+    "lines": "linii",
+    "daysAgo": "dni temu",
+    "methods": {
+      "name": "Nazwa metody",
+      "lines": "Linie",
+      "commits": "Commity",
+      "authors": "Autorzy",
+      "lastCommit": "Ostatni commit",
+      "url": "URL",
+      "open": "Otwórz",
+      "complexityTrends": "Trendy złożoności"
     }
   },
 

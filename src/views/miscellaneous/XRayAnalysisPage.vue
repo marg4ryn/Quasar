@@ -18,7 +18,9 @@
 
             <div class="metric-item">
               <span class="metric-label">{{ t('metrics.path') }}</span>
-              <span class="metric-value">{{ currentFileDetails?.info?.path }}</span>
+              <span class="metric-value">{{
+                details.filePath || currentFileDetails?.info?.path
+              }}</span>
             </div>
 
             <div class="metric-item">
@@ -81,13 +83,18 @@
             </div>
 
             <div class="metric-item">
-              <span class="metric-label"> {{ t('xray.methods') }}</span>
-              <span class="metric-value">{{ latestStats.methods }}</span>
+              <span class="metric-label"> {{ t('xray.method') }}</span>
+              <span class="metric-value">{{ details.methods }}</span>
             </div>
 
             <div class="metric-item">
               <span class="metric-label"> {{ t('xray.numberOfVersions') }}</span>
               <span class="metric-value">{{ details.versions }}</span>
+            </div>
+
+            <div class="metric-item">
+              <span class="metric-label">{{ t('xray.currentAuthors') }}</span>
+              <span class="metric-value">{{ details.currentAuthors }}</span>
             </div>
 
             <div class="metric-item">
@@ -105,54 +112,88 @@
         <!-- Authors Card -->
         <div class="stats-card" data-cols="1">
           <div class="card-header">
-            <h3 class="card-title">{{ t('xray.authors') }}</h3>
+            <h3 class="card-title">
+              {{ t('xray.currentAuthors') }} ({{ details.currentAuthors }})
+            </h3>
           </div>
           <div class="card-content" :style="{ gap: '14px' }">
-            <div v-for="author in authors" :key="author.path" class="author-item">
+            <div v-for="author in currentAuthorsData" :key="author.name" class="author-item">
               <span class="author-name">{{ author.name }}</span>
-              <span class="author-percentage">{{ author.displayValue }}%</span>
+              <div class="author-stats">
+                <span class="author-lines"
+                  >{{ author.linesAdded.toLocaleString() }} {{ t('xray.lines') }}</span
+                >
+                <span class="author-percentage">{{ author.percentage.toFixed(1) }}%</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Code Changes (Churn) -->
-        <div class="stats-card" data-cols="2">
-          <div class="card-header">
-            <h3 class="card-title">{{ t('xray.codeChanges') }}</h3>
-          </div>
-          <CodeChurnChart v-if="churnData" :data="churnData" />
-        </div>
-
-        <!-- Commits history -->
+        <!-- Methods Statistics -->
         <div class="stats-card" data-cols="2">
           <div class="card-header">
             <h3 class="card-title">
-              {{ t('xray.commitsHistory') }} ({{ details.commits.length }})
+              {{ t('xray.methodsStatistics') }} ({{ details.methodsStatistics.length }})
             </h3>
           </div>
           <div class="card-content">
-            <div class="commits-table">
+            <div class="methods-table">
               <div class="table-header">
-                <div class="col-hash">{{ t('xray.commits.hash') }}</div>
-                <div class="col-date">{{ t('xray.commits.date') }}</div>
-                <div class="col-author">{{ t('xray.commits.author') }}</div>
-                <div class="col-changes">{{ t('xray.commits.changes') }}</div>
+                <div class="col-name">{{ t('xray.methods.name') }}</div>
+                <div class="col-lines">{{ t('xray.methods.lines') }}</div>
+                <div class="col-commits">{{ t('xray.methods.commits') }}</div>
+                <div class="col-authors">{{ t('xray.methods.authors') }}</div>
+                <div class="col-last-commit">{{ t('xray.methods.lastCommit') }}</div>
+                <div class="col-url">{{ t('xray.methods.url') }}</div>
               </div>
 
               <div class="table-body">
                 <div
-                  v-for="commit in [...details.commits].reverse()"
-                  :key="commit.hash"
-                  class="table-row"
+                  v-for="method in sortedMethods"
+                  :key="method.name"
+                  class="table-row method-row"
+                  @click="toggleMethodDetails(method.name)"
                 >
-                  <div class="col-hash">
-                    <code>{{ commit.hash.substring(0, 7) }}</code>
+                  <div class="col-name">
+                    <span class="method-name">{{ method.name }}</span>
+                    <span class="method-position"
+                      >({{ method.startLine }}-{{ method.endLine }})</span
+                    >
                   </div>
-                  <div class="col-date">{{ formatDate(commit.date) }}</div>
-                  <div class="col-author">{{ commit.author }}</div>
-                  <div class="col-changes">
-                    <span class="added">+{{ commit.linesAdded }}</span>
-                    <span class="deleted">-{{ commit.linesDeleted }}</span>
+                  <div class="col-lines">{{ method.lines }}</div>
+                  <div class="col-commits">{{ method.commits }}</div>
+                  <div class="col-authors">{{ method.authors }}</div>
+                  <div class="col-last-commit">
+                    <div class="last-commit-info">
+                      <span>{{ formatDate(method.lastCommitDate) }}</span>
+                      <span class="days-ago"
+                        >({{ method.daysSinceLastCommit }} {{ t('xray.daysAgo') }})</span
+                      >
+                    </div>
+                  </div>
+                  <div class="col-url">
+                    <a :href="method.url" target="_blank" class="url-link" @click.stop>
+                      {{ t('xray.methods.open') }}
+                    </a>
+                  </div>
+
+                  <!-- Expandable complexity trends -->
+                  <div v-if="expandedMethod === method.name" class="method-details">
+                    <div class="complexity-trends">
+                      <h4>{{ t('xray.methods.complexityTrends') }}</h4>
+                      <TimelineChart
+                        v-if="getMethodComplexityData(method)"
+                        :datasets="[
+                          {
+                            label: t('metrics.complexity'),
+                            data: getMethodComplexityData(method)!,
+                            color: ChartColor.Blue,
+                            tooltipDesc: t('xray.charts.complexityTooltip'),
+                            yAxisID: 'left',
+                          },
+                        ]"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -235,18 +276,63 @@
             </div>
           </div>
         </div>
+
+        <!-- Code Changes (Churn) -->
+        <div class="stats-card" data-cols="2">
+          <div class="card-header">
+            <h3 class="card-title">{{ t('xray.codeChanges') }}</h3>
+          </div>
+          <CodeChurnChart v-if="churnData" :data="churnData" />
+        </div>
+
+        <!-- Commits history -->
+        <div class="stats-card" data-cols="2">
+          <div class="card-header">
+            <h3 class="card-title">
+              {{ t('xray.commitsHistory') }} ({{ details.commits.length }})
+            </h3>
+          </div>
+          <div class="card-content">
+            <div class="commits-table">
+              <div class="table-header">
+                <div class="col-hash">{{ t('xray.commits.hash') }}</div>
+                <div class="col-date">{{ t('xray.commits.date') }}</div>
+                <div class="col-author">{{ t('xray.commits.author') }}</div>
+                <div class="col-changes">{{ t('xray.commits.changes') }}</div>
+              </div>
+
+              <div class="table-body">
+                <div
+                  v-for="commit in [...details.commits].reverse()"
+                  :key="commit.hash"
+                  class="table-row"
+                >
+                  <div class="col-hash">
+                    <code>{{ commit.hash.substring(0, 7) }}</code>
+                  </div>
+                  <div class="col-date">{{ formatDate(commit.date) }}</div>
+                  <div class="col-author">{{ commit.author }}</div>
+                  <div class="col-changes">
+                    <span class="added">+{{ commit.linesAdded }}</span>
+                    <span class="deleted">-{{ commit.linesDeleted }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { computed, ComputedRef } from 'vue'
+  import { computed, ComputedRef, ref } from 'vue'
   import { useRoute } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { useRestApi } from '@/composables/useRestApi'
   import { useUserSettingsStore } from '@/stores/userSettingsStore'
-  import { XRayDetails, FileDetails, AuthorContribution } from '@/types'
+  import { XRayDetails, FileDetails, MethodStatistics } from '@/types'
   import { ChurnData } from '@/components/visuals/CodeChurnChart.vue'
   import { ChartColor, ChartDataPoint } from '@/types/timelineChart.js'
 
@@ -269,6 +355,12 @@
     return fileDetails(filePath.value).value || null
   })
 
+  const expandedMethod = ref<string | null>(null)
+
+  const toggleMethodDetails = (methodName: string) => {
+    expandedMethod.value = expandedMethod.value === methodName ? null : methodName
+  }
+
   const latestStats = computed(() => {
     return (
       details.value?.versionsStatistics?.[0] || {
@@ -282,13 +374,23 @@
     )
   })
 
-  const authors = currentFileDetails.value?.knowledge?.contributions
-    .map((author: AuthorContribution) => ({
-      path: author.name,
-      name: author.name,
-      displayValue: author.percentage.toFixed(1),
+  const currentAuthorsData = computed(() => {
+    return details.value?.currentAuthorsStatistics || []
+  })
+
+  const sortedMethods = computed(() => {
+    if (!details.value?.methodsStatistics) return []
+    return [...details.value.methodsStatistics].sort((a, b) => b.commits - a.commits)
+  })
+
+  const getMethodComplexityData = (method: MethodStatistics): ChartDataPoint[] | null => {
+    if (!method.complexityTrends || method.complexityTrends.length === 0) return null
+
+    return method.complexityTrends.map((trend) => ({
+      date: trend.date,
+      value: trend.complexity,
     }))
-    .sort((a, b) => parseFloat(b.displayValue) - parseFloat(a.displayValue))
+  }
 
   const churnData = computed<ChurnData[] | null>(() => {
     if (!details.value?.commits) return null
@@ -377,6 +479,75 @@
 </script>
 
 <style scoped lang="scss">
+  .method-details {
+    grid-column: 1 / -1;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .complexity-trends h4 {
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .method-name {
+    font-weight: 600;
+  }
+
+  .method-position {
+    font-size: 12px;
+    color: #666;
+    margin-left: 8px;
+  }
+
+  .last-commit-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .days-ago {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .author-stats {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .author-lines {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .methods-table {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .methods-table .table-header,
+  .methods-table .table-row {
+    display: grid;
+    grid-template-columns: 2fr 0.8fr 0.8fr 0.8fr 1.2fr 0.8fr;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .methods-table .table-header {
+    font-weight: 600;
+    padding: 12px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .methods-table .table-row {
+    padding: 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
   .page-wrapper {
     display: flex;
     flex-direction: column;
@@ -480,7 +651,8 @@
   }
 
   .commits-table,
-  .versions-table {
+  .versions-table,
+  .methods-table {
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
@@ -512,7 +684,7 @@
       align-items: center;
 
       &:hover {
-        background: var(--color-bg-secondary);
+        background: var(--color-item-bg-hover);
         border-color: var(--color-border);
       }
     }
@@ -570,6 +742,19 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+  }
+
+  .methods-table {
+    .url-link {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.85rem;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 

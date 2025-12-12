@@ -1,4 +1,5 @@
 <template>
+  <AppButtonClose />
   <div class="table-wrapper">
     <div v-if="loading && analyses.length === 0" class="loading-state">
       <p>{{ t('common.loading') }}</p>
@@ -121,6 +122,7 @@
   import { useI18n } from 'vue-i18n'
   import { AnalysisHistoryResponseItem, AnalysisHistoryResponse } from '@/types'
   import { useConnectionStore } from '@/stores/sseConnectorStore'
+  import AppButtonClose from '@/components/common/AppButtonClose.vue'
 
   const { t } = useI18n()
 

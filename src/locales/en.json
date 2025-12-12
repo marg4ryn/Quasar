@@ -411,7 +411,7 @@
     "commitsHistory": "Commits History",
     "trends": "Complexity Trends",
     "versionStats": "Version Statistics",
-    "methods": "Methods",
+    "method": "Methods",
     "numberOfVersions": "Number of Versions",
 
     "commits": {
@@ -439,6 +439,20 @@
     "charts": {
       "complexityTooltip": "Complexity",
       "codeLinesTooltip": "Lines"
+    },
+
+    "methodsStatistics": "Methods statistics",
+    "lines": "lines",
+    "daysAgo": "days ago",
+    "methods": {
+      "name": "Method name",
+      "lines": "Lines",
+      "commits": "Commits",
+      "authors": "Authors",
+      "lastCommit": "Last commit",
+      "url": "URL",
+      "open": "Open",
+      "complexityTrends": "Complexity trends"
     }
   },
 

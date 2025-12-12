@@ -196,6 +196,32 @@ export interface VersionStatistics {
   methods: number
 }
 
+export interface ComplexityTrend {
+  date: string
+  complexity: number
+  lines: number
+}
+
+export interface MethodStatistics {
+  name: string
+  startLine: number
+  endLine: number
+  lines: number
+  url: string
+  commits: number
+  authors: number
+  firstCommitDate: string
+  lastCommitDate: string
+  daysSinceLastCommit: number
+  complexityTrends: ComplexityTrend[]
+}
+
+export interface AuthorStatistics {
+  name: string
+  linesAdded: number
+  percentage: number
+}
+
 export interface XRayDetails {
   analysisId: string
   filePath: string
@@ -205,6 +231,10 @@ export interface XRayDetails {
   commits: Commit[]
   versionsStatistics: VersionStatistics[]
   versions: number
+  methodsStatistics: MethodStatistics[]
+  methods: number
+  currentAuthorsStatistics: AuthorStatistics[]
+  currentAuthors: number
 }
 
 interface AnalysisHistoryItem {
@@ -220,9 +250,9 @@ interface PageResponse<T> {
   content: T[]
   totalPages: number
   totalElements: number
-  number: number,
-  size?: number,
-  first?: boolean,
+  number: number
+  size?: number
+  first?: boolean
   last?: boolean
 }
 
