@@ -122,11 +122,13 @@
   import { useI18n } from 'vue-i18n'
   import { AnalysisHistoryResponseItem, AnalysisHistoryResponse } from '@/types'
   import { useConnectionStore } from '@/stores/sseConnectorStore'
+  import { useRestApi } from '@/composables/useRestApi'
   import AppButtonClose from '@/components/common/AppButtonClose.vue'
 
   const { t } = useI18n()
 
   const router = useRouter()
+  const restApiStore = useRestApi()
   const connectionStore = useConnectionStore()
   const analyses = ref<AnalysisHistoryResponseItem[]>([])
   const loading = ref(false)
@@ -180,6 +182,7 @@
     if (analysis?.result?.data) {
       analysis.result.data = analysisId
     }
+    restApiStore.clearAll()
     router.push('/repository-overview')
   }
 
