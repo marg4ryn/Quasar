@@ -332,6 +332,7 @@
   import { ChartColor, ChartDataPoint } from '@/types/timelineChart.js'
   import { useI18n } from 'vue-i18n'
   import type { AuthorsStatisticsDetails } from '@/types'
+  import { getUserLanguage } from '@/plugins/i18n'
 
   import TimelineChart from '@/components/visuals/TimelineChart.vue'
   import CodeChurnChart from '@/components/visuals/CodeChurnChart.vue'
@@ -430,15 +431,8 @@
     }))
   })
 
-  const formatDate = (date: Date | string) => {
-    const userSettings = useUserSettingsStore()
-    let lang = ''
-
-    if (userSettings.selectedLanguage === 'system') {
-      lang = navigator.language.startsWith('pl') ? 'pl' : 'en'
-    } else {
-      lang = userSettings.selectedLanguage
-    }
+  const formatDate = (date: Date | string): string => {
+    let lang = getUserLanguage()
 
     return new Date(date).toLocaleDateString(lang, {
       year: 'numeric',
@@ -447,15 +441,8 @@
     })
   }
 
-  const formatDateTime = (date: Date | string) => {
-    const userSettings = useUserSettingsStore()
-
-    let lang = ''
-    if (userSettings.selectedLanguage === 'system') {
-      lang = navigator.language.startsWith('pl') ? 'pl' : 'en'
-    } else {
-      lang = userSettings.selectedLanguage
-    }
+  const formatDateTime = (date: Date | string): string => {
+    let lang = getUserLanguage()
 
     return new Date(date).toLocaleString(lang, {
       year: 'numeric',

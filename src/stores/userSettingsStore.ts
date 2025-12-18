@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { getUserLanguage, type Lang } from '@/plugins/i18n'
 
 function getStorageItem<T>(key: string, defaultValue: T): T {
   const item = localStorage.getItem(key)
@@ -44,10 +45,8 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
       .trim()
   }
 
-  function applyLanguage(language: 'pl' | 'en' | 'system') {
-    const resolvedLang =
-      language === 'system' ? (navigator.language.startsWith('pl') ? 'pl' : 'en') : language
-
+  function applyLanguage(language: 'pl' | 'en' | 'system'): void {
+    const resolvedLang: Lang = language === 'system' ? getUserLanguage() : language
     locale.value = resolvedLang
     document.documentElement.setAttribute('lang', resolvedLang)
   }

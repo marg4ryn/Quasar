@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, Router } from 'vue-router'
-import { i18n } from '@/i18n'
+import { i18n } from '@/plugins/i18n'
 import { useUIStore } from '@/stores/uiStore'
 
 const Welcome = () => import('@/views/miscellaneous/WelcomePage.vue')

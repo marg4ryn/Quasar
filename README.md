@@ -34,6 +34,7 @@ Different screens of the tool present the “code city” in various visual vari
 
 Here's an overview of the project's directory structure:
 
+-   **`city/`**: Code city utils
 -   **`components/`**: Reusable Vue components
     -   `city/`: Components for building city pages
     -   `common/`: Small, versatile UI components
@@ -43,12 +44,12 @@ Here's an overview of the project's directory structure:
     -   `visuals`: Graphic elements
 -   **`composables/`**: Composables logic
 -   **`locales/`**: Stores translation files for different languages
+-   **`plugins/`**: Aapplication functionality extensions
 -   **`router/`**: Vue Router configuration
 -   **`services/`**: Files containing business logic and communication with external APIs
 -   **`stores/`**: Pinia modules for global state management
 -   **`styles/`**: SCSS files
 -   **`types/`**: Custom TypeScript types
--   **`utils/`**: Useful functions and constants
 -   **`views/`**: Components representing entire pages/views of the application
 
 ---
