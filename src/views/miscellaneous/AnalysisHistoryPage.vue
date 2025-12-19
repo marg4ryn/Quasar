@@ -186,7 +186,7 @@
         analysisId: 'download-repository',
         result: { data: analysisId, timestamp: Date.now().toString() },
         screenRoute: '/repository-overview',
-        state: "completed"
+        state: 'completed',
       })
     }
     restApiStore.clearAll()

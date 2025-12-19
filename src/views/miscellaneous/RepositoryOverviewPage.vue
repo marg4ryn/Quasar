@@ -339,7 +339,7 @@
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
   const { t } = useI18n()
-  const {formatDate, formatDateTime} = useDateFormatter()
+  const { formatDate, formatDateTime } = useDateFormatter()
   const { repositoryDetails, authorsStatisticsDetails, analysisTrendsDetails, isGeneralLoading } =
     useRestApi()
 

@@ -40,6 +40,6 @@ export function useCodeCityState(): CodeCityState {
     rotationCenter,
     objectMap,
     clearSelection,
-    setRotationCenter
+    setRotationCenter,
   }
 }

@@ -11,7 +11,7 @@ const edgesToMerge: Array<{
 
 const colorDataMap = new Map<string, { color: number; intensity: number }>()
 
-const UNIT_CUBE = new THREE.BoxGeometry(1, 1, 1);
+const UNIT_CUBE = new THREE.BoxGeometry(1, 1, 1)
 
 interface InstanceInfo {
   node: CityNode
@@ -21,7 +21,7 @@ interface InstanceInfo {
 
 const instances = {
   building: [] as InstanceInfo[],
-  platform: [] as InstanceInfo[]
+  platform: [] as InstanceInfo[],
 }
 
 // ========== TWORZENIE GEOMETRII ==========
@@ -227,7 +227,7 @@ function collectInstance(
   const matrix = new THREE.Matrix4()
   const position = new THREE.Vector3(x, y + height / 2, z)
   const scale = new THREE.Vector3(width, height, depth)
-  
+
   matrix.compose(position, new THREE.Quaternion(), scale)
 
   instances[type].push({ node, matrix, type })

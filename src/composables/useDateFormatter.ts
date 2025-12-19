@@ -1,4 +1,4 @@
-  import { getUserLanguage } from '@/plugins/i18n'
+import { getUserLanguage } from '@/plugins/i18n'
 
 export function useDateFormatter() {
   const formatDate = (date: Date | string): string => {
@@ -11,7 +11,7 @@ export function useDateFormatter() {
     })
   }
 
-    const formatDateTime = (date: Date | string): string => {
+  const formatDateTime = (date: Date | string): string => {
     const lang = getUserLanguage()
 
     return new Date(date).toLocaleString(lang, {

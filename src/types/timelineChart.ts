@@ -4,7 +4,7 @@ export enum ChartColor {
   Orange = 'orange',
   Red = 'red',
   Purple = 'purple',
-  Pink = 'pink'
+  Pink = 'pink',
 }
 
 export interface ChartDataPoint {

@@ -7,8 +7,4 @@ import { i18n } from '@/plugins/i18n'
 
 import '@/styles/main.scss'
 
-createApp(App)
-  .use(pinia)
-  .use(routerPlugin)
-  .use(i18n)
-  .mount('#app')
+createApp(App).use(pinia).use(routerPlugin).use(i18n).mount('#app')
