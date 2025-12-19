@@ -34,19 +34,19 @@ Here's an overview of the project's directory structure:
 -   **`components/`**: Reusable Vue components
     -   `city/`: Components for building city pages
     -   `common/`: Small, versatile UI components
-    -   `modals`: Dialog boxes and popups
-    -   `sections`: Larger parts of the interface
-    -   `settings`: Settings page components
-    -   `visuals`: Graphic elements
+    -   `modals/`: Dialog boxes and popups
+    -   `sections/`: Larger parts of the interface
+    -   `settings/`: Settings page components
+    -   `visuals/`: Graphic elements
 -   **`composables/`**: Composables logic
--   **`locales/`**: Stores translation files for different languages
--   **`plugins/`**: Aapplication functionality extensions
+-   **`locales/`**: Translation files for different languages
+-   **`plugins/`**: Application functionality extensions
 -   **`router/`**: Vue Router configuration
--   **`services/`**: Files containing business logic and communication with external APIs
+-   **`services/`**: Communication with external APIs
 -   **`stores/`**: Pinia modules for global state management
 -   **`styles/`**: SCSS files
 -   **`types/`**: Custom TypeScript types
--   **`views/`**: Components representing entire pages/views of the application
+-   **`views/`**: Components representing entire pages of the application
 
 ---
 
@@ -70,12 +70,7 @@ Here's an overview of the project's directory structure:
     ```
 
 3.  **Configuration:**
-    Create a `.env` file in the root directory based on the example below.
-
-    ```properties
-    VITE_API_URL=http://localhost:8080/api/
-    VITE_API_TIMEOUT=30000
-    ```
+    Create a `.env` file in the root directory based on the `.env.example` file.
 
 4.  **Run Development Server:**
     ```bash
@@ -99,16 +94,5 @@ If you prefer to run the application using Docker:
     ```bash
     docker run -d -p 5173:80 quasar-frontend
     ```
-
----
-
-## ⚙️ Configuration Variables
-
-The application is configured via `.env` file.
-
-| Variable | Description |
-| :--- | :--- |
-| `VITE_API_URL` | The base URL for the Backend REST API. |
-| `VITE_API_TIMEOUT` | Request timeout in milliseconds. |
 
 ---

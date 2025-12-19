@@ -7,6 +7,7 @@ import { defineConfig } from 'eslint/config'
 
 export default defineConfig([
   {
+    // General rules
     files: ['**/*.{js,ts,vue}'],
     languageOptions: {
       sourceType: 'module',
@@ -15,11 +16,14 @@ export default defineConfig([
     extends: [js.configs.recommended, prettier],
   },
 
+  // TypeScript rules
   tseslint.configs.recommended,
 
+  // Vue rules
   pluginVue.configs['flat/essential'],
 
   {
+    // Vue TypeScript
     files: ['**/*.vue'],
     languageOptions: {
       parserOptions: {
