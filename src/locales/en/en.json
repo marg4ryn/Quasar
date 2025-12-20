@@ -21,7 +21,7 @@
   "appbar": {
     "settings": "Settings",
     "notifications": "Notifications",
-    "user-profile": "User Profile",
+    "user-profile": "Your Profile",
     "new-analysis": "New Analysis",
     "modal": "Are you sure you want to leave the current analysis?"
   },
@@ -490,10 +490,16 @@
       "supervisorDegree": "Dr."
     },
     "description": {
-      "title": "Introduction",
-      "p1": "In the software development industry, especially within organizations working on large, long-term projects, managing technical debt and maintaining code quality play a crucial role. As code repositories grow — often spanning thousands of files and hundreds of thousands of lines of code — and as team composition changes over time, identifying areas that require refactoring becomes increasingly difficult. Current code quality management processes often rely on code reviews and reactive problem-solving, addressing issues only after defects appear. In recent years, however, behavioral code analysis methods have gained popularity, enhancing traditional static analysis with data from version control systems, such as change history and team collaboration patterns. Combining structural and behavioral perspectives enables faster detection of risky code areas before they evolve into more serious issues.",
-      "p2": "Manual identification of code that requires attention can be time-consuming and inefficient, often leading to the omission of critical areas. Refactoring decisions are frequently made intuitively, without access to data that integrates both technical and organizational aspects of the project. Additional challenges include limited visibility into how knowledge is distributed within the team and how different modules depend on each other. Inefficient planning of maintenance activities and poor issue prediction lead to higher project maintenance costs. Therefore, there is a strong need for effective visualization of both technical and organizational data, enabling quick understanding of system structure and supporting decision-making regarding refactoring priorities.",
-      "p3": "Existing tools, such as CodeScene, offer advanced capabilities for detecting areas that require attention by combining static and behavioral code analysis. However, their complex interfaces are not always intuitive, particularly for less experienced users who may feel overwhelmed by the volume of data and visualizations. Furthermore, the transparency of the metrics used and the methods for calculating them are not always clearly presented, which can make it even more difficult to interpret the results accurately."
+      "title1": "What exactly is Quasar?",
+      "p1": "Most large software projects resemble bustling, complex organisms where it’s easy to lose your bearings. Quasar is a modern tool that acts like a navigation system for your repository. Instead of merely browsing code as text, our application analyzes its history, helping teams understand how their work has evolved and pinpointing the areas that require the most attention.",
+      "title2": "Your code as an interactive 3D city",
+      "p2": "Forget about boring spreadsheets and long reports. Quasar transforms complex data into an intuitive “code city” visualization. In this model, each file is a building: its height and width reflect the intensity of work and its size. This way, a single glance at the 3D map reveals the “skyscrapers” — the key elements of the system where most of the development energy is concentrated.",
+      "title3": "Light in the darkness: from Hotspots to Quasars",
+      "p3": "The name of our application is no coincidence. Quasars are the brightest objects in the universe, emitting immense energy that allows them to shine brighter than entire galaxies. In code, these are the “hotspots” — the most critical areas where complex structures intersect with constant changes. Quasar acts as a powerful spotlight, illuminating these heated areas and helping teams focus where their attention is needed most.",
+      "title4": "The human side of technology",
+      "p4": "Software isn’t just about files — it’s primarily the product of people’s work. Quasar provides a unique view of the development team, visualizing collaboration dynamics and knowledge flow among members. The application makes it easy to see how engagement is distributed across different modules, promoting better communication and fostering more cohesive, self-aware teams.",
+      "title5": "Built with a passion for quality",
+      "p5": "Quasar was born from the need for a tool that makes software development more predictable and less stressful. Our mission is to provide a solution that combines hard technical data with an intuitive presentation. We believe that with better insight into a project’s structure and history, every team can work more effectively and confidently."
     },
     "technologies": {
       "title": "Technologies",
@@ -502,11 +508,9 @@
       "frontendLabel": "Frontend",
       "frontend": "TypeScript, Vue.js, SCSS",
       "visualizationsLabel": "Visualizations",
-      "visualizations": "D3.js, Three.js",
+      "visualizations": "Three.js, D3.js, Chart.js",
       "analysisLabel": "Analysis",
-      "analysis": "Git",
-      "hostingLabel": "Hosting",
-      "hosting": "Google Cloud, Terraform, Docker, Kubernetes"
+      "analysis": "Git"
     }
   }
 }

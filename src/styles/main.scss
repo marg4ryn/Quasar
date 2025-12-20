@@ -22,6 +22,7 @@ body {
   font-family: $font-family-base;
   background: var(--color-bg-secondary);
   color: var(--color-text-primary);
+  min-width: 320px;
   @include text-smooth;
   overflow-x: hidden;
 }

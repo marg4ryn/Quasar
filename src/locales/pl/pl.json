@@ -494,10 +494,16 @@
       "supervisorDegree": "dr inż."
     },
     "description": {
-      "title": "Wprowadzenie",
-      "p1": "W branży rozwoju oprogramowania, szczególnie w organizacjach pracujących nad dużymi, długotrwałymi projektami, zarządzanie długiem technicznym i jakością kodu odgrywa istotną rolę. Wraz ze wzrostem rozmiaru repozytoriów kodu, które w wielu przypadkach obejmują tysiące plików i setki tysięcy linii kodu, oraz rotacją w zespołach programistycznych identyfikacja obszarów wymagających refaktoryzacji staje się coraz trudniejsza. Obecne procesy zarządzania jakością kodu często opierają się na przeglądach kodu i reaktywnym rozwiązywaniu problemów dopiero po wystąpieniu defektów. W ostatnich latach rośnie jednak popularność metod analizy behawioralnej kodu, które wzbogacają tradycyjną statyczną analizę o dane z systemów kontroli wersji, takie jak historia zmian czy wzorce współpracy zespołu. Połączenie perspektywy strukturalnej i behawioralnej pozwala na szybsze wykrywanie ryzykownych obszarów kodu, zanim przekształcą się one w poważniejsze problemy.",
-      "p2": "Manualna identyfikacja kodu wymagającego uwagi może być czasochłonna oraz nieskuteczna i prowadzić do przeoczenia krytycznych obszarów. Decyzje o refaktoryzacji często podejmowane są intuicyjnie bez danych, które integrowałyby aspekty techniczne i organizacyjne projektu. Problemy może powodować także niedostateczna widoczność rozkładu wiedzy w projekcie oraz zależności między modułami. Nieefektywne planowanie prac utrzymania kodu i przewidywanie problemów skutkuje wyższymi kosztami utrzymania projektów. Kluczowa jest potrzeba dobrej wizualizacji danych technicznych i organizacyjnych umożliwiająca szybkie zrozumienie struktury systemu i wsparcie w podejmowaniu decyzji dotyczących priorytetyzacji prac refaktoryzacyjnych.",
-      "p3": "Dostępne narzędzia, takie jak CodeScene, oferują zaawansowane możliwości wykrywania obszarów wymagających uwagi poprzez połączenie statycznej analizy kodu z analizą behawioralną. Ich złożony interfejs może nie być jednak w pełni intuicyjny, szczególnie dla mniej zaawansowanych użytkowników, którzy mogą czuć się przytłoczeni nadmiarem danych i wizualizacji. Również przejrzystość wykorzystanych metryk oraz sposób ich obliczania nie zawsze są jasno przedstawione, co może dodatkowo utrudniać właściwą interpretację wyników."
+      "title1": "Czym właściwie jest Quasar?",
+      "p1": "Większość dużych projektów programistycznych przypomina tętniące życiem, ale skomplikowane organizmy, w których łatwo stracić orientację. Quasar to nowoczesne narzędzie, które działa jak nawigacja dla Twojego repozytorium. Zamiast tylko przeglądać tekst kodu, nasza aplikacja analizuje historię jego zmian, pomagając zespołom zrozumieć ewolucję ich pracy i precyzyjnie wskazać miejsca, które wymagają szczególnej opieki.",
+      "title2": "Twój kod jako interaktywne miasto 3D",
+      "p2": "Zapomnij o nudnych tabelkach i długich raportach. Quasar zamienia skomplikowane dane w intuicyjną wizualizację „miasta kodu”. W tym modelu każdy plik jest budynkiem: jego wysokość i szerokość odzwierciedlają intensywność pracy nad danym fragmentem oraz jego rozmiar. Dzięki temu wystarczy jeden rzut oka na mapę 3D, aby dostrzec „drapacze chmur” – kluczowe elementy systemu, wokół których skupia się najwięcej energii projektowej.",
+      "title3": "Światło w mroku: od Hotspotów do Kwazarów",
+      "p3": "Nazwa naszej aplikacji nie jest przypadkowa. Kwazary to najjaśniejsze punkty we Wszechświecie, emitujące gigantyczną energię, która pozwala im świecić jaśniej niż całe galaktyki. W kodzie takimi punktami są „hotspoty” – najbardziej krytyczne miejsca, gdzie skomplikowana struktura łączy się z ciągłymi zmianami. Quasar pełni rolę potężnego reflektora: rzuca światło na te najbardziej „rozgrzane” obszary, pozwalając zespołom skupić uwagę tam, gdzie jest ona najbardziej potrzebna.",
+      "title4": "Ludzka strona technologii",
+      "p4": "Oprogramowanie to nie tylko pliki, to przede wszystkim efekt pracy ludzi. Quasar oferuje unikalne spojrzenie na zespół deweloperski, obrazując dynamikę współpracy i przepływ wiedzy między jego członkami. Aplikacja pozwala w przejrzysty sposób zobaczyć, jak rozkłada się zaangażowanie w poszczególnych modułach, co sprzyja lepszej komunikacji i budowaniu bardziej zgranych, świadomych swojej pracy zespołów.",
+      "title5": "Zbudowany z pasji do jakości",
+      "p5": "Projekt Quasar narodził się z potrzeby stworzenia narzędzia, które uczyni rozwój oprogramowania bardziej przewidywalnym i mniej stresującym. Naszą misją jest dostarczenie rozwiązania, które łączy twarde dane techniczne z intuicyjną formą przekazu. Wierzymy, że dzięki lepszemu wglądowi w strukturę i historię projektu, każdy zespół może tworzyć lepszy kod, ciesząc się przy tym większą przejrzystością swoich codziennych działań."
     },
     "technologies": {
       "title": "Technologie",
@@ -506,11 +512,9 @@
       "frontendLabel": "Frontend",
       "frontend": "TypeScript, Vue.js, SCSS",
       "visualizationsLabel": "Wizualizacje",
-      "visualizations": "D3.js, Three.js",
+      "visualizations": "Three.js, D3.js, Chart.js",
       "analysisLabel": "Analiza",
-      "analysis": "Git",
-      "hostingLabel": "Hosting",
-      "hosting": "Google Cloud, Terraform, Docker, Kubernetes"
+      "analysis": "Git"
     }
   }
 }

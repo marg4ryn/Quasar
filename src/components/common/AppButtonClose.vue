@@ -25,10 +25,9 @@
 <script setup lang="ts">
   import { computed } from 'vue'
   import { useRouter } from 'vue-router'
-  import { useI18n } from 'vue-i18n'
   import { useUIStore } from '@/stores/uiStore'
+  import { t } from '@/plugins/i18n'
 
-  const { t } = useI18n()
   const router = useRouter()
   const uiStore = useUIStore()
 
@@ -42,16 +41,17 @@
 <style lang="scss" scoped>
   .icon-button {
     position: absolute;
-    right: 8px;
+    right: 10px;
     background: none;
     border: none;
     color: var(--color-text-primary);
     cursor: pointer;
-    padding: 8px;
+    padding: 3px;
     font-size: 1.2em;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1000;
     transition: color 0.2s ease;
 
     &:hover {

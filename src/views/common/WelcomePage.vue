@@ -316,6 +316,7 @@
     width: 200px;
     height: 200px;
     margin-bottom: $spacing-md;
+    caret-color: transparent;
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 1));
   }
 
