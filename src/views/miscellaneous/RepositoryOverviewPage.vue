@@ -331,7 +331,7 @@
   import { ChartColor, ChartDataPoint } from '@/types/timelineChart.js'
   import { useI18n } from 'vue-i18n'
   import type { AuthorsStatisticsDetails } from '@/types'
-  import { useDateFormatter } from '@/composables/useDateFormatter'
+  import { formatDate, formatDateTime } from '@/utils/dateFormatter'
 
   import TimelineChart from '@/components/visuals/TimelineChart.vue'
   import CodeChurnChart from '@/components/visuals/CodeChurnChart.vue'
@@ -339,7 +339,6 @@
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
   const { t } = useI18n()
-  const { formatDate, formatDateTime } = useDateFormatter()
   const { repositoryDetails, authorsStatisticsDetails, analysisTrendsDetails, isGeneralLoading } =
     useRestApi()
 

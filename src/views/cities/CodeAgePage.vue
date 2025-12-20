@@ -14,7 +14,7 @@
         class="item-value"
         :style="{ color: getIntensityColor(item.normalizedValue ?? 0) }"
       >
-        {{ item.displayValue }} {{ $t('leftPanel.code-age.days') }}
+        {{ formatDaysOnly(item.displayValue) }}
       </span>
     </template>
   </CodeCityPageTemplate>
@@ -24,6 +24,7 @@
   import { ref, computed } from 'vue'
   import { useRestApi } from '@/composables/useRestApi'
   import { MetricType, CodeAgeDetails } from '@/types'
+  import { formatDaysOnly } from '@/utils/dateFormatter'
   import CodeCityPageTemplate from '@/components/city/CodeCityPageTemplate.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 

@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, watch, nextTick } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { getUserLanguage, type Lang } from '@/plugins/i18n'
+import { setLocale, getUserLanguage, type Lang } from '@/plugins/i18n'
 
 function getStorageItem<T>(key: string, defaultValue: T): T {
   const item = localStorage.getItem(key)
@@ -23,13 +22,10 @@ function setStorageItem<T>(key: string, value: T): void {
 }
 
 export const useUserSettingsStore = defineStore('userSettings', () => {
-  const { locale } = useI18n()
-
   const selectedColor = ref<'#bc1922' | '#28abf2'>(getStorageItem('selectedColor', '#bc1922'))
   const selectedLanguage = ref<'en' | 'pl' | 'system'>(getStorageItem('selectedLanguage', 'system'))
   const isGradientOn = ref<'on' | 'off'>(getStorageItem('isGradientOn', 'on'))
   const isAutoRotateOn = ref(getStorageItem('isAutoRotateOn', true))
-
   const colorPrimary = ref('')
 
   async function applyColor(color: string) {
@@ -46,9 +42,9 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
   }
 
   function applyLanguage(language: 'pl' | 'en' | 'system'): void {
-    const resolvedLang: Lang = language === 'system' ? getUserLanguage() : language
-    locale.value = resolvedLang
-    document.documentElement.setAttribute('lang', resolvedLang)
+    const lang: Lang = language === 'system' ? getUserLanguage() : language
+    setLocale(lang)
+    document.documentElement.setAttribute('lang', lang)
   }
 
   applyColor(selectedColor.value)

@@ -332,12 +332,31 @@
   },
 
   "dates": {
-    "today": "Dzisiaj",
-    "dayAgo": "1 dzień temu",
-    "daysAgo": "{count} dni temu",
-    "weeksAgo": "{count} tyg. temu",
-    "monthsAgo": "{count} mies. temu",
-    "yearsAgo": "{count} lat temu"
+    "today": "dzisiaj",
+    "yesterday": "wczoraj",
+    "ago": "temu",
+    "units": {
+      "day": {
+        "one": "dzień",
+        "few": "dni",
+        "many": "dni"
+      },
+      "week": {
+        "one": "tydzień",
+        "few": "tygodnie",
+        "many": "tygodni"
+      },
+      "month": {
+        "one": "miesiąc",
+        "few": "miesiące",
+        "many": "miesięcy"
+      },
+      "year": {
+        "one": "rok",
+        "few": "lata",
+        "many": "lat"
+      }
+    }
   },
 
   "common": {

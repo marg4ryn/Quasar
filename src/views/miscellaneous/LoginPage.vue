@@ -97,7 +97,6 @@
   import { useI18n } from 'vue-i18n'
   import AppButton from '@/components/common/AppButton.vue'
   import AppButtonClose from '@/components/common/AppButtonClose.vue'
-  import { api } from '@/services/restApi'
 
   const { t } = useI18n()
 

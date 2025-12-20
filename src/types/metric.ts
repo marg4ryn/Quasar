@@ -1,8 +1,7 @@
-import { i18n } from '@/plugins/i18n'
+import { t } from '@/plugins/i18n'
 import { CityNode } from '@/types'
 import type { FileDetails } from '@/types/restApi'
-
-const t = i18n.global.t
+import { formatDate, formatDaysOnly } from '@/utils/dateFormatter'
 
 export interface MetricsStore {
   fileDetails?: Map<string, FileDetails>
@@ -146,7 +145,7 @@ export const allMetrics: MetricItem[] = [
       const details = metrics?.fileDetails?.get(node.path)
       const date = details?.info?.firstCommitDate
       if (!date) return null
-      return date
+      return formatDate(date)
     },
     requiresApi: true,
   },
@@ -157,7 +156,7 @@ export const allMetrics: MetricItem[] = [
       const details = metrics?.fileDetails?.get(node.path)
       const date = details?.info?.lastCommitDate
       if (!date) return null
-      return `${date} (${t('metrics.daysAgo', { count: details?.info?.codeAgeDays })})`
+      return `${formatDate(date)} (${formatDaysOnly(details?.info?.codeAgeDays)})`
     },
     requiresApi: true,
     description: 'metrics.dateInfo',

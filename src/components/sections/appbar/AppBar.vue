@@ -41,6 +41,7 @@
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
   import { computed, ref } from 'vue'
+  import { formatDate } from '@/utils/dateFormatter'
   import ModalBox from '@/components/modals/ModalBox.vue'
 
   const { repositoryDetails } = useRestApi()
@@ -74,23 +75,6 @@
 
   function handleNewAnalysis() {
     router.push('/welcome')
-  }
-
-  const formatDate = (date: Date | string) => {
-    const userSettings = useUserSettingsStore()
-    let lang = ''
-
-    if (userSettings.selectedLanguage === 'system') {
-      lang = navigator.language.startsWith('pl') ? 'pl' : 'en'
-    } else {
-      lang = userSettings.selectedLanguage
-    }
-
-    return new Date(date).toLocaleDateString(lang, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
   }
 </script>
 

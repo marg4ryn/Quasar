@@ -333,12 +333,27 @@
   },
 
   "dates": {
-    "today": "Today",
-    "dayAgo": "1 day ago",
-    "daysAgo": "{count} days ago",
-    "weeksAgo": "{count} weeks ago",
-    "monthsAgo": "{count} months ago",
-    "yearsAgo": "{count} years ago"
+    "today": "today",
+    "yesterday": "yesterday",
+    "ago": "ago",
+    "units": {
+      "day": {
+        "one": "day",
+        "other": "days"
+      },
+      "week": {
+        "one": "week",
+        "other": "weeks"
+      },
+      "month": {
+        "one": "month",
+        "other": "months"
+      },
+      "year": {
+        "one": "year",
+        "other": "years"
+      }
+    }
   },
 
   "common": {

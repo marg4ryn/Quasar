@@ -108,9 +108,7 @@
                 </div>
                 <div class="detail-item">
                   <span class="label">{{ t('table.details.daysSinceLast') }}:</span>
-                  <span class="value"
-                    >{{ author.daysSinceLastCommit }} {{ t('table.details.days') }}</span
-                  >
+                  <span class="value">{{ formatDaysOnly(author.daysSinceLastCommit) }} </span>
                 </div>
               </div>
 
@@ -155,13 +153,12 @@
   import { useI18n } from 'vue-i18n'
   import { AuthorsStatisticsDetails } from '@/types'
   import { useRestApi } from '@/composables/useRestApi'
-  import { useUserSettingsStore } from '@/stores/userSettingsStore'
+  import { formatDate, formatDaysSince, formatDaysOnly } from '@/utils/dateFormatter'
 
   import TabNavigation from '@/components/city/TabNavigation.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
   const { authorsStatisticsDetails, isGeneralLoading } = useRestApi()
-
   const { t } = useI18n()
   const authors = authorsStatisticsDetails()
 
@@ -212,32 +209,6 @@
       return sortDirection.value === 'asc' ? comparison : -comparison
     })
   })
-
-  const formatDate = (date: Date | string) => {
-    const userSettings = useUserSettingsStore()
-    let lang = ''
-
-    if (userSettings.selectedLanguage === 'system') {
-      lang = navigator.language.startsWith('pl') ? 'pl' : 'en'
-    } else {
-      lang = userSettings.selectedLanguage
-    }
-
-    return new Date(date).toLocaleDateString(lang, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  }
-
-  const formatDaysSince = (days: number) => {
-    if (days === 0) return t('dates.today')
-    if (days === 1) return t('dates.dayAgo')
-    if (days < 7) return t('dates.daysAgo', { count: days })
-    if (days < 30) return t('dates.weeksAgo', { count: Math.floor(days / 7) })
-    if (days < 365) return t('dates.monthsAgo', { count: Math.floor(days / 30) })
-    return t('dates.yearsAgo', { count: Math.floor(days / 365) })
-  }
 </script>
 
 <style scoped lang="scss">
