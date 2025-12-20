@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch } from 'vue'
 import { setLocale, getUserLanguage, type Lang } from '@/plugins/i18n'
 
 function getStorageItem<T>(key: string, defaultValue: T): T {
@@ -22,24 +22,11 @@ function setStorageItem<T>(key: string, value: T): void {
 }
 
 export const useUserSettingsStore = defineStore('userSettings', () => {
-  const selectedColor = ref<'#bc1922' | '#28abf2'>(getStorageItem('selectedColor', '#bc1922'))
+  const selectedColor = ref('#f593e3')
   const selectedLanguage = ref<'en' | 'pl' | 'system'>(getStorageItem('selectedLanguage', 'system'))
   const isGradientOn = ref<'on' | 'off'>(getStorageItem('isGradientOn', 'on'))
   const isAutoRotateOn = ref(getStorageItem('isAutoRotateOn', true))
   const colorPrimary = ref('')
-
-  async function applyColor(color: string) {
-    document.documentElement.style.setProperty('--color-primary', color)
-
-    const favicon = document.querySelector("link[rel='icon']") as HTMLLinkElement
-    if (favicon) {
-      favicon.href = color === '#28abf2' ? '/logo_blue.png' : '/logo_red.png'
-    }
-    await nextTick()
-    colorPrimary.value = getComputedStyle(document.documentElement)
-      .getPropertyValue('--color-primary')
-      .trim()
-  }
 
   function applyLanguage(language: 'pl' | 'en' | 'system'): void {
     const lang: Lang = language === 'system' ? getUserLanguage() : language
@@ -47,14 +34,8 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
     document.documentElement.setAttribute('lang', lang)
   }
 
-  applyColor(selectedColor.value)
   applyLanguage(selectedLanguage.value)
   document.documentElement.setAttribute('data-theme', 'dark')
-
-  watch(selectedColor, (value) => {
-    setStorageItem('selectedColor', value)
-    applyColor(value)
-  })
 
   watch(selectedLanguage, (value) => {
     setStorageItem('selectedLanguage', value)

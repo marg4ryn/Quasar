@@ -12,12 +12,6 @@
           @toggle="toggleBox(index)"
         >
           <template v-if="index === 0">
-            <SectionHeader :label="t('settingsPage.appearance.mainColor')" />
-            <RadioButtonGroup
-              v-model="useUserSettingsStore().selectedColor"
-              name="color"
-              :options="colors"
-            />
             <SectionHeader :label="t('settingsPage.appearance.gradient')" />
             <RadioButtonGroup
               v-model="useUserSettingsStore().isGradientOn"

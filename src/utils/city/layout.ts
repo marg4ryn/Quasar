@@ -5,7 +5,7 @@ import {
   BUILDING_WIDTH_SCALE,
   PLATFORM_HEIGHT,
   AREA_BUFFER,
-} from '@/city/constants'
+} from '@/utils/city/constants'
 
 interface SkylineSegment {
   x: number

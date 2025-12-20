@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <div class="footer-left">2025 HotSpotter</div>
+    <div class="footer-left">2025 Quasar</div>
 
     <div class="footer-right">
       <RouterLink to="/about" class="footer-btn" :aria-label="t('footer.aria')">

@@ -2,7 +2,7 @@
   <div class="app">
     <MeshGradient
       v-if="userSettings.isGradientOn === 'on'"
-      :primary-color="userSettings.colorPrimary"
+      :primary-color="'#240046'"
       :secondary-color="'#08040c'"
       class="background-gradient"
     />

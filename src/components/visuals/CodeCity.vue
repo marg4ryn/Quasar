@@ -13,13 +13,13 @@
   import type { CityNode } from '@/types/city'
   import { useCodeCityScene } from '@/composables/useCodeCityScene'
   import { useCodeCityState } from '@/composables/useCodeCityState'
-  import { processNode } from '@/city/layout'
+  import { processNode } from '@/utils/city/layout'
   import {
     createGeometry,
     createMergedEdges,
     getColorDataForPath,
     createAllInstancedMeshes,
-  } from '@/city/geometry'
+  } from '@/utils/city/geometry'
   import * as THREE from 'three'
   import {
     COLORS,
@@ -32,9 +32,9 @@
     MIN_CAMERA_ROTATION_X,
     MAX_CAMERA_ROTATION_X,
     HOVER_CHECK_INTERVAL,
-  } from '@/city/constants'
+  } from '@/utils/city/constants'
   import { toRaw } from 'vue'
-  import { applyColorData, clearColorData } from '@/city/geometry'
+  import { applyColorData, clearColorData } from '@/utils/city/geometry'
   import { useCodeCityController } from '@/composables/useCodeCityController'
 
   const {

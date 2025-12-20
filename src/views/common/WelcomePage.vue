@@ -9,11 +9,8 @@
     />
 
     <div class="welcome-content">
-      <img :src="logoSrc" alt="HotSpotter Logo" class="logo" />
+      <img src="/logo.svg" alt="HotSpotter Logo" class="logo" />
 
-      <h1 class="main-title">
-        {{ t('welcomePage.header') }} <span class="appname">Hot</span>Spotter!
-      </h1>
       <h2 class="subtitle">{{ t('welcomePage.motto') }}</h2>
 
       <form @submit.prevent="onSubmit">
@@ -90,7 +87,6 @@
   import { useRouter, onBeforeRouteLeave } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
-  import { useUserSettingsStore } from '@/stores/userSettingsStore'
   import { useSseConnector } from '@/composables/useSseConnector'
   import { useRestApi } from '@/composables/useRestApi'
   import { useLogger } from '@/composables/useLogger'
@@ -102,7 +98,6 @@
   const api = useRestApi()
   const log = useLogger('WelcomePage')
   const newAnalysisStore = useNewAnalysisStore()
-  const userSettingsStore = useUserSettingsStore()
 
   const REPO_URL_PATTERN =
     /^(?:https:\/\/)?(?:git(?:hub|lab))\.com\/(?:[^/]+)\/(?:(?!\.git$)[^/]+?)(?:\.git)*$/
@@ -128,17 +123,6 @@
     '/repository-overview',
     'sse.analysis.repo-download'
   )
-
-  const logoSrc = computed(() => {
-    switch (userSettingsStore.selectedColor) {
-      case '#bc1922':
-        return '/logo_red.png'
-      case '#28abf2':
-        return '/logo_blue.png'
-      default:
-        return '/logo_red.png'
-    }
-  })
 
   const validateLink = () => {
     const trimmedLink = link.value.trim()

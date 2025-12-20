@@ -4,8 +4,7 @@
     <div class="about__container">
       <div class="about__header">
         <h2 class="about__project-name">
-          <span class="about__project-name appname">Hot</span>
-          <span>Spotter</span>
+          <span>Quasar</span>
         </h2>
       </div>
 

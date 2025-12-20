@@ -50,20 +50,20 @@ describe('dateFormatter', () => {
   })
 
   describe('formatDaysOnly', () => {
-    it('returns "today" for 0 days in English', () => {
+    it('formats 0 days correctly in English', () => {
       setLocale('en')
 
       const result = formatDaysOnly(0)
 
-      expect(result).toBe('today')
+      expect(result).toBe('0 days ago')
     })
 
-    it('returns "dzisiaj" for 0 days in Polish', () => {
+    it('formats 0 days correctly in Polish', () => {
       setLocale('pl')
 
       const result = formatDaysOnly(0)
 
-      expect(result).toBe('dzisiaj')
+      expect(result).toBe('0 dni temu')
     })
 
     it('formats 1 day correctly in English', () => {

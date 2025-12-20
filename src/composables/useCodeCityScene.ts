@@ -1,6 +1,6 @@
 import { type Ref } from 'vue'
 import * as THREE from 'three'
-import { clearEdgesCache } from '@/city/geometry'
+import { clearEdgesCache } from '@/utils/city/geometry'
 
 interface CodeCityScene {
   getScene: () => THREE.Scene | null

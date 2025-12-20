@@ -7,9 +7,9 @@
         :aria-label="t('appbar.new-analysis')"
         @click="openNewAnalysis"
       >
-        <img :src="logoSrc" alt="Logo" class="app_logo" />
+        <img src="/logo.svg" alt="Logo" class="app_logo" />
         <span class="app-name">
-          <span class="app-name__1">Hot</span><span class="app-name__2">Spotter</span>
+          <span class="app-name__2">uasar</span>
         </span>
       </button>
 
@@ -36,7 +36,6 @@
 
 <script setup lang="ts">
   import { useUIStore } from '@/stores/uiStore'
-  import { useUserSettingsStore } from '@/stores/userSettingsStore'
   import { useRestApi } from '@/composables/useRestApi'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
@@ -51,23 +50,11 @@
   const router = useRouter()
   const uiStore = useUIStore()
   const isAppBarVisible = computed(() => uiStore.isAppBarVisible)
-  const userSettingsStore = useUserSettingsStore()
   const showDialog = ref(false)
 
   const repoName = computed(() => detailsRef.value?.info.repositoryName)
   const startDate = computed(() => detailsRef.value?.info.analysisRangeStartDate)
   const endDate = computed(() => detailsRef.value?.info.analysisRangeEndDate)
-
-  const logoSrc = computed(() => {
-    switch (userSettingsStore.selectedColor) {
-      case '#bc1922':
-        return '/logo_red.png'
-      case '#28abf2':
-        return '/logo_blue.png'
-      default:
-        return '/logo_red.png'
-    }
-  })
 
   function openNewAnalysis() {
     showDialog.value = true

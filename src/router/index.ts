@@ -2,18 +2,14 @@ import { createRouter, createWebHistory, Router } from 'vue-router'
 import { i18n } from '@/plugins/i18n'
 import { useUIStore } from '@/stores/uiStore'
 
-const Welcome = () => import('@/views/miscellaneous/WelcomePage.vue')
-const Settings = () => import('@/views/miscellaneous/SettingsPage.vue')
-const About = () => import('@/views/miscellaneous/AboutPage.vue')
-const Login = () => import('@/views/miscellaneous/LoginPage.vue')
-const Register = () => import('@/views/miscellaneous/RegisterPage.vue')
-const LoginSuccess = () => import('@/views/miscellaneous/LoginSuccessPage.vue')
-const AnalysisHistory = () => import('@/views/miscellaneous/AnalysisHistoryPage.vue')
-const RepositoryOverview = () => import('@/views/miscellaneous/RepositoryOverviewPage.vue')
-const DevelopersList = () => import('@/views/miscellaneous/DevelopersListPage.vue')
-const XRayAnalysis = () => import('@/views/miscellaneous/XRayAnalysisPage.vue')
-
-const DeveloperRelationships = () => import('@/views/relationships/DeveloperRelationshipsPage.vue')
+const Welcome = () => import('@/views/common/WelcomePage.vue')
+const Settings = () => import('@/views/common/SettingsPage.vue')
+const About = () => import('@/views/common/AboutPage.vue')
+const AnalysisHistory = () => import('@/views/common/AnalysisHistoryPage.vue')
+const RepositoryOverview = () => import('@/views/common/RepositoryOverviewPage.vue')
+const DevelopersList = () => import('@/views/common/DevelopersListPage.vue')
+const XRayAnalysis = () => import('@/views/common/XRayAnalysisPage.vue')
+const DeveloperRelationships = () => import('@/views/common/DeveloperRelationshipsPage.vue')
 
 const FileExtensions = () => import('@/views/cities/FileExtensionsPage.vue')
 const Hotspots = () => import('@/views/cities/HotspotsPage.vue')
@@ -22,6 +18,10 @@ const FilesCoupling = () => import('@/views/cities/FilesCouplingPage.vue')
 const LeadDevelopers = () => import('@/views/cities/LeadDevelopersPage.vue')
 const AbandonedCode = () => import('@/views/cities/AbandonedCodePage.vue')
 const KnowledgeRisks = () => import('@/views/cities/KnowledgeRisksPage.vue')
+
+const Login = () => import('@/views/auth/LoginPage.vue')
+const Register = () => import('@/views/auth/RegisterPage.vue')
+const LoginSuccess = () => import('@/views/auth/LoginSuccessPage.vue')
 
 export default function (): Router {
   const routes = [
@@ -234,7 +234,7 @@ export default function (): Router {
   router.afterEach((to) => {
     const { t } = i18n.global
 
-    const baseTitle = 'HotSpotter'
+    const baseTitle = 'Quasar'
     const titleKey = to.meta.titleKey as string | undefined
 
     if (titleKey) {

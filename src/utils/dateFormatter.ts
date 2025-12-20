@@ -1,6 +1,7 @@
 import { t, getLocale } from '@/plugins/i18n'
 
 const getPolishPluralForm = (count: number): 'one' | 'few' | 'many' => {
+  if (count === 0) return 'many'
   if (count === 1) return 'one'
 
   const lastDigit = count % 10
@@ -38,10 +39,6 @@ export const formatDateTime = (date: Date | string): string => {
 }
 
 export const formatDaysOnly = (days: number): string => {
-  if (days === 0) {
-    return t('dates.today')
-  }
-
   if (days === 1) {
     return `1 ${t('dates.units.day.one')} ${t('dates.ago')}`
   }

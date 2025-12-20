@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import type { CityNode, ProcessedNodeData } from '@/types'
-import { COLORS, EDGE_THICKNESS } from '@/city/constants'
+import { COLORS, EDGE_THICKNESS } from '@/utils/city/constants'
 
 const edgesCache = new Map<string, Float32Array>()
 
