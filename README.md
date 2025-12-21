@@ -20,9 +20,25 @@ The central element of the application interface is a fully interactive 3D visua
 
 Different screens of the tool present the *“code city”* in various visual variants, enabling repository analysis from multiple perspectives and highlighting different aspects of its structure. For example, the *“hotspots”* view identifies areas with the highest risk of technical debt.
 
+| Starting the Analysis |
+|:---:|
+| <img src="./docs/welcome.png" width="1000"/> |
+
+| Repository Overview |
+|:---:|
+| <img src="./docs/overview.png" width="1000"/> |
+
 | 3D Code City Model |
 |:---:|
-| ![Code City](./docs/city.png) |
+| <img src="./docs/extensions.png" width="1000"/> |
+
+| Hotspots View |
+|:---:|
+| <img src="./docs/hotspots.png" width="1000"/> |
+
+| Developer Relationships |
+|:---:|
+| <img src="./docs/relationships.png" width="1000"/> |
 
 ---
 
