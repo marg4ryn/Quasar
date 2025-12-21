@@ -48,11 +48,13 @@
     min-width: 120px;
 
     &--primary {
-      background: $color-button-primary;
-      color: white;
+      background: none;
+      color: $color-button-primary;
+      border: 1px solid $color-button-primary;
 
       &:hover {
         background: $color-button-primary-hover;
+        color: white;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
       }

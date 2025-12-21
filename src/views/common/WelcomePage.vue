@@ -1,19 +1,13 @@
 <template>
   <section class="welcome-screen">
-    <LoadingBar
-      :show="isRunning"
-      :label="statusLabel || 'welcomePage.loading'"
-      :show-cancel-button="true"
-      :on-cancel="handleCancelAnalysis"
-      :modal-label="t('welcomePage.modal')"
-    />
-
     <div class="welcome-content">
-      <img src="/logo.svg" alt="HotSpotter Logo" class="logo" />
+      <div class="welcome-header">
+        <img src="/logo.svg" alt="HotSpotter Logo" class="welcome-header__logo" />
+        <span class="welcome-header__appname">uasar</span>
+        <h2 class="welcome-header__subtitle">{{ t('welcomePage.motto') }}</h2>
+      </div>
 
-      <h2 class="subtitle">{{ t('welcomePage.motto') }}</h2>
-
-      <form @submit.prevent="onSubmit">
+      <form @submit.prevent="onSubmit" class="welcome-form">
         <div class="input-section">
           <label for="repo-link" class="input-label">{{ t('welcomePage.prompt') }}</label>
           <input
@@ -83,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed } from 'vue'
   import { useRouter, onBeforeRouteLeave } from 'vue-router'
   import { useI18n } from 'vue-i18n'
   import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
@@ -91,24 +85,21 @@
   import { useRestApi } from '@/composables/useRestApi'
   import { useLogger } from '@/composables/useLogger'
   import AppButton from '@/components/common/AppButton.vue'
-  import LoadingBar from '@/components/sections/LoadingBar.vue'
 
   const { t } = useI18n()
   const router = useRouter()
   const api = useRestApi()
   const log = useLogger('WelcomePage')
   const newAnalysisStore = useNewAnalysisStore()
-
   const REPO_URL_PATTERN =
     /^(?:https:\/\/)?(?:git(?:hub|lab))\.com\/(?:[^/]+)\/(?:(?!\.git$)[^/]+?)(?:\.git)*$/
-
   const MIN_DATE = '2000-01-01'
   const today = new Date().toISOString().split('T')[0]
   const MAX_DATE = today
   const link = ref(newAnalysisStore.link || '')
   const validationError = ref('')
   const isLinkValid = ref(false)
-  const showDateInputs = ref(false)
+  const showDateInputs = ref(true)
   const fromDate = ref(newAnalysisStore.fromDate || MIN_DATE)
   const toDate = ref(newAnalysisStore.toDate || MAX_DATE)
   const fromDateError = ref('')
@@ -118,7 +109,7 @@
     api.clearAll().then(() => next())
   })
 
-  const { isRunning, isCompleted, statusLabel, start, stop } = useSseConnector(
+  const { start } = useSseConnector(
     'download-repository',
     '/repository-overview',
     'sse.analysis.repo-download'
@@ -269,23 +260,7 @@
         endDate: newAnalysisStore.toDate.value,
       })
     }
-  }
-
-  watch(isCompleted, async (newValue) => {
-    if (newValue) {
-      resetNewAnalysisStore()
-      router.push('/repository-overview')
-    }
-  })
-
-  const resetNewAnalysisStore = () => {
-    newAnalysisStore.setLink('')
-    newAnalysisStore.setFromDate(MIN_DATE)
-    newAnalysisStore.setToDate(MAX_DATE)
-  }
-
-  const handleCancelAnalysis = () => {
-    stop()
+    router.push('/loading')
   }
 
   if (link.value) {
@@ -309,36 +284,39 @@
     text-align: center;
     max-width: 600px;
     width: 100%;
+    height: 100%;
     gap: $spacing-lg;
   }
 
-  .logo {
-    width: 200px;
-    height: 200px;
-    margin-bottom: $spacing-md;
-    caret-color: transparent;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 1));
-  }
+  .welcome-header {
+    flex: 3;
 
-  .main-title {
-    font-size: $font-size-3xl;
-    font-weight: $font-weight-semibold;
-    color: var(--color-text-primary);
-    margin: 0;
-    line-height: $line-height-tight;
+    &__logo {
+      width: 200px;
+      height: 200px;
+      caret-color: transparent;
+      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 1));
+    }
 
-    .appname {
-      font-weight: 800;
-      color: var(--color-primary);
+    &__appname {
+      font-size: 78px;
+      font-weight: $font-weight-semibold;
+      color: var(--color-text-primary);
+      margin: 0;
+      line-height: $line-height-tight;
+    }
+
+    &__subtitle {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-normal;
+      color: var(--color-text-secondary);
+      margin: 0;
+      line-height: $line-height-normal;
     }
   }
 
-  .subtitle {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-normal;
-    color: var(--color-text-tertiary);
-    margin: 0;
-    line-height: $line-height-normal;
+  .welcome-form {
+    flex: 2;
   }
 
   .input-section {

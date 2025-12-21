@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, Router } from 'vue-router'
-import { i18n } from '@/plugins/i18n'
+import { t } from '@/plugins/i18n'
 import { useUIStore } from '@/stores/uiStore'
 
 const Welcome = () => import('@/views/common/WelcomePage.vue')
@@ -10,6 +10,7 @@ const RepositoryOverview = () => import('@/views/common/RepositoryOverviewPage.v
 const DevelopersList = () => import('@/views/common/DevelopersListPage.vue')
 const XRayAnalysis = () => import('@/views/common/XRayAnalysisPage.vue')
 const DeveloperRelationships = () => import('@/views/common/DeveloperRelationshipsPage.vue')
+const LoadingScreen = () => import('@/views/common/LoadingPage.vue')
 
 const FileExtensions = () => import('@/views/cities/FileExtensionsPage.vue')
 const Hotspots = () => import('@/views/cities/HotspotsPage.vue')
@@ -53,10 +54,19 @@ export default function (): Router {
       component: About,
     },
     {
+      path: '/loading',
+      name: 'loading',
+      meta: {
+        titleKey: 'title.loading',
+        showNavBar: false,
+      },
+      component: LoadingScreen,
+    },
+    {
       path: '/login',
       name: 'login',
       meta: {
-        titleKey: 'title.login',
+        titleKey: 'title.loading',
         showNavBar: false,
       },
       component: Login,
@@ -232,8 +242,6 @@ export default function (): Router {
   })
 
   router.afterEach((to) => {
-    const { t } = i18n.global
-
     const baseTitle = 'Quasar'
     const titleKey = to.meta.titleKey as string | undefined
 
