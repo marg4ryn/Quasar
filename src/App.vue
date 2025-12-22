@@ -9,7 +9,7 @@
     <AppBar v-if="isAppBarVisible" />
     <RightSection />
     <NavBar v-if="isNavBarVisible" />
-    <div class="content" :style="{ minHeight: contentMinHeight }">
+    <div class="content">
       <RouterView />
     </div>
     <AppFooter />
@@ -49,12 +49,6 @@
 
   const isNavBarVisible = computed(() => uiStore.isNavBarVisible)
   const isAppBarVisible = computed(() => uiStore.isAppBarVisible)
-
-  const contentMinHeight = computed(() => {
-    const appBarHeight = isNavBarVisible.value ? 50 : 0
-    const navBarHeight = isNavBarVisible.value ? 50 : 0
-    return `calc(100vh - ${appBarHeight + navBarHeight}px)`
-  })
 
   onBeforeMount(() => {
     notificationsStore.clearAll()

@@ -260,7 +260,28 @@ export default function (): Router {
     },
   })
 
-  const historyStack: string[] = []
+  // Flaga do wykrywania czy nawigacja pochodzi z History API
+  let isHistoryNavigation = false
+
+  // Nasłuchuj na zmiany historii przeglądarki (back/forward)
+  window.addEventListener('popstate', () => {
+    isHistoryNavigation = true
+  })
+
+  // Zachowaj oryginalną metodę push
+  const originalPush = router.push.bind(router)
+
+  // Nadpisz push aby automatycznie używać replace dla skipHistory
+  router.push = function (to) {
+    const resolved = router.resolve(to)
+
+    if (resolved.meta.skipHistory) {
+      console.log('Auto-replacing (skipHistory):', resolved.path)
+      return router.replace(to)
+    }
+
+    return originalPush(to)
+  }
 
   router.beforeEach((to, from, next) => {
     const uiStore = useUIStore()
@@ -268,15 +289,16 @@ export default function (): Router {
     uiStore.isNavBarVisible = to.meta.showNavBar ?? false
     uiStore.isAppBarVisible = to.meta.showAppBar ?? false
 
-    console.log('In router before each [To: ', to, ', From: ', from, ']')
-    if (!to.meta.skipHistory) {
-      console.log('history push try: ', to.meta.skipHistory)
-      if (from.name && (!from.meta.skipHistory || from.meta.skipHistory === undefined)) {
-        console.log('history push: ', from.path)
-        historyStack.push(to.path)
-      }
-    } else {
-      console.log('history push skipped')
+    console.log('Navigation [To:', to.path, 'From:', from.path, ']', {
+      skipHistory: to.meta.skipHistory,
+      isHistoryNav: isHistoryNavigation,
+    })
+
+    // Jeśli to nawigacja z History API (back/forward), tylko ją obsłuż
+    if (isHistoryNavigation) {
+      isHistoryNavigation = false
+      next()
+      return
     }
 
     next()
@@ -287,22 +309,5 @@ export default function (): Router {
     document.title = to.meta.titleKey ? `${t(to.meta.titleKey)} - ${baseTitle}` : baseTitle
   })
 
-  router.smartBack = function () {
-    if (historyStack.length > 0) {
-      const previousPath = historyStack.pop()
-      if (previousPath) {
-        this.replace(previousPath)
-        return
-      }
-    }
-    this.replace('/')
-  }
-
   return router
-}
-
-declare module 'vue-router' {
-  interface Router {
-    smartBack(): void
-  }
 }

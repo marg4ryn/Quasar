@@ -264,6 +264,7 @@
     position: relative;
     flex: 1 0 auto;
     width: 100%;
+    min-height: 100vh;
     padding: $spacing-xl $spacing-lg;
   }
 

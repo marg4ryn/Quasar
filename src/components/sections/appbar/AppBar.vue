@@ -8,9 +8,7 @@
         @click="openNewAnalysis"
       >
         <img src="/logo.svg" alt="Logo" class="app_logo" />
-        <span class="app-name">
-          <span class="app-name__2">uasar</span>
-        </span>
+        <span class="app-name">uasar</span>
       </button>
 
       <div class="app-bar__center">
@@ -87,8 +85,8 @@
     &__left {
       cursor: pointer;
       display: flex;
-      align-items: center;
-      gap: 10px;
+      align-items: end;
+      gap: 4px;
       text-decoration: none;
       color: var(--color-text-primary);
       border-radius: $radius-md;
@@ -107,23 +105,16 @@
     }
 
     .app_logo {
-      height: 40px;
-      width: 40px;
-      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 1));
+      height: 32px;
+      width: 32px;
+      margin-bottom: 5px;
     }
 
     .app-name {
       font-size: 1.6rem;
       text-decoration: none;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-
-      &__1 {
-        font-weight: 800;
-        color: var(--color-primary);
-      }
-      &__2 {
-        color: var(--color-text-primary);
-      }
+      color: var(--color-text-primary);
     }
 
     .repo-label {

@@ -36,11 +36,13 @@
     transition: all 0.2s;
     min-width: 120px;
 
-    background: var(--color-button-secondary);
+    background: none;
     color: white;
+    border: 1px solid var(--color-border);
 
     &:hover {
       background: var(--color-button-secondary-hover);
+      border-color: var(--color-border-hover);
       transform: translateY(-1px);
     }
 
