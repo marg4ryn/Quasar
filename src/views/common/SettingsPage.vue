@@ -66,11 +66,6 @@
     { label: 'settingsPage.appearance.polish', value: 'pl' },
   ]
 
-  const colors = [
-    { label: 'settingsPage.appearance.red', value: '#bc1922' },
-    { label: 'settingsPage.appearance.blue', value: '#28abf2' },
-  ]
-
   const gradient = [
     { label: 'settingsPage.appearance.on', value: 'on' },
     { label: 'settingsPage.appearance.off', value: 'off' },
