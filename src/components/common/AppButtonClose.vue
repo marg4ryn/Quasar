@@ -32,7 +32,11 @@
   const uiStore = useUIStore()
 
   const handleBack = () => {
-    router.back()
+    if (window.history.length > 1) {
+      router.back()
+    } else {
+      router.replace('/')
+    }
   }
 
   const buttonTop = computed(() => (uiStore.isAppBarVisible ? '8px' : '48px'))

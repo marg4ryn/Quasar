@@ -24,8 +24,13 @@
         </div>
 
         <div class="checkbox-section">
-          <label class="checkbox-label">
-            <input type="checkbox" v-model="showDateInputs" class="checkbox-input" />
+          <label class="checkbox-label" for="show-date-inputs">
+            <input
+              id="show-date-inputs"
+              type="checkbox"
+              v-model="showDateInputs"
+              class="checkbox-input"
+            />
             <span>{{ t('welcomePage.customDateRange') }}</span>
           </label>
         </div>
@@ -34,8 +39,9 @@
           <div v-if="showDateInputs" class="date-section">
             <div class="date-inputs">
               <div class="date-input-group">
-                <label class="date-label">{{ t('welcomePage.from') }}:</label>
+                <label class="date-label" for="date-from">{{ t('welcomePage.from') }}:</label>
                 <input
+                  id="date-from"
                   type="date"
                   class="date-input"
                   :class="{ error: fromDateError }"
@@ -48,8 +54,9 @@
                 <span v-if="fromDateError" class="error-message">{{ fromDateError }}</span>
               </div>
               <div class="date-input-group">
-                <label class="date-label">{{ t('welcomePage.to') }}:</label>
+                <label class="date-label" for="date-to">{{ t('welcomePage.to') }}:</label>
                 <input
+                  id="date-to"
                   type="date"
                   class="date-input"
                   :class="{ error: toDateError }"

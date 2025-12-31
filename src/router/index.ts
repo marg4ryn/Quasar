@@ -35,7 +35,6 @@ declare module 'vue-router' {
     titleKey?: string
     showNavBar?: boolean
     showAppBar?: boolean
-    skipHistory?: boolean
   }
 }
 
@@ -47,7 +46,6 @@ const routes: RouteRecordRaw[] = [
     meta: {
       showNavBar: false,
       showAppBar: false,
-      skipHistory: false,
     },
   },
   {
@@ -56,8 +54,8 @@ const routes: RouteRecordRaw[] = [
     component: commonViews.Settings,
     meta: {
       titleKey: 'title.settings',
+      showAppBar: false,
       showNavBar: false,
-      skipHistory: true,
     },
   },
   {
@@ -66,8 +64,8 @@ const routes: RouteRecordRaw[] = [
     component: commonViews.About,
     meta: {
       titleKey: 'title.about',
+      showAppBar: false,
       showNavBar: false,
-      skipHistory: true,
     },
   },
   {
@@ -76,8 +74,8 @@ const routes: RouteRecordRaw[] = [
     component: commonViews.LoadingScreen,
     meta: {
       titleKey: 'title.loading',
+      showAppBar: false,
       showNavBar: false,
-      skipHistory: true,
     },
   },
   {
@@ -87,7 +85,6 @@ const routes: RouteRecordRaw[] = [
     meta: {
       titleKey: 'title.analysis-history',
       showNavBar: false,
-      skipHistory: true,
     },
   },
   {
@@ -98,7 +95,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.repository-overview',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
   },
   {
@@ -109,7 +105,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.developers-list',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
   },
   {
@@ -119,7 +114,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.developer-relationships',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
     component: commonViews.DeveloperRelationships,
   },
@@ -131,7 +125,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.xray-analysis',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
   },
   {
@@ -142,7 +135,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.file-extensions',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
   },
   {
@@ -153,7 +145,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.hotspots',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
   },
   {
@@ -164,7 +155,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.code-age',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
   },
   {
@@ -175,7 +165,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.files-coupling',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
   },
   {
@@ -186,7 +175,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.lead-developers',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
   },
   {
@@ -197,7 +185,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.abandoned-code',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
   },
   {
@@ -208,7 +195,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.knowledge-risks',
       showNavBar: true,
       showAppBar: true,
-      skipHistory: false,
     },
   },
   {
@@ -219,7 +205,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.login',
       showNavBar: false,
       showAppBAr: false,
-      skipHistory: true,
     },
   },
   {
@@ -230,7 +215,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.register',
       showNavBar: false,
       showAppBAr: false,
-      skipHistory: true,
     },
   },
   {
@@ -241,7 +225,6 @@ const routes: RouteRecordRaw[] = [
       titleKey: 'title.login',
       showNavBar: false,
       showAppBAr: false,
-      skipHistory: true,
     },
   },
 
@@ -260,45 +243,14 @@ export default function (): Router {
     },
   })
 
-  // Flaga do wykrywania czy nawigacja pochodzi z History API
-  let isHistoryNavigation = false
-
-  // Nasłuchuj na zmiany historii przeglądarki (back/forward)
-  window.addEventListener('popstate', () => {
-    isHistoryNavigation = true
-  })
-
-  // Zachowaj oryginalną metodę push
-  const originalPush = router.push.bind(router)
-
-  // Nadpisz push aby automatycznie używać replace dla skipHistory
-  router.push = function (to) {
-    const resolved = router.resolve(to)
-
-    if (resolved.meta.skipHistory) {
-      console.log('Auto-replacing (skipHistory):', resolved.path)
-      return router.replace(to)
-    }
-
-    return originalPush(to)
-  }
-
   router.beforeEach((to, from, next) => {
     const uiStore = useUIStore()
 
-    uiStore.isNavBarVisible = to.meta.showNavBar ?? false
-    uiStore.isAppBarVisible = to.meta.showAppBar ?? false
-
-    console.log('Navigation [To:', to.path, 'From:', from.path, ']', {
-      skipHistory: to.meta.skipHistory,
-      isHistoryNav: isHistoryNavigation,
-    })
-
-    // Jeśli to nawigacja z History API (back/forward), tylko ją obsłuż
-    if (isHistoryNavigation) {
-      isHistoryNavigation = false
-      next()
-      return
+    if (to.meta.showNavBar !== undefined) {
+      uiStore.isNavBarVisible = to.meta.showNavBar
+    }
+    if (to.meta.showAppBar !== undefined) {
+      uiStore.isAppBarVisible = to.meta.showAppBar
     }
 
     next()
@@ -306,7 +258,7 @@ export default function (): Router {
 
   router.afterEach((to) => {
     const baseTitle = 'Quasar'
-    document.title = to.meta.titleKey ? `${t(to.meta.titleKey)} - ${baseTitle}` : baseTitle
+    document.title = to.meta.titleKey ? `${t(to.meta.titleKey)} · ${baseTitle}` : baseTitle
   })
 
   return router

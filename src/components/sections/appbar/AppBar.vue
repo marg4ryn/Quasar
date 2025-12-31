@@ -59,7 +59,7 @@
   }
 
   function handleNewAnalysis() {
-    router.push('/welcome')
+    router.push('/')
   }
 </script>
 

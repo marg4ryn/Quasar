@@ -129,7 +129,7 @@
     "alertEnterRepo": "Podaj link do repozytorium przed rozpoczęciem!",
     "loading": "Pobieranie repozytorium...",
     "modal": "Czy na pewno chcesz przerwać pobieranie repozytorium?",
-    "repoPlaceholder": "np. https://github.com/johndoe/test.git",
+    "repoPlaceholder": "https://github.com/johndoe/test.git",
     "invalidRepoUrl": "Nieprawidłowy adres URL repozytorium. Użyj adresu URL GitHub lub GitLab.",
     "customDateRange": "Ustaw zakres dat",
     "dateRequired": "Data jest wymagana",
