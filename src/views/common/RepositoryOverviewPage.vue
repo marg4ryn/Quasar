@@ -78,16 +78,23 @@
 
         <!-- Commit Trends Card -->
         <div class="stats-card" data-cols="1">
+          <select v-model="commitTimeScale" class="time-scale-select">
+            <option value="day">{{ t('repositoryOverview.commitTrends.scale.day') }}</option>
+            <option value="week">{{ t('repositoryOverview.commitTrends.scale.week') }}</option>
+            <option value="month">{{ t('repositoryOverview.commitTrends.scale.month') }}</option>
+            <option value="year">{{ t('repositoryOverview.commitTrends.scale.year') }}</option>
+          </select>
           <div class="card-header">
             <h3 class="card-title">{{ t('repositoryOverview.commitTrends.title') }}</h3>
           </div>
           <TimelineChart
             v-if="commitData"
             :showLegend="false"
+            :timeScale="commitTimeScale"
             :datasets="[
               {
                 label: '',
-                data: commitData,
+                data: aggregatedCommitData,
                 color: ChartColor.Blue,
                 tooltipDesc: t('repositoryOverview.commitTrends.tooltip'),
                 yAxisID: 'left',
@@ -325,15 +332,17 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { ref, computed } from 'vue'
   import { useRestApi } from '@/composables/useRestApi'
   import { ChurnData } from '@/components/visuals/CodeChurnChart.vue'
   import { ChartColor, ChartDataPoint } from '@/types/timelineChart.js'
   import { useI18n } from 'vue-i18n'
   import type { AuthorsStatisticsDetails } from '@/types'
   import { formatDate, formatDateTime } from '@/utils/common/dateFormatter'
+  import { startOfWeek, startOfMonth, startOfYear, format } from 'date-fns'
 
   import TimelineChart from '@/components/visuals/TimelineChart.vue'
+  import { CustomTimeScale } from '@/components/visuals/TimelineChart.vue'
   import CodeChurnChart from '@/components/visuals/CodeChurnChart.vue'
   import TabNavigation from '@/components/city/TabNavigation.vue'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
@@ -342,6 +351,7 @@
   const { repositoryDetails, authorsStatisticsDetails, analysisTrendsDetails, isGeneralLoading } =
     useRestApi()
 
+  const commitTimeScale = ref<CustomTimeScale>('week')
   const detailsRef = repositoryDetails()
   const trendsRef = analysisTrendsDetails()
   const authorsRef = authorsStatisticsDetails()
@@ -430,6 +440,39 @@
     }))
   })
 
+  const aggregatedCommitData = computed(() => {
+    if (!commitData.value) return []
+
+    const grouped = new Map<string, number>()
+
+    commitData.value.forEach((item) => {
+      const date = new Date(item.date)
+      let key: string
+
+      switch (commitTimeScale.value) {
+        case 'week':
+          key = format(startOfWeek(date, { weekStartsOn: 1 }), 'yyyy-MM-dd')
+          break
+        case 'month':
+          key = format(startOfMonth(date), 'yyyy-MM-dd')
+          break
+        case 'year':
+          key = format(startOfYear(date), 'yyyy-MM-dd')
+          break
+        case 'day':
+        default:
+          key = format(date, 'yyyy-MM-dd')
+          break
+      }
+
+      grouped.set(key, (grouped.get(key) || 0) + item.value)
+    })
+
+    return Array.from(grouped, ([date, value]) => ({ date, value })).sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    )
+  })
+
   function mergeSameDayData<T extends Record<string, any>>(
     data: T[],
     dateKey: keyof T,
@@ -516,6 +559,31 @@
     font-weight: 600;
     margin: 0;
     color: var(--color-text-primary);
+  }
+
+  .time-scale-select {
+    position: absolute;
+    right: 1.5rem;
+    top: 0.6rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .time-scale-select:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .time-scale-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
 
   .card-content {

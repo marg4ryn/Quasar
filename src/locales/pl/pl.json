@@ -241,7 +241,13 @@
     },
     "commitTrends": {
       "title": "Trendy zmian",
-      "tooltip": "Commity"
+      "tooltip": "Commity",
+      "scale": {
+        "day": "Dzień",
+        "week": "Tydzień",
+        "month": "Miesiąc",
+        "year": "Rok"
+      }
     },
     "codeChanges": {
       "title": "Zmiany w kodzie"
