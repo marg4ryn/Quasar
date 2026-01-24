@@ -241,7 +241,13 @@
     },
     "commitTrends": {
       "title": "Commit Trends",
-      "tooltip": "Commits"
+      "tooltip": "Commits",
+      "scale": {
+        "day": "Day",
+        "week": "Week",
+        "month": "Month",
+        "year": "Year"
+      }
     },
     "codeChanges": {
       "title": "Code Changes"
