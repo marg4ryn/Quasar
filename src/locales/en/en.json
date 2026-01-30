@@ -129,7 +129,7 @@
     "alertEnterRepo": "Please enter a repository link before starting!",
     "loading": "Downloading repository...",
     "modal": "Are you sure you want to abort the repository download?",
-    "repoPlaceholder": "e.g. https://github.com/johndoe/test.git",
+    "repoPlaceholder": "https://github.com/johndoe/test.git",
     "invalidRepoUrl": "Invalid repository URL. Use GitHub or GitLab URL.",
     "customDateRange": "Set date range",
     "dateRequired": "Date is required",
@@ -245,7 +245,13 @@
     },
     "commitTrends": {
       "title": "Commit Trends",
-      "tooltip": "Commits"
+      "tooltip": "Commits",
+      "scale": {
+        "day": "Day",
+        "week": "Week",
+        "month": "Month",
+        "year": "Year"
+      }
     },
     "codeChanges": {
       "title": "Code Changes"

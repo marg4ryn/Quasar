@@ -6,6 +6,7 @@ import AboutPage from '@/views/common/AboutPage.vue'
 describe('AboutPage', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
   })
 
   it('renders correctly', () => {

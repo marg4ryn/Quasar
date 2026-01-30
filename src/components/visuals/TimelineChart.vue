@@ -25,6 +25,9 @@
   import 'chartjs-adapter-date-fns'
   import { useLogger } from '@/composables/useLogger'
   import { ChartColor, type Dataset } from '@/types/timelineChart.js'
+  import { formatDate } from '@/utils/common/dateFormatter'
+
+  export type CustomTimeScale = 'day' | 'week' | 'month' | 'year'
 
   const CHART_COLORS = {
     [ChartColor.Blue]: {
@@ -114,10 +117,7 @@
     if (!chartRef.value || !props.datasets || props.datasets.length === 0) return
 
     try {
-      if (chartInstance) {
-        chartInstance.destroy()
-        chartInstance = null
-      }
+      destroyChart()
 
       const ctx = chartRef.value.getContext('2d')
       if (!ctx) return
@@ -193,11 +193,7 @@
                   const dateStr = context[0].parsed.x
                   if (!dateStr) return ''
                   const date = new Date(dateStr)
-                  return date.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                  })
+                  return formatDate(date)
                 },
                 label: (context) => {
                   const dataset = context.dataset as any
@@ -226,7 +222,7 @@
               time: {
                 unit: 'day',
                 displayFormats: {
-                  day: 'MMM dd yyyy',
+                  day: 'yyyy-MM-dd',
                   month: 'MMM yyyy',
                 },
                 parser: 'yyyy-MM-dd',
@@ -276,6 +272,13 @@
     }
   }
 
+  function destroyChart() {
+    if (chartInstance) {
+      chartInstance.destroy()
+      chartInstance = null
+    }
+  }
+
   function handleResize() {
     createChart()
   }
@@ -299,11 +302,7 @@
       window.removeEventListener('resize', resizeHandler)
       resizeHandler = null
     }
-
-    if (chartInstance) {
-      chartInstance.destroy()
-      chartInstance = null
-    }
+    destroyChart()
   })
 </script>
 
