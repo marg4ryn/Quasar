@@ -41,11 +41,10 @@ export async function request<T>(endpoint: string, options: RequestInit = {}): P
     clearTimeout(timeoutId)
 
     if (!response.ok) {
-      const errorData: ApiError = await response.json().catch(() => ({
-        error: 'api.errors.unknown',
-        message: `api.errors.httpError`,
-        errorCode: response.status,
-      }))
+      const errorData: ApiError = await response
+        .json()
+        .catch(() => createHttpError(response.status))
+
       log.error(`Request failed: ${response.status}`, errorData)
       throw errorData
     }
@@ -54,17 +53,66 @@ export async function request<T>(endpoint: string, options: RequestInit = {}): P
   } catch (err) {
     clearTimeout(timeoutId)
 
+    // 1. Timeout or manual interrupt
     if (err instanceof Error && err.name === 'AbortError') {
+      const requestError: ApiError = {
+        error: 'Request Interrupted',
+        message: 'errors.requestInterrupted',
+      }
       log.error('Request timeout', endpoint)
-      throw {
-        error: 'api.errors.timeout',
-        message: 'api.errors.requestTimeout',
-        errorCode: 408,
-      } as ApiError
+      throw requestError
     }
 
-    log.error('Request error:', err)
-    throw err
+    // 2. Network errors
+    if (err instanceof TypeError) {
+      const networkError: ApiError = {
+        error: 'Network Error',
+        message: 'errors.networkFailure',
+      }
+      log.error('Network error:', err.message)
+      throw networkError
+    }
+
+    // 3. Http errors
+    if (err && typeof err === 'object') {
+      throw err as ApiError
+    }
+
+    // 4. Unknown error
+    const unknownError: ApiError = {
+      error: 'Unknown Error',
+      message: 'errors.unknown',
+    }
+    log.error('Unknown error:', err)
+    throw unknownError
+  }
+}
+
+function createHttpError(status: number): ApiError {
+  if (status === 404) {
+    return {
+      error: 'Error 404',
+      message: 'errors.resourceNotFound',
+    }
+  }
+
+  if (status >= 400 && status < 500) {
+    return {
+      error: 'Client Error',
+      message: `errors.clientError`,
+    }
+  }
+
+  if (status >= 500 && status < 600) {
+    return {
+      error: 'Server Error',
+      message: 'errors.serverError',
+    }
+  }
+
+  return {
+    error: 'Unknown Error',
+    message: `errors.unknown`,
   }
 }
 
@@ -135,7 +183,7 @@ export const api = {
     return request<XRayResponse>(`analysis/${analysisId}/x-ray?${queryString}`)
   },
 
-  async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+  async get<T>(endpoint: string, params?: Record<string, string | number | boolean>): Promise<T> {
     const queryString = params ? `?${buildQueryString(params)}` : ''
     return request<T>(`${endpoint}${queryString}`, { method: 'GET' })
   },

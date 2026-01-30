@@ -156,16 +156,20 @@
 
   "errors": {
     "failedToParseCompletionData": "Nie udało się przetworzyć danych",
-    "serverError": "Błąd serwera",
     "unknownServerError": "Nieznany błąd serwera",
     "connectionFailedMaxRetries": "Połączenie nie powiodło się ",
-    "unknown": "Nieznany błąd",
     "httpError": "Wystąpił błąd HTTP",
     "timeout": "Przekroczono limit czasu",
     "requestTimeout": "Żądanie trwało zbyt długo",
     "noAnalysisId": "Nie podano ID analizy",
     "fetchStructureFailed": "Nie udało się załadować struktury",
-    "connectionFailed": "Błąd połączenia"
+    "connectionFailed": "Błąd połączenia",
+    "requestInterrupted": "Żądanie zostało przerwane. Spróbuj ponownie.",
+    "networkFailure": "Błąd połączenia z siecią. Sprawdź połączenie internetowe.",
+    "resourceNotFound": "Nie znaleziono żądanego zasobu.",
+    "clientError": "Nieprawidłowe żądanie. Sprawdź wprowadzone dane.",
+    "serverError": "Wystąpił błąd serwera. Spróbuj ponownie później.",
+    "unknown": "Wystąpił nieoczekiwany błąd."
   },
 
   "rightPanel": {

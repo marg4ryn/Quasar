@@ -28,11 +28,10 @@ export function useRestApi() {
 
   async function handleFetch<T>(
     fetchFn: () => Promise<T>,
-    errorKey: string,
+    endpointKey: string,
     successMessage?: string
   ): Promise<boolean> {
-    store.setLoading(errorKey, true)
-    store.setError(errorKey, null)
+    store.setLoading(endpointKey, true)
 
     try {
       await fetchFn()
@@ -42,12 +41,16 @@ export function useRestApi() {
       return true
     } catch (err) {
       const error = err as ApiError
-      const errorMsg = t(error.message) || t(`api.errors.${errorKey}Failed`)
-      store.setError(errorKey, errorMsg)
-      log.error(`${errorKey}:`, error)
+      const errorMsg = t(error.message)
+
+      notificationsStore.addNotification({
+        message: errorMsg,
+        type: 'error',
+      })
+
       return false
     } finally {
-      store.setLoading(errorKey, false)
+      store.setLoading(endpointKey, false)
     }
   }
 
@@ -387,7 +390,6 @@ export function useRestApi() {
     isFileDetailsLoading,
     isXRayDetailsLoading,
     isGeneralLoading,
-    errors: computed(() => store.errors),
 
     clearAll: store.clearAll,
   }

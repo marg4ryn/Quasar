@@ -73,7 +73,6 @@ export const useRestApiStore = defineStore('api', () => {
   const analysisTrendsDetails = ref<AnalysisTrendsResponse | null>(null)
   const xRayDetails = ref<Record<string, XRayResponse>>({})
   const loading = ref<Record<string, boolean>>({})
-  const errors = ref<Record<string, string | null>>({})
 
   async function loadFromCache() {
     try {
@@ -415,13 +414,6 @@ export const useRestApiStore = defineStore('api', () => {
     loading.value[key] = value
   }
 
-  function setError(key: string, message: string | null) {
-    errors.value[key] = message
-    if (message) {
-      log.error(`Error for ${key}: ${message}`)
-    }
-  }
-
   async function clearAll() {
     structure.value = null
     itemsMap.value = new Map()
@@ -438,7 +430,6 @@ export const useRestApiStore = defineStore('api', () => {
     analysisTrendsDetails.value = null
     xRayDetails.value = {}
     loading.value = {}
-    errors.value = {}
 
     try {
       await caches.delete(CACHE_NAME)
@@ -467,7 +458,6 @@ export const useRestApiStore = defineStore('api', () => {
     analysisTrendsDetails,
     xRayDetails,
     loading,
-    errors,
 
     // Setters
     setStructure,
@@ -506,7 +496,6 @@ export const useRestApiStore = defineStore('api', () => {
 
     // State management
     setLoading,
-    setError,
 
     // Clear functions
     clearAll,

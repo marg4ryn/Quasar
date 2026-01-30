@@ -1,7 +1,6 @@
 export interface ApiError {
   error: string
   message: string
-  errorCode: number
 }
 
 export interface FileInfo {
@@ -164,8 +163,8 @@ export interface FileTypeStatistics {
 
 export interface RepositoryDetails {
   info: RepositoryInfo
-  statistics: RepositoryStatistics
-  staticAnalysis: RepositoryStaticAnalysis
+  statistics: RepositoryStatistics | null
+  staticAnalysis: RepositoryStaticAnalysis | null
 }
 
 export interface AnalysisTrendsDetails {

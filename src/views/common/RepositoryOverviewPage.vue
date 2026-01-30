@@ -177,28 +177,28 @@
               <span class="metric-label">{{
                 t('repositoryOverview.analysisStatistics.authors')
               }}</span>
-              <span class="metric-value">{{ detailsRef.statistics.authors }}</span>
+              <span class="metric-value">{{ detailsRef.statistics?.authors }}</span>
             </div>
 
             <div class="metric-item">
               <span class="metric-label">{{
                 t('repositoryOverview.analysisStatistics.activeAuthors')
               }}</span>
-              <span class="metric-value">{{ detailsRef.statistics.activeAuthors }}</span>
+              <span class="metric-value">{{ detailsRef.statistics?.activeAuthors }}</span>
             </div>
 
             <div class="metric-item">
               <span class="metric-label">{{
                 t('repositoryOverview.analysisStatistics.commits')
               }}</span>
-              <span class="metric-value">{{ detailsRef.statistics.commits }}</span>
+              <span class="metric-value">{{ detailsRef.statistics?.commits }}</span>
             </div>
 
             <div class="metric-item">
               <span class="metric-label">{{
                 t('repositoryOverview.analysisStatistics.files')
               }}</span>
-              <span class="metric-value">{{ detailsRef.statistics.files }}</span>
+              <span class="metric-value">{{ detailsRef.statistics?.files }}</span>
             </div>
 
             <div class="metric-item">
@@ -206,7 +206,7 @@
                 t('repositoryOverview.analysisStatistics.codeLines')
               }}</span>
               <span class="metric-value">{{
-                detailsRef.statistics.codeLines.toLocaleString()
+                detailsRef.statistics?.codeLines.toLocaleString()
               }}</span>
             </div>
 
@@ -215,7 +215,7 @@
                 t('repositoryOverview.analysisStatistics.commentLines')
               }}</span>
               <span class="metric-value">{{
-                detailsRef.statistics.commentLines.toLocaleString()
+                detailsRef.statistics?.commentLines.toLocaleString()
               }}</span>
             </div>
 
@@ -224,7 +224,7 @@
                 t('repositoryOverview.analysisStatistics.blankLines')
               }}</span>
               <span class="metric-value">{{
-                detailsRef.statistics.blankLines.toLocaleString()
+                detailsRef.statistics?.blankLines.toLocaleString()
               }}</span>
             </div>
           </div>
@@ -240,28 +240,28 @@
 
           <div class="metric-item">
             <span class="metric-label">{{ t('repositoryOverview.staticAnalysis.bugs') }}</span>
-            <span class="metric-value">{{ detailsRef.staticAnalysis.bugs }}</span>
+            <span class="metric-value">{{ detailsRef.staticAnalysis?.bugs }}</span>
           </div>
 
           <div class="metric-item">
             <span class="metric-label">{{
               t('repositoryOverview.staticAnalysis.vulnerabilities')
             }}</span>
-            <span class="metric-value">{{ detailsRef.staticAnalysis.vulnerabilities }}</span>
+            <span class="metric-value">{{ detailsRef.staticAnalysis?.vulnerabilities }}</span>
           </div>
 
           <div class="metric-item">
             <span class="metric-label">{{
               t('repositoryOverview.staticAnalysis.codeSmells')
             }}</span>
-            <span class="metric-value">{{ detailsRef.staticAnalysis.codeSmells }}</span>
+            <span class="metric-value">{{ detailsRef.staticAnalysis?.codeSmells }}</span>
           </div>
 
           <div class="metric-item">
             <span class="metric-label">{{
               t('repositoryOverview.staticAnalysis.complexity')
             }}</span>
-            <span class="metric-value">{{ detailsRef.staticAnalysis.complexity }}</span>
+            <span class="metric-value">{{ detailsRef.staticAnalysis?.complexity }}</span>
           </div>
 
           <div class="metric-item">
@@ -269,7 +269,7 @@
               t('repositoryOverview.staticAnalysis.duplicatedLines')
             }}</span>
             <span class="metric-value">
-              {{ detailsRef.staticAnalysis.duplicatedLinesDensity }}%
+              {{ detailsRef.staticAnalysis?.duplicatedLinesDensity }}%
             </span>
           </div>
         </div>
@@ -281,7 +281,7 @@
           </div>
           <div class="card-content">
             <div
-              v-for="fileType in detailsRef.statistics.fileTypeStatistics"
+              v-for="fileType in detailsRef.statistics?.fileTypeStatistics"
               :key="fileType.fileType"
               class="file-type-item"
             >
