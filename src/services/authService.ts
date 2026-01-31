@@ -1,22 +1,5 @@
 import { request } from '@/services/restApi'
-
-export interface RegisterPayload {
-  email: string
-  password: string
-  name: string
-}
-
-export interface LoginPayload {
-  email: string
-  password: string
-}
-
-export interface User {
-  userId: string
-  email: string
-  name: string
-  role: string
-}
+import type { RegisterPayload, LoginPayload, User } from '@/types'
 
 export async function register(data: RegisterPayload): Promise<User> {
   return request<User>('auth/register', {

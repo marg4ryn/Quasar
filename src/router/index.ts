@@ -11,7 +11,6 @@ const commonViews = {
   DevelopersList: () => import('@/views/common/DevelopersListPage.vue'),
   XRayAnalysis: () => import('@/views/common/XRayAnalysisPage.vue'),
   DeveloperRelationships: () => import('@/views/common/DeveloperRelationshipsPage.vue'),
-  LoadingScreen: () => import('@/views/common/LoadingPage.vue'),
 }
 
 const citiesViews = {
@@ -64,16 +63,6 @@ const routes: RouteRecordRaw[] = [
     component: commonViews.About,
     meta: {
       titleKey: 'title.about',
-      showAppBar: false,
-      showNavBar: false,
-    },
-  },
-  {
-    path: '/loading',
-    name: 'loading',
-    component: commonViews.LoadingScreen,
-    meta: {
-      titleKey: 'title.loading',
       showAppBar: false,
       showNavBar: false,
     },

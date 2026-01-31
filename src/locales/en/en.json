@@ -50,14 +50,12 @@
     "remove": "Remove notification",
     "viewDetails": "View Results",
     "analysis": {
-      "completed": "Process' {screen}' completed successfully in {duration}s.",
-      "failed": "Process '{screen}' failed: {error}.",
-      "start-failed": "Process '{screen}' failed to start: {error}.",
-      "cancelled": "Process '{screen}' was cancelled",
-      "interrupted": "Analysis {screen} was interrupted by page refresh and will be resumed"
+      "completed": "Repository analysis completed successfully in {duration}s",
+      "failed": "Repository analysis failed: {error}",
+      "cancelled": "Repository analysis has been canceled"
     },
     "x-ray": {
-      "completed": "X-Ray analysis for '{filePath}' completed successfully."
+      "completed": "X-Ray analysis for '{filePath}' completed successfully"
     }
   },
 
@@ -148,9 +146,6 @@
       "analyzing": "Analyzing...",
       "finalizing": "Finalizing...",
       "unknown": "Unknown status"
-    },
-    "analysis": {
-      "repo-download": "Repository analysis"
     }
   },
 
@@ -164,12 +159,12 @@
     "noAnalysisId": "No analysis ID provided",
     "fetchStructureFailed": "Failed to load structure",
     "connectionFailed": "Connection failed",
-    "requestInterrupted": "The request was interrupted. Please try again.",
-    "networkFailure": "Network connection error. Please check your internet connection.",
-    "resourceNotFound": "The requested resource was not found.",
-    "clientError": "Invalid request. Please check the provided data.",
-    "serverError": "A server error occurred. Please try again later.",
-    "unknown": "An unexpected error occurred."
+    "requestInterrupted": "The request was interrupted. Please try again",
+    "networkFailure": "Network connection error. Please check your internet connection",
+    "resourceNotFound": "The requested resource was not found",
+    "clientError": "Invalid request. Please check the provided data",
+    "serverError": "A server error occurred. Please try again later",
+    "unknown": "An unexpected error occurred"
   },
 
   "rightPanel": {

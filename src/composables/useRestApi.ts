@@ -5,26 +5,16 @@ import { api } from '@/services/restApi'
 import { ApiError } from '@/types'
 import { useLogger } from '@/composables/useLogger'
 import { useI18n } from 'vue-i18n'
-import { useConnectionStore } from '@/stores/sseConnectorStore'
+import { useSseConnector } from '@/composables/useSseConnector'
 import { useNotificationsStore } from '@/stores/notificationsStore'
 
 export function useRestApi() {
   const store = useRestApiStore()
-  const connectionStore = useConnectionStore()
+  const { getAnalysisId } = useSseConnector()
   const notificationsStore = useNotificationsStore()
   const router = useRouter()
-
   const log = useLogger('useApi')
   const { t } = useI18n()
-
-  function getAnalysisId(): string | null {
-    const analysis = connectionStore.analysis
-    if (analysis?.analysisId) {
-      return analysis.analysisId
-    }
-    log.warn('Analysis ID not found in connectionStore')
-    return null
-  }
 
   async function handleFetch<T>(
     fetchFn: () => Promise<T>,

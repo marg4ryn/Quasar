@@ -50,14 +50,12 @@
     "remove": "Usuń powiadomienie",
     "viewDetails": "Zobacz wyniki",
     "analysis": {
-      "completed": "Proces '{screen}' zakończył się pomyślnie w {duration}s.",
-      "failed": "Proces '{screen}' nie powiódł się: {error}.",
-      "start-failed": "Nie udało się rozpocząć procesu '{screen}': {error}.",
-      "cancelled": "Proces '{screen}' został anulowany",
-      "interrupted": "Analiza {screen} została przerwana przez odświeżenie strony i zostanie wznowiona"
+      "completed": "Analiza repozytorium zakończyła się pomyślnie w {duration}s",
+      "failed": "Analiza repozytorium nie powiodła się: {error}",
+      "cancelled": "Analiza repozytorium została anulowana"
     },
     "x-ray": {
-      "completed": "Analiza X-Ray dla '{filePath}' zakończyła się pomyślnie."
+      "completed": "Analiza X-Ray dla '{filePath}' zakończyła się pomyślnie"
     }
   },
 
@@ -148,9 +146,6 @@
       "analyzing": "Analizowanie...",
       "finalizing": "Finalizowanie...",
       "unknown": "Nieznany status"
-    },
-    "analysis": {
-      "repo-download": "Analiza repozytorium"
     }
   },
 
@@ -164,12 +159,12 @@
     "noAnalysisId": "Nie podano ID analizy",
     "fetchStructureFailed": "Nie udało się załadować struktury",
     "connectionFailed": "Błąd połączenia",
-    "requestInterrupted": "Żądanie zostało przerwane. Spróbuj ponownie.",
-    "networkFailure": "Błąd połączenia z siecią. Sprawdź połączenie internetowe.",
-    "resourceNotFound": "Nie znaleziono żądanego zasobu.",
-    "clientError": "Nieprawidłowe żądanie. Sprawdź wprowadzone dane.",
-    "serverError": "Wystąpił błąd serwera. Spróbuj ponownie później.",
-    "unknown": "Wystąpił nieoczekiwany błąd."
+    "requestInterrupted": "Żądanie zostało przerwane. Spróbuj ponownie",
+    "networkFailure": "Błąd połączenia z siecią. Sprawdź połączenie internetowe",
+    "resourceNotFound": "Nie znaleziono żądanego zasobu",
+    "clientError": "Nieprawidłowe żądanie. Sprawdź wprowadzone dane",
+    "serverError": "Wystąpił błąd serwera. Spróbuj ponownie później",
+    "unknown": "Wystąpił nieoczekiwany błąd"
   },
 
   "rightPanel": {
