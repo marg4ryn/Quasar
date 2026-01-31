@@ -1,7 +1,6 @@
 export type ConnectionState = 'idle' | 'running' | 'completed' | 'error'
 
 export interface Analysis {
-  analysisId?: string
   state?: ConnectionState
   status?: AnalysisStatus
   error?: string

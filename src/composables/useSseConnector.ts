@@ -1,11 +1,13 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { createAnalysisConnection } from '@/services/sseConnector'
+import { useAnalysisStore } from '@/stores/analysisStore'
 import { useNotificationsStore } from '@/stores/notificationsStore'
 import { Analysis, AnalysisConnection, getAnalysisStatusLabelKey } from '@/types'
 import { useLogger } from '@/composables/useLogger'
 
 const log = useLogger('useSseConnector')
+const analysisStore = useAnalysisStore()
 const analysis = ref<Analysis | null>(null)
 const connection = ref<AnalysisConnection | null>(null)
 
@@ -19,14 +21,6 @@ export function useSseConnector() {
     status.value !== undefined ? getAnalysisStatusLabelKey(status.value) : undefined
   )
 
-  const getAnalysisId = (): string | undefined => {
-    if (analysis.value?.analysisId) {
-      return analysis.value.analysisId
-    }
-    log.warn('Analysis ID not found')
-    return undefined
-  }
-
   const start = (params?: Record<string, string>) => {
     if (analysis.value?.state === 'running') {
       log.warn('Analysis is already running')
@@ -34,7 +28,6 @@ export function useSseConnector() {
     }
 
     analysis.value = {
-      analysisId: undefined,
       state: 'running',
       status: undefined,
       error: undefined,
@@ -55,7 +48,6 @@ export function useSseConnector() {
         if (analysis.value) {
           analysis.value.state = 'completed'
           analysis.value.completedAt = new Date()
-          analysis.value.analysisId = result
 
           const duration = analysis.value.startedAt
             ? Math.round(
@@ -71,6 +63,7 @@ export function useSseConnector() {
             screenRoute: '/repository-overview',
           })
         }
+        analysisStore.setAnalysisId(result)
         connection.value = null
       },
       (error) => {
@@ -131,6 +124,5 @@ export function useSseConnector() {
     stop,
     setAnalysis,
     clear,
-    getAnalysisId,
   }
 }

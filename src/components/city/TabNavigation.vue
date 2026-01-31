@@ -21,8 +21,9 @@
 
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
+  import { useRoute } from 'vue-router'
   import { useI18n } from 'vue-i18n'
+  import { useNavigation } from '@/composables/useNavigation'
 
   const { t } = useI18n()
 
@@ -36,21 +37,21 @@
     tabs: Tab[]
   }>()
 
-  const router = useRouter()
   const route = useRoute()
+  const { navigateTo } = useNavigation()
 
   const hoveredTab = ref<string | null>(null)
   const currentTab = ref<string | null>(null)
 
   const activeTab = computed(() => {
-    const match = props.tabs.find((tab) => route.path.startsWith(tab.route))
+    const match = props.tabs.find((tab) => route.path.endsWith(tab.route))
     return match ? match.id : currentTab.value
   })
 
   function handleTabClick(tabId: string) {
     const tab = props.tabs.find((t) => t.id === tabId)
     if (tab?.route) {
-      router.push(tab.route)
+      navigateTo(tab.route)
     }
   }
 

@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useRouter } from 'vue-router'
+  import { useNavigation } from '@/composables/useNavigation'
   import { useNewAnalysisStore } from '@/stores/newAnalysisStore'
   import { useSseConnector } from '@/composables/useSseConnector'
   import AnalysisForm, { type AnalysisFormData } from '@/components/forms/StartAnalysisForm.vue'
@@ -31,7 +31,7 @@
   import { useRestApi } from '@/composables/useRestApi'
   import LoadingBar from '@/components/sections/LoadingBar.vue'
 
-  const router = useRouter()
+  const { navigateTo } = useNavigation()
   const newAnalysisStore = useNewAnalysisStore()
   const { start, stop, isRunning, isCompleted, statusLabel } = useSseConnector()
   const api = useRestApi()
@@ -48,7 +48,7 @@
     if (newValue) {
       newAnalysisStore.reset()
       api.clearAll()
-      router.push('/repository-overview')
+      navigateTo('/repository-overview')
     }
   })
 

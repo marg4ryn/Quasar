@@ -5,12 +5,12 @@ import { api } from '@/services/restApi'
 import { ApiError } from '@/types'
 import { useLogger } from '@/composables/useLogger'
 import { useI18n } from 'vue-i18n'
-import { useSseConnector } from '@/composables/useSseConnector'
+import { useAnalysisStore } from '@/stores/analysisStore'
 import { useNotificationsStore } from '@/stores/notificationsStore'
 
 export function useRestApi() {
   const store = useRestApiStore()
-  const { getAnalysisId } = useSseConnector()
+  const { analysisId } = useAnalysisStore()
   const notificationsStore = useNotificationsStore()
   const router = useRouter()
   const log = useLogger('useApi')
@@ -45,8 +45,6 @@ export function useRestApi() {
   }
 
   function structure() {
-    const analysisId = getAnalysisId()
-
     const structureComputed = computed(() => store.structure)
 
     if (!store.structure && analysisId) {
@@ -67,7 +65,6 @@ export function useRestApi() {
 
   function itemsMap() {
     if (!store.itemsMap || store.itemsMap.size === 0) {
-      const analysisId = getAnalysisId()
       if (analysisId) {
         handleFetch(
           async () => {
@@ -91,7 +88,6 @@ export function useRestApi() {
       return computed(() => store.getFileDetails(filePath))
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -112,7 +108,6 @@ export function useRestApi() {
       return computed(() => store.hotspotsDetails)
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -133,7 +128,6 @@ export function useRestApi() {
       return computed(() => store.codeAgeDetails)
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -154,7 +148,6 @@ export function useRestApi() {
       return computed(() => store.fileCouplingDetails)
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -175,7 +168,6 @@ export function useRestApi() {
       return computed(() => store.knowledgeLossDetails)
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -196,7 +188,6 @@ export function useRestApi() {
       return computed(() => store.authorsStatisticsDetails)
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -217,7 +208,6 @@ export function useRestApi() {
       return computed(() => store.leadAuthorsDetails)
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -238,7 +228,6 @@ export function useRestApi() {
       return computed(() => store.filesExtensionsDetails)
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -259,7 +248,6 @@ export function useRestApi() {
       return computed(() => store.authorCouplingDetails)
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -280,7 +268,6 @@ export function useRestApi() {
       return computed(() => store.repositoryDetails)
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -301,7 +288,6 @@ export function useRestApi() {
       return computed(() => store.analysisTrendsDetails)
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {
@@ -326,7 +312,6 @@ export function useRestApi() {
       return computed(() => store.getXRayDetails(filePath))
     }
 
-    const analysisId = getAnalysisId()
     if (analysisId) {
       handleFetch(
         async () => {

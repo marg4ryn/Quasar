@@ -12,7 +12,9 @@
     <Transition name="submenu-fade-slide">
       <ul v-show="submenu && submenu.length && hover" class="submenu">
         <li v-for="item in submenu" :key="item.label">
-          <RouterLink :to="item.to" @click="hideSubmenu">{{ item.label }}</RouterLink>
+          <RouterLink :to="`/${analysisId}${item.to}`" @click="hideSubmenu">{{
+            item.label
+          }}</RouterLink>
         </li>
       </ul>
     </Transition>
@@ -22,6 +24,8 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { RouterLink, useRoute } from 'vue-router'
+  import { useAnalysisStore } from '@/stores/analysisStore'
+  const { analysisId } = useAnalysisStore()
 
   interface SubmenuItem {
     label: string

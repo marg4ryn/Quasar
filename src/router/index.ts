@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, Router, RouteRecordRaw } from 'vue-router'
 import { t } from '@/plugins/i18n'
 import { useUIStore } from '@/stores/uiStore'
+import { useAnalysisStore } from '@/stores/analysisStore'
 
 const commonViews = {
   Welcome: () => import('@/views/common/WelcomePage.vue'),
@@ -77,7 +78,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/repository-overview',
+    path: '/:analysisId/repository-overview',
     name: 'repository-overview',
     component: commonViews.RepositoryOverview,
     meta: {
@@ -87,7 +88,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/developers-list',
+    path: '/:analysisId/developers-list',
     name: 'developers-list',
     component: commonViews.DevelopersList,
     meta: {
@@ -97,7 +98,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/developer-relationships',
+    path: '/:analysisId/developer-relationships',
     name: 'developer-relationships',
     meta: {
       titleKey: 'title.developer-relationships',
@@ -107,7 +108,7 @@ const routes: RouteRecordRaw[] = [
     component: commonViews.DeveloperRelationships,
   },
   {
-    path: '/xray-analysis',
+    path: '/:analysisId/xray-analysis',
     name: 'xray-analysis',
     component: commonViews.XRayAnalysis,
     meta: {
@@ -117,7 +118,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/file-extensions',
+    path: '/:analysisId/file-extensions',
     name: 'file-extensions',
     component: citiesViews.FileExtensions,
     meta: {
@@ -127,7 +128,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/hotspots',
+    path: '/:analysisId/hotspots',
     name: 'hotspots',
     component: citiesViews.Hotspots,
     meta: {
@@ -137,7 +138,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/code-age',
+    path: '/:analysisId/code-age',
     name: 'code-age',
     component: citiesViews.CodeAge,
     meta: {
@@ -147,7 +148,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/files-coupling',
+    path: '/:analysisId/files-coupling',
     name: 'files-coupling',
     component: citiesViews.FilesCoupling,
     meta: {
@@ -157,7 +158,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/lead-developers',
+    path: '/:analysisId/lead-developers',
     name: 'lead-developers',
     component: citiesViews.LeadDevelopers,
     meta: {
@@ -167,7 +168,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/abandoned-code',
+    path: '/:analysisId/abandoned-code',
     name: 'abandoned-code',
     component: citiesViews.AbandonedCode,
     meta: {
@@ -177,7 +178,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/knowledge-risks',
+    path: '/:analysisId/knowledge-risks',
     name: 'knowledge-risks',
     component: citiesViews.KnowledgeRisks,
     meta: {
@@ -240,6 +241,12 @@ export default function (): Router {
     }
     if (to.meta.showAppBar !== undefined) {
       uiStore.isAppBarVisible = to.meta.showAppBar
+    }
+
+    const store = useAnalysisStore()
+    const analysisId = to.params.analysisId as string
+    if (analysisId) {
+      store.setAnalysisId(analysisId)
     }
 
     next()

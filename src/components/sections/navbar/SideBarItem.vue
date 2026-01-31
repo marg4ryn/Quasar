@@ -25,7 +25,11 @@
     <Transition name="submenu-slide">
       <ul v-show="isExpanded && submenu && submenu.length" class="sidebar-submenu">
         <li v-for="item in submenu" :key="item.label">
-          <RouterLink :to="item.to" @click="$emit('navigate')" class="sidebar-submenu__link">
+          <RouterLink
+            :to="`/${analysisId}${item.to}`"
+            @click="$emit('navigate')"
+            class="sidebar-submenu__link"
+          >
             {{ item.label }}
           </RouterLink>
         </li>
@@ -37,6 +41,8 @@
 <script setup lang="ts">
   import { computed } from 'vue'
   import { RouterLink, useRoute } from 'vue-router'
+  import { useAnalysisStore } from '@/stores/analysisStore'
+  const { analysisId } = useAnalysisStore()
 
   interface SubmenuItem {
     label: string

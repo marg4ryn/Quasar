@@ -121,7 +121,7 @@
   import { api } from '@/services/restApi'
   import { useI18n } from 'vue-i18n'
   import { AnalysisHistoryResponseItem, AnalysisHistoryResponse } from '@/types'
-  import { useConnectionStore } from '@/stores/sseConnectorStore'
+  import { useAnalysisStore } from '@/stores/analysisStore'
   import { useRestApi } from '@/composables/useRestApi'
   import { formatDate, formatDateTime } from '@/utils/common/dateFormatter'
   import AppButtonClose from '@/components/common/AppButtonClose.vue'
@@ -130,7 +130,7 @@
 
   const router = useRouter()
   const restApiStore = useRestApi()
-  const connectionStore = useConnectionStore()
+  const analysisStore = useAnalysisStore()
   const analyses = ref<AnalysisHistoryResponseItem[]>([])
   const loading = ref(false)
   const currentPage = ref(0)
@@ -179,13 +179,7 @@
   }
 
   const goToResults = (analysisId: string) => {
-    connectionStore.setAnalysis({
-      analysisId: analysisId,
-      startedAt: new Date(),
-      completedAt: new Date(),
-      status: undefined,
-      state: 'completed',
-    })
+    analysisStore.setAnalysisId(analysisId)
     restApiStore.clearAll()
     router.push('/repository-overview')
   }
